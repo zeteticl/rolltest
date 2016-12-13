@@ -339,16 +339,20 @@ function ArrMax (Arr){
           return Math.floor((Math.random() * diceSided) + 1)
         }              
 		
-		function RollDice(inputStr){
+	function RollDice(inputStr){
   //先把inputStr變成字串（不知道為什麼非這樣不可）
   let comStr=inputStr.toString();
   let finalStr = '[';
-
+  let totally = 0;
+  let temp = 0;
   for (let i = 1; i <= comStr.split('d')[0]; i++) {
-    finalStr = finalStr + Dice(comStr.split('d')[1]) + '+';
+	temp = Dice(comStr.split('d')[1]);
+	totally +=temp;
+  finalStr = finalStr + temp + '+';
      }
 
   finalStr = finalStr.substring(0, finalStr.length - 1) + ']';
+  finalStr = finalStr.replace('[', totally +'[');
   return finalStr;
 }
 
