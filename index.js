@@ -294,7 +294,10 @@ function ArrMax (Arr){
     }
 
     //計算算式
-    let answer = eval(equation.toString());
+    let aaa = equation;
+	aaa = aaa.replace(/\d+[[]/, '[' );
+	let answer = eval(aaa.toString());
+	
     finalStr = finalStr + i + '# ' + equation + ' = ' + answer + '\n';
     }
         
@@ -315,12 +318,14 @@ function ArrMax (Arr){
     if (tempMatch.toString().split('d')[0]>300) return undefined;
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>1000000) return undefined;
     equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
-	equation = equation.replace('[', totally +'[');
 	
   }
   
   //計算算式
-  let answer = eval(equation.toString());
+	let aaa = equation;
+	aaa = aaa.replace(/\d+[[]/, '[' );
+	let answer = eval(aaa.toString());
+      
   if(text1 != null){
 	  finalStr= text0 + '：' + text1 + '\n' + equation + ' = ' + answer;
     	  }
@@ -349,6 +354,7 @@ function ArrMax (Arr){
   let comStr=inputStr.toString();
   let finalStr = '[';
   let temp = 0;
+  var totally = 0;
   for (let i = 1; i <= comStr.split('d')[0]; i++) {
 	temp = Dice(comStr.split('d')[1]);
 	totally +=temp;
@@ -356,7 +362,7 @@ function ArrMax (Arr){
      }
 
   finalStr = finalStr.substring(0, finalStr.length - 1) + ']';
- // finalStr = finalStr.replace('[', totally +'[');
+  finalStr = finalStr.replace('[', totally +'[');
   return finalStr;
 }
 
