@@ -451,7 +451,7 @@ function d66s(text) {
 	if (temp0>= temp1){
 		let temp2 = temp0;
 		temp0 = temp1;
-		temp2 = temp1;
+		temp1 = temp2;
 	}
 	if(text != null){
 	
