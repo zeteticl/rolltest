@@ -348,7 +348,7 @@ function ArrMax (Arr){
   
   //計算算式
   let answer = eval(equation.toString());
-    finalStr= inputStr[0] + '：' + inputStr[1] '\n' + equation + ' = ' + answer;
+    finalStr= inputStr[0] + '：' + inputStr[1] + '\n' + equation + ' = ' + answer;
   }
   return finalStr;
 
