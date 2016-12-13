@@ -270,7 +270,7 @@ function ArrMax (Arr){
 
   //先定義要輸出的Str
   let finalStr = '' ;  
-  let totally = 0;
+  
   
   //是複數擲骰喔
   if(mutiOrNot.toString().match(/\D/)==null ) {
@@ -310,10 +310,13 @@ function ArrMax (Arr){
   //寫出算式
   let equation = DiceToRoll;
   while(equation.match(/\d+d\d+/)!=null) {
+	let totally = 0;
     let tempMatch = equation.match(/\d+d\d+/);    
     if (tempMatch.toString().split('d')[0]>300) return undefined;
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>1000000) return undefined;
     equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
+	equation = equation.replace('[', totally +'[');
+	
   }
   
   //計算算式
@@ -326,7 +329,7 @@ function ArrMax (Arr){
     		  }
 
   }
-  finalStr = finalStr.replace('[', totally +'[');
+  
   return finalStr;
 
 
