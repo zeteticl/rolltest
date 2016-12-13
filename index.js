@@ -105,9 +105,9 @@ function parseInput(rplyToken, inputStr) {
   
 		if (trigger.match(/^help$|^幫助$/)!= null ) return Help();
 		
-        if(trigger.match(/^d66$/)!= null ) return d66(mainMsg[1]);
+        if (trigger.match(/^d66$/)!= null ) return d66(mainMsg[1]);
 	
-		if(trigger.match(/^d66s$/)!= null ) return d66s(mainMsg[1]);
+		if (trigger.match(/^d66s$/)!= null ) return d66s(mainMsg[1]);
 		if (trigger.match(/^ccb$|^cc$|^ccn$[1-2]$|^cc[1-2]$/)!= null )
 	{       		
 
@@ -135,7 +135,7 @@ CC後請輸入目標數字\
 	}
 
          //普通ROLL擲骰判定在此        
-        if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+/)!=null) {
+        if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) {
           return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
         }
 	
@@ -428,12 +428,12 @@ function nechronica(triggermsg ,text) {
 
 function d66(text) {
 
-
+	let returnStr = '';
 	if(text != null){
-	let returnStr =   'D66：' + text + ' → ' + Dice(6) + Dice(6);
+	returnStr =   'D66：' + text + ' → ' + Dice(6) + Dice(6);
 	}
 	else{
-	let returnStr = 'D66 → ' + Dice(6) + Dice(6);
+	returnStr = 'D66 → ' + Dice(6) + Dice(6);
 	}
 	return returnStr;
 	
@@ -447,17 +447,18 @@ function d66s(text) {
 
 	let temp0 = Dice(6);
 	let temp1 = Dice(6);
-	if (temp0> temp1){
+	let returnStr = '';
+	if (temp0>= temp1){
 		let temp2 = temp0;
 		temp0 = temp1;
 		temp2 = temp1;
 	}
 	if(text != null){
 	
-	let returnStr =   'D66s：' + text + ' → ' + temp0 + temp1;
+	returnStr =   'D66s：' + text + ' → ' + temp0 + temp1;
 	}
 	else{
-	let returnStr = 'D66s → ' +  temp0 + temp1;
+	returnStr = 'D66s → ' +  temp0 + temp1;
 	}
 	return returnStr;
 	
