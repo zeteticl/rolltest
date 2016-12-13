@@ -309,7 +309,12 @@ function ArrMax (Arr){
   
   //是複數擲骰喔
   if(mutiOrNot.toString().match(/\D/)==null ) {
-    finalStr= mainMsg[0] + '次擲骰：\n' + mainMsg[1] +' ' + mainMsg[2] + '\n';
+	  if(mainMsg[2] != null){
+	  finalStr= mainMsg[0] + '次擲骰：\n' + mainMsg[1] +' ' + mainMsg[2] + '\n';
+    	  }
+		  else{
+		  finalStr= mainMsg[0] + '次擲骰：\n' + mainMsg[1] +' ' + '\n';
+    		  }
     if(mutiOrNot>30) return '不支援30次以上的複數擲骰。';
     
     for (i=1 ; i<=mutiOrNot ;i++){
@@ -348,6 +353,12 @@ function ArrMax (Arr){
   
   //計算算式
   let answer = eval(equation.toString());
+  if(mainMsg[1] != null){
+	  finalStr= mainMsg[0] + '：' + mainMsg[1] + '\n' + equation + ' = ' + answer;
+    	  }
+		  else{
+		  finalStr= mainMsg[0] + '：\n' + equation + ' = ' + answer;
+    		  }
     finalStr= mainMsg[0] + '：' + mainMsg[1] + '\n' + equation + ' = ' + answer;
   }
   return finalStr;
