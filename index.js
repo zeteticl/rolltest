@@ -149,11 +149,11 @@ CC後請輸入目標數字\
 			return MultiDrawTarot(mainMsg[1], mainMsg[2], 3); //預設抽 79 張
 		}
 
-		//tarot 指令
+		/*tarot 指令
 	if (trigger.match(/猜拳/) != null) {
 			return RockPaperScissors(inputStr, mainMsg[1]);
 		}
-
+*/
          //普通ROLL擲骰判定在此        
      if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) {
           return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
@@ -855,7 +855,6 @@ function tarotCardReply(count) {
 \n・占卜運氣功能 字句中包括運氣即可\
 \n・塔羅牌占卜 塔羅/大十字塔羅/每日塔羅牌\
 \n・時間tarot 等關键字可啓動\
-\n・猜拳功能 猜拳 剪刀/石頭/布 可以用1,2,3取代\
 ';
 			
 		}
