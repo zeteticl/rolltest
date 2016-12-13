@@ -348,11 +348,11 @@ function ArrMax (Arr){
   for (let i = 1; i <= comStr.split('d')[0]; i++) {
 	temp = Dice(comStr.split('d')[1]);
 	totally +=temp;
-  finalStr = finalStr + temp + '+';
+    finalStr = finalStr + temp + '+';
      }
 
   finalStr = finalStr.substring(0, finalStr.length - 1) + ']';
-  finalStr = finalStr.replace('[', totally +'[');
+ // finalStr = finalStr.replace('[', totally +'[');
   return finalStr;
 }
 
