@@ -96,7 +96,7 @@ function parseInput(rplyToken, inputStr) {
 		let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
          //擲骰判定在此        
         if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/d/)!=null) {
-          return nomalDiceRoller(inputStr);
+          return nomalDiceRoller(inputStr,mainMsg);
         }
                        
         //鴨霸獸指令開始於此
@@ -293,7 +293,7 @@ function ArrMax (Arr){
 ////////////////////////////////////////
 //////////////// 普通ROLL
 ////////////////////////////////////////
- function nomalDiceRoller(inputStr){
+ function nomalDiceRoller(inputStr,mainMsg){
   
   //首先判斷是否是誤啟動（檢查是否有符合骰子格式）
   if (inputStr.toLowerCase().match(/\d+d\d+/) == null) return undefined;
@@ -309,7 +309,7 @@ function ArrMax (Arr){
   
   //是複數擲骰喔
   if(mutiOrNot.toString().match(/\D/)==null ) {
-    finalStr= '複數擲骰：\n' + inputStr[1] +' ' + inputStr[2];
+    finalStr= mainMsg[0] + '次擲骰：\n' + mainMsg[1] +' ' + mainMsg[2] + '\n';
     if(mutiOrNot>30) return '不支援30次以上的複數擲骰。';
     
     for (i=1 ; i<=mutiOrNot ;i++){
@@ -348,7 +348,7 @@ function ArrMax (Arr){
   
   //計算算式
   let answer = eval(equation.toString());
-    finalStr= inputStr[0] + '：' + inputStr[1] + '\n' + equation + ' = ' + answer;
+    finalStr= mainMsg[0] + '：' + mainMsg[1] + '\n' + equation + ' = ' + answer;
   }
   return finalStr;
 
