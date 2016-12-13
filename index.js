@@ -136,7 +136,7 @@ CC後請輸入目標數字\
 	
 
 	//tarot 指令
-	if (trigger.match(/^tarot$|^塔羅牌$|^塔羅$/) != null) {
+	if (trigger.match(/tarot|塔羅牌|塔羅/) != null) {
 			if (trigger.match(/每日|daily/)!= null) {
 				return NomalDrawTarot(mainMsg[1], mainMsg[2]);
 			}
@@ -150,8 +150,8 @@ CC後請輸入目標數字\
 		}
 
 		//tarot 指令
-	if (trigger == '猜拳') {
-			return RockPaperScissors(mainMsg[1], mainMsg[2]);
+	if (trigger.match(/猜拳/) != null) {
+			return RockPaperScissors(inputStr, mainMsg[1]);
 		}
 
          //普通ROLL擲骰判定在此        
@@ -580,9 +580,9 @@ wwwwwwwwwwwwwwwww', '\
 //////////////// Funny
 ////////////////////////////////////////
 /* 猜拳功能 */
-function RockPaperScissors(HandToCal, text) {
+	function RockPaperScissors(HandToCal, text) {
 	let returnStr = '';
-	if (HandToCal == null) {
+	if (HandToCal.match(/石頭|布|剪刀|1|2|3/) != null) {
 		let aHand = ['石頭','布','剪刀'];
            HandToCal = aHand[Math.floor((Math.random() * (aHand.length)) + 0)];
 	}
@@ -592,9 +592,9 @@ function RockPaperScissors(HandToCal, text) {
 		case 0: //石頭
 			returnStr = '我出石頭！\n';
 
-			if (HandToCal == '剪刀') returnStr += '哼哼你輸惹';
-			else if (HandToCal == '石頭') returnStr += '看來我們不相上下阿';
-			else if (HandToCal == '布') returnStr += '你好像有點強！';
+			if (HandToCal.match(/剪刀|1/) != null) returnStr += '哼哼你輸惹';
+			else if (HandToCal.match(/石頭|2/) != null) returnStr += '看來我們不相上下阿';
+			else if (HandToCal.match(/布|3/) != null) returnStr += '你好像有點強！';
 			else returnStr += '欸不對喔你亂出！';
 
 			break;
@@ -602,9 +602,9 @@ function RockPaperScissors(HandToCal, text) {
 		case 1: //布
 			returnStr = '我出布！\n';
 
-			if (HandToCal == '剪刀') returnStr += '讓你一次而已啦！';
-			else if (HandToCal == '布') returnStr += '原來平手...沒什麼嘛！';
-			else if (HandToCal == '石頭') returnStr += '哈哈你看看你！';
+			if (HandToCal.match(/剪刀|1/) != null) returnStr += '讓你一次而已啦！';
+			else if (HandToCal.match(/布|2/) != null) returnStr += '原來平手...沒什麼嘛！';
+			else if (HandToCal.match(/石頭|3/) != null) returnStr += '哈哈你看看你！';
 			else returnStr += '別亂出阿會壞掉的';
 
 			break;
@@ -612,9 +612,9 @@ function RockPaperScissors(HandToCal, text) {
 		case 2: //剪刀
 			returnStr = '我出剪刀！\n';
 
-			if (HandToCal == '剪刀') returnStr += '平手 (  艸)';
-			else if (HandToCal == '布') returnStr += '贏了 (｀・ω・´)b';
-			else if (HandToCal == '石頭') returnStr += '輸惹 ゜。。゜(ノД‵)ノ・゜';
+			if (HandToCal.match(/剪刀|1/) != null) returnStr += '平手 (  艸)';
+			else if (HandToCal.match(/布|2/) != null) returnStr += '贏了 (｀・ω・´)b';
+			else if (HandToCal.match(/石頭|3/) != null) returnStr += '輸惹 ゜。。゜(ノД‵)ノ・゜';
 			else returnStr += '亂出打你喔 (｀・ω・´)凸';
 
 			break;
@@ -837,7 +837,7 @@ function tarotCardReply(count) {
 			return randomReply() + '\n' + '\
 【擲骰BOT】v1.0 \
 \n 例如輸入2d6+1　攻撃！\
-\n 會輸出）2d6+1：攻撃  (6+3)+1 = 10\
+\n 會輸出）2d6+1：攻撃  9[6+3]+1 = 10\
 \n 如上面一樣,在骰子數字後方隔空白位打字,可以進行發言。\
 \n 以下還有其他例子\
 \n 5 3D6  ：分別骰出5次3d6\
@@ -846,13 +846,16 @@ function tarotCardReply(count) {
 \n ・COC七版判定　CCx（目標値）\
 \n　x：獎勵骰/懲罰骰 (2～n2)。沒有的話可以省略。\
 \n例）CC 30　CC1 50　CCn2 75\
-\n・占卜運氣功能 字句中包括運氣即可\
 \n・NC 永遠的後日談擲骰\
 \n(骰數)NC/NA (問題)\
 \n 例如 1NC 2Na+4 3na-2\
 \n・WOD 黑暗世界擲骰\
 \n(骰數)WOD/Wd(加骰)(+成功數) (問題)\
 \n 例如 2wod 3wd8 15wd9+2\
+\n・占卜運氣功能 字句中包括運氣即可\
+\n・塔羅牌占卜 塔羅/大十字塔羅/每日塔羅牌\
+\n・時間tarot 等關键字可啓動\
+\n・猜拳功能 猜拳 剪刀/石頭/布 可以用1,2,3取代\
 ';
 			
 		}
