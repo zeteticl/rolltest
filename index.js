@@ -345,7 +345,6 @@ function ArrMax (Arr){
   //先把inputStr變成字串（不知道為什麼非這樣不可）
   let comStr=inputStr.toString();
   let finalStr = '[';
-  totally = 0;
   let temp = 0;
   for (let i = 1; i <= comStr.split('d')[0]; i++) {
 	temp = Dice(comStr.split('d')[1]);
