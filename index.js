@@ -94,9 +94,9 @@ function parseInput(rplyToken, inputStr) {
         let msgSplitor = ' ';	
 		let mainMsg = inputStr.split(msgSplitor); //定義輸入字串，以空格切開     
 		let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
-         //擲骰判定在此        
+         //普通ROLL擲骰判定在此        
         if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/d/)!=null) {
-          return nomalDiceRoller(inputStr,mainMsg);
+          return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
         }
                        
         //鴨霸獸指令開始於此
@@ -138,42 +138,6 @@ CC後請輸入目標數字\
 		return wod(trigger,mainMsg[1]);
 	}
 	
-        if (trigger.match(/^r$/)!= null )
-	{        
-		if (mainMsg[1].match(/^[d]|[+][d]/) != null)
-{
-        mainMsg[1] = mainMsg[1].replace(/^[d]/gi, "1d");
-		mainMsg[1] = mainMsg[1].replace(/[+][d]/gi, "+1d");		      
-	}
-	
-		if (inputStr.split(msgSplitor).length == 1)
-	  {
-            return NomalRollDice('1d100',mainMsg[2]);          
-	  }
-		
-	
-		if (inputStr.split(msgSplitor).length >= 3)
-	{
-
-            if (mainMsg[2].split('*').length == 2) 
-	    {
-              let tempArr = mainMsg[2].split('*');
-              let text = inputStr.split(msgSplitor)[3];
-              //secCommand = parseInt(tempArr[1]);
-              return MutiRollDice(mainMsg[1].toString().toLowerCase(),parseInt(tempArr[1]),text);
-            }
-            return NomalRollDice(mainMsg[1].toString().toLowerCase(),mainMsg[2]);
-          
-	}
-          if (inputStr.split(msgSplitor).length == 2)
-	  {
-            return NomalRollDice(mainMsg[1].toString().toLowerCase(),mainMsg[2]);          
-	  }
-          
-          
-        return NomalRollDice('1d100','');
-	
-	}
 }
 
 
@@ -293,7 +257,7 @@ function ArrMax (Arr){
 ////////////////////////////////////////
 //////////////// 普通ROLL
 ////////////////////////////////////////
- function nomalDiceRoller(inputStr,mainMsg){
+ function nomalDiceRoller(inputStr,text0,text1,text2){
   
   //首先判斷是否是誤啟動（檢查是否有符合骰子格式）
   if (inputStr.toLowerCase().match(/\d+d\d+/) == null) return undefined;
@@ -309,11 +273,11 @@ function ArrMax (Arr){
   
   //是複數擲骰喔
   if(mutiOrNot.toString().match(/\D/)==null ) {
-	  if(mainMsg[2] != null){
-	  finalStr= mainMsg[0] + '次擲骰：\n' + mainMsg[1] +' ' + mainMsg[2] + '\n';
+	  if(text2 != null){
+	  finalStr= text0 + '次擲骰：\n' + text1 +' ' + text2 + '\n';
     	  }
 		  else{
-		  finalStr= mainMsg[0] + '次擲骰：\n' + mainMsg[1] +' ' + '\n';
+		  finalStr= text0 + '次擲骰：\n' + text1 +'\n';
     		  }
     if(mutiOrNot>30) return '不支援30次以上的複數擲骰。';
     
@@ -353,13 +317,13 @@ function ArrMax (Arr){
   
   //計算算式
   let answer = eval(equation.toString());
-  if(mainMsg[1] != null){
-	  finalStr= mainMsg[0] + '：' + mainMsg[1] + '\n' + equation + ' = ' + answer;
+  if(text1 != null){
+	  finalStr= text0 + '：' + text1 + '\n' + equation + ' = ' + answer;
     	  }
 		  else{
-		  finalStr= mainMsg[0] + '：\n' + equation + ' = ' + answer;
+		  finalStr= text0 + '：\n' + equation + ' = ' + answer;
     		  }
-    finalStr= mainMsg[0] + '：' + mainMsg[1] + '\n' + equation + ' = ' + answer;
+
   }
   return finalStr;
 
