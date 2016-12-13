@@ -105,9 +105,9 @@ function parseInput(rplyToken, inputStr) {
   
 		if (trigger.match(/^help$|^幫助$/)!= null ) return Help();
 		
-        if(trigger.match(/^d66$/)!= null ) return d66();
+        if(trigger.match(/^d66$/)!= null ) return d66(mainMsg[1]);
 	
-
+		if(trigger.match(/^d66s$/)!= null ) return d66s(mainMsg[1]);
 		if (trigger.match(/^ccb$|^cc$|^ccn$[1-2]$|^cc[1-2]$/)!= null )
 	{       		
 
@@ -424,7 +424,7 @@ function nechronica(triggermsg ,text) {
 //////////////// D66
 ////////////////////////////////////////
 
-function d66(triggermsg ,text) {
+function d66(text) {
 
 
 	if(text != null){
@@ -442,7 +442,7 @@ function d66(triggermsg ,text) {
 //////////////// D66s
 ////////////////////////////////////////
 
-function d66s(triggermsg ,text) {
+function d66s(text) {
 
 	let temp0 = Dice(6);
 	let temp1 = Dice(6);
@@ -455,10 +455,10 @@ function d66s(triggermsg ,text) {
 	
 	if(text != null){
 	
-	var returnStr =   'D66s：' + text + ' → ' + temp0 + temp1;
+	let returnStr =   'D66s：' + text + ' → ' + temp0 + temp1;
 	}
 	else{
-	var returnStr = 'D66s → ' +  temp0 + temp1;
+	let returnStr = 'D66s → ' +  temp0 + temp1;
 	}
 	return returnStr;
 	
