@@ -133,13 +133,15 @@ CC後請輸入目標數字\
 	{        
 		return wod(trigger,mainMsg[1]);
 	}
+
+         //普通ROLL擲骰判定在此        
+        if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+/)!=null) {
+          return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
+        }
 	
 }
 
-         //普通ROLL擲骰判定在此        
-        if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) {
-          return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
-        }
+
 
 
                
@@ -429,7 +431,6 @@ function d66(text) {
 
 	if(text != null){
 	let returnStr =   'D66：' + text + ' → ' + Dice(6) + Dice(6);
-
 	}
 	else{
 	let returnStr = 'D66 → ' + Dice(6) + Dice(6);
@@ -446,13 +447,11 @@ function d66s(text) {
 
 	let temp0 = Dice(6);
 	let temp1 = Dice(6);
-	if (temp0> temp1)
-	{
+	if (temp0> temp1){
 		let temp2 = temp0;
 		temp0 = temp1;
 		temp2 = temp1;
 	}
-	
 	if(text != null){
 	
 	let returnStr =   'D66s：' + text + ' → ' + temp0 + temp1;
