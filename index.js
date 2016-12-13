@@ -94,10 +94,6 @@ function parseInput(rplyToken, inputStr) {
         let msgSplitor = ' ';	
 		let mainMsg = inputStr.split(msgSplitor); //定義輸入字串，以空格切開     
 		let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
-         //普通ROLL擲骰判定在此        
-        if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/d/)!=null) {
-          return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
-        }
                        
         //鴨霸獸指令開始於此
         if (trigger.match(/鴨霸獸|巴獸/) != null) return randomReply() ;        
@@ -109,7 +105,7 @@ function parseInput(rplyToken, inputStr) {
   
 		if (trigger.match(/^help$|^幫助$/)!= null ) return Help();
 		
-        
+        if(trigger.match(/^d66$/)!= null ) return d66();
 	
 
 		if (trigger.match(/^ccb$|^cc$|^ccn$[1-2]$|^cc[1-2]$/)!= null )
@@ -139,6 +135,11 @@ CC後請輸入目標數字\
 	}
 	
 }
+
+         //普通ROLL擲骰判定在此        
+        if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) {
+          return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
+        }
 
 
                
@@ -419,6 +420,49 @@ function nechronica(triggermsg ,text) {
 	return returnStr;
 }
 
+////////////////////////////////////////
+//////////////// D66
+////////////////////////////////////////
+
+function d66(triggermsg ,text) {
+
+
+	if(text != null){
+	let returnStr =   'D66：' + text + ' → ' + Dice(6) + Dice(6);
+
+	}
+	else{
+	let returnStr = 'D66 → ' + Dice(6) + Dice(6);
+	}
+	return returnStr;
+	
+}
+
+////////////////////////////////////////
+//////////////// D66s
+////////////////////////////////////////
+
+function d66s(triggermsg ,text) {
+
+	let temp0 = Dice(6);
+	let temp1 = Dice(6);
+	if (temp0> temp1)
+	{
+		let temp2 = temp0;
+		temp0 = temp1;
+		temp2 = temp1;
+	}
+	
+	if(text != null){
+	
+	var returnStr =   'D66s：' + text + ' → ' + temp0 + temp1;
+	}
+	else{
+	var returnStr = 'D66s → ' +  temp0 + temp1;
+	}
+	return returnStr;
+	
+}
 
 
 ////////////////////////////////////////
@@ -427,7 +471,6 @@ function nechronica(triggermsg ,text) {
 
 function wod(triggermsg ,text) {
 	var returnStr = triggermsg+' [';
-	var wodarray = [];
 	var varcou = 0;
 	var varsu = 0;
 	var match = /^(\d+)(wd|wod)(\d|)((\+|-)(\d+)|)$/i.exec(triggermsg);   //判斷式  [0]3wd8+10,[1]3,[2]wd,[3]8,[4]+10,[5]+,[6]10  
