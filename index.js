@@ -342,13 +342,13 @@ function ArrMax (Arr){
 		function RollDice(inputStr){
   //先把inputStr變成字串（不知道為什麼非這樣不可）
   let comStr=inputStr.toString();
-  let finalStr = '(';
+  let finalStr = '[';
 
   for (let i = 1; i <= comStr.split('d')[0]; i++) {
     finalStr = finalStr + Dice(comStr.split('d')[1]) + '+';
      }
 
-  finalStr = finalStr.substring(0, finalStr.length - 1) + ')';
+  finalStr = finalStr.substring(0, finalStr.length - 1) + ']';
   return finalStr;
 }
 
@@ -465,12 +465,12 @@ for (var i = 0; i < Number(match[1]); i++)
         }
 		function Help() {
 			return randomReply() + '\n' + '\
-【擲骰BOT】你可以在聊天中進行自定義的擲骰 \
-\n 例如輸入）r 2d6+1　攻撃！\
-\n 會輸出）2d6+1 → 4+3+1=8；攻擊\
-\n 如上面一樣,在骰子數字後方隔空白位打字,就可以進行發言。\
+【擲骰BOT】v1.0 \
+\n 例如輸入2d6+1　攻撃！\
+\n 會輸出）2d6+1：攻撃  (6+3)+1 = 10\
+\n 如上面一樣,在骰子數字後方隔空白位打字,可以進行發言。\
 \n 以下還有其他例子\
-\n r 3D6 *5 ：分別骰出5次3d6\
+\n 5 3D6  ：分別骰出5次3d6\
 \n ・COC六版判定　CCb （目標値）：做出成功或失敗的判定\
 \n例）CCb 30　CCb 80\
 \n ・COC七版判定　CCx（目標値）\
