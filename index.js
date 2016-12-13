@@ -270,7 +270,7 @@ function ArrMax (Arr){
 
   //先定義要輸出的Str
   let finalStr = '' ;  
-  var totally = 0;
+  let totally = 0;
   
   //是複數擲骰喔
   if(mutiOrNot.toString().match(/\D/)==null ) {
