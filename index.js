@@ -309,7 +309,7 @@ function ArrMax (Arr){
   
   //是複數擲骰喔
   if(mutiOrNot.toString().match(/\D/)==null ) {
-	  if(mainMsg[2] != null){
+	  if(mainMsg[2] != ""){
 	  finalStr= mainMsg[0] + '次擲骰：\n' + mainMsg[1] +' ' + mainMsg[2] + '\n';
     	  }
 		  else{
@@ -353,7 +353,7 @@ function ArrMax (Arr){
   
   //計算算式
   let answer = eval(equation.toString());
-  if(mainMsg[1] != null){
+  if(mainMsg[1] != ""){
 	  finalStr= mainMsg[0] + '：' + mainMsg[1] + '\n' + equation + ' = ' + answer;
     	  }
 		  else{
