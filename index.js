@@ -134,46 +134,28 @@ CC後請輸入目標數字\
 		return wod(trigger,mainMsg[1]);
 	}
 	
-	//擲杯功能
-	if (trigger.match(/^cup$|^擲杯$/) != null) {
-		return NormalDrawCup(trigger, mainMsg[1]);
-	}
 
 	//tarot 指令
-		if (trigger.match(/tarot|塔羅牌|塔羅/) != null) {
-
-		// if (inputStr.split(msgSplitor).length == 2 || inputStr.split(msgSplitor).length == 3) {
-
+	if (trigger.match(/^tarot$|^塔羅牌$|^塔羅$/) != null) {
 			if (trigger.match(/每日|daily/)!= null) {
 				return NomalDrawTarot(mainMsg[1], mainMsg[2]);
 			}
-
 			if (trigger.match(/時間|time/)!= null) {
 				return MultiDrawTarot(mainMsg[1], mainMsg[2], 1);
 			}
-
 			if (trigger.match(/大十字|cross/)!= null) {
 				return MultiDrawTarot(mainMsg[1], mainMsg[2], 2);
 			}
-
-			// if (mainMsg[1] == '法典' || mainMsg[1] == '章典')
-			// 	return '你們打算懷著惡意傷害我的姊妹們，\
-			// 			\n因此我遵守我們名譽的章典， \
-			// 			\n給與你們殺死我的機會， \
-			// 			\n在此向你們申請決鬥！';
-
-			// if (mainMsg[1] == '抽牌' || mainMsg[1] == '決鬥' || mainMsg[1] == 'duel')
-			// 	return randomDuelReply(inputStr);
-
 			return MultiDrawTarot(mainMsg[1], mainMsg[2], 3); //預設抽 79 張
 		}
 
+		//tarot 指令
 	if (trigger == '猜拳') {
 			return RockPaperScissors(mainMsg[1], mainMsg[2]);
 		}
 
          //普通ROLL擲骰判定在此        
-        if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) {
+     if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) {
           return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
         }
 	
@@ -593,14 +575,16 @@ wwwwwwwwwwwwwwwww', '\
            return TEXT[0] + ' ： ' + rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
         }
 		
-	////////////////////////////////////////
+		
+////////////////////////////////////////
 //////////////// Funny
 ////////////////////////////////////////
 /* 猜拳功能 */
 function RockPaperScissors(HandToCal, text) {
 	let returnStr = '';
 	if (HandToCal == null) {
-		HandToCal = FunnyDice(3);
+		let aHand = ['石頭','布','剪刀'];
+           HandToCal = aHand[Math.floor((Math.random() * (aHand.length)) + 0)];
 	}
 	var hand = FunnyDice(3); // 0:石頭 1:布 2:剪刀
 
@@ -643,79 +627,10 @@ function RockPaperScissors(HandToCal, text) {
 	return returnStr;
 }
 
-////////////////////////////////////////
-//////////////// Cup
-////////////////////////////////////////
-/* 擲杯功能 */
-function NormalDrawCup(chack, text) {
-	let returnStr = ''; //1為陽, 0為陰, 2定為中性
-
-	var result_left = [];
-	var result_right = [];
-	var cup_yes = 0,
-		cup_no = 0,
-		cup_laugh = 0,
-		cup_null = 0,
-		cup_else = 0;
-	// var max = 0;
-
-	for (var i = 0; i < 3; i++) //丟三次
-	{
-		result_left[i] = FunnyDice(3);
-		result_right[i] = FunnyDice(3);
-
-		if (result_left[i] == 0 && result_right[i] == 0) cup_no++;
-		if (result_left[i] == 0 && result_right[i] == 1) cup_yes++;
-		if (result_left[i] == 1 && result_right[i] == 0) cup_yes++;
-		if (result_left[i] == 1 && result_right[i] == 1) cup_laugh++;
-		if (result_left[i] == 2 && result_right[i] == 2) cup_null++;
-		// else cup_else ++;
-	}
-
-	if (text != null) {
-		if (cup_no >= 2) {
-			if (cup_no == 3)
-				returnStr += '三蓋杯' + ' ; ' + text;
-			else
-				returnStr += '蓋杯' + ' ; ' + text;
-		} else if (cup_yes >= 2) {
-			if (cup_yes == 3)
-				returnStr += '三聖杯' + ' ; ' + text;
-			else
-				returnStr += '聖杯' + ' ; ' + text;
-		} else if (cup_laugh >= 2) {
-			if (cup_laugh == 3)
-				returnStr += '三笑杯' + ' ; ' + text;
-			else
-				returnStr += '笑杯' + ' ; ' + text;
-		} else if (cup_null == 3) returnStr += '立杯' + ' ; ' + text;
-		else returnStr += '沒杯' + ' ; ' + text;
-	} else {
-		if (cup_no >= 2) {
-			if (cup_no == 3)
-				returnStr += '三蓋杯';
-			else
-				returnStr += '蓋杯';
-		} else if (cup_yes >= 2) {
-			if (cup_yes == 3)
-				returnStr += '三聖杯';
-			else
-				returnStr += '聖杯';
-		} else if (cup_laugh >= 2) {
-			if (cup_laugh == 3)
-				returnStr += '三笑杯';
-			else
-				returnStr += '笑杯';
-		} else if (cup_null == 3) returnStr += '立杯';
-		else returnStr += '沒杯';
-	}
-
-	return returnStr;
-}
 
 
 ////////////////////////////////////////
-//////////////// Tarot
+//////////////// Tarot塔羅牌
 ////////////////////////////////////////
 function MultiDrawTarot(CardToCal, text, type) {
 	let returnStr = '';
