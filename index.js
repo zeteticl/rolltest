@@ -270,6 +270,7 @@ function ArrMax (Arr){
 
   //先定義要輸出的Str
   let finalStr = '' ;  
+  var totally = 0;
   
   //是複數擲骰喔
   if(mutiOrNot.toString().match(/\D/)==null ) {
@@ -325,6 +326,7 @@ function ArrMax (Arr){
     		  }
 
   }
+  finalStr = finalStr.replace('[', totally +'[');
   return finalStr;
 
 
@@ -343,7 +345,7 @@ function ArrMax (Arr){
   //先把inputStr變成字串（不知道為什麼非這樣不可）
   let comStr=inputStr.toString();
   let finalStr = '[';
-  var totally = 0;
+  totally = 0;
   let temp = 0;
   for (let i = 1; i <= comStr.split('d')[0]; i++) {
 	temp = Dice(comStr.split('d')[1]);
