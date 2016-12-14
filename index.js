@@ -748,7 +748,7 @@ function tarotRevReply(count) {
 }
 
 function choice(input) {
-	let a = input.replace( /choice / ,'').split(' ');
+	let a = input.replace( /choice / ,'').split(msgSplitor);
 	return '隨機選項 ['+ a + '] → ' + a[Dice(a.length)-1];
 }
 
