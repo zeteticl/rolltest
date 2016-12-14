@@ -322,7 +322,7 @@ function ArrMax (Arr){
     let equation = DiceToRoll;
     while(equation.match(/\d+d\d+/)!=null) {
       let tempMatch = equation.match(/\d+d\d+/);
-      equation = equation.replace(/\d+d\d+/, ntonn(RollDice(tempMatch)));
+      equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
     }
 
     //計算算式
@@ -350,7 +350,7 @@ function ArrMax (Arr){
     let tempMatch = equation.match(/\d+d\d+/);    
     if (tempMatch.toString().split('d')[0]>300) return undefined;
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>1000000) return undefined;
-    equation = equation.replace(/\d+d\d+/, ntonn(RollDice(tempMatch)));
+    equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
 	
   }
   
@@ -403,15 +403,6 @@ function ArrMax (Arr){
 function FunnyDice(diceSided) {
 	return Math.floor((Math.random() * diceSided)) //猜拳，從0開始
 }
-
-
-        function ntonn(num){
-          if(num <=9){
-            num = '0' + num;
-          }
-          return num;
-        }             
-        
 
 ////////////////////////////////////////
 //////////////// nechronica (NC)
