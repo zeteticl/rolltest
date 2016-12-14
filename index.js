@@ -295,7 +295,7 @@ function ArrMax (Arr){
   if (inputStr.toLowerCase().match(/\d+d\d+/) == null) return undefined;
   
   //再來先把第一個分段拆出來，待會判斷是否是複數擲骰
-  let mutiOrNot = inputStr.toLowerCase().match(/\S+/);
+  let mutiOrNot = text0;
   
   //排除小數點
   if (mutiOrNot.toString().match(/\./)!=null)return undefined;
@@ -315,7 +315,7 @@ function ArrMax (Arr){
     if(mutiOrNot>30) return '不支援30次以上的複數擲骰。';
     
     for (i=1 ; i<=mutiOrNot ;i++){
-    let DiceToRoll = inputStr.toLowerCase().match(/\S+/ig)[1];
+    let DiceToRoll = text1.toLowerCase();
     if (DiceToRoll.match('d') == null) return undefined;
 
     //寫出算式
