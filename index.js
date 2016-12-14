@@ -92,8 +92,8 @@ function parseInput(rplyToken, inputStr) {
 		_isNaN = function(obj) {
 			return isNaN(parseInt(obj));
         }                   
-        let msgSplitor = (/     |    |   |  | /);	
-		let mainMsg = inputStr.split(msgSplitor); //定義輸入字串，以空格切開     
+        let msgSplitor = (/\S+/ig);	
+		let mainMsg = inputStr.match(msgSplitor); //定義輸入字串，以空格切開     
 		let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
                        
         //鴨霸獸指令開始於此
@@ -315,7 +315,7 @@ function ArrMax (Arr){
     if(mutiOrNot>30) return '不支援30次以上的複數擲骰。';
     
     for (i=1 ; i<=mutiOrNot ;i++){
-    let DiceToRoll = inputStr.toLowerCase().split(' ',2)[1];
+    let DiceToRoll = inputStr.toLowerCase().match(/\S+/ig)[1];
     if (DiceToRoll.match('d') == null) return undefined;
 
     //寫出算式
