@@ -138,7 +138,7 @@ CC後請輸入目標數字\
 	//choice 指令開始於此
 		if (trigger.match(/^choice$/i)!= null && mainMsg.length >= 3) 
 	{        
-		return choice(inputStr);
+		return choice(inputStr,msgSplitor);
 	}
 
 	//tarot 指令
@@ -747,8 +747,8 @@ function tarotRevReply(count) {
 	return returnStr;
 }
 
-function choice(input) {
-	let a = input.replace( /choice / ,'').split(msgSplitor);
+function choice(input,Splitor) {
+	let a = input.replace( /choice / ,'').split(Splitor);
 	return '隨機選項 ['+ a + '] → ' + a[Dice(a.length)-1];
 }
 
