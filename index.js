@@ -56,7 +56,6 @@ app.listen(app.get('port'), function() {
 });
 
 function replyMsgToLine(rplyToken, rplyVal) {
-	rplyVal.match
 	let rplyObj = {
     replyToken: rplyToken,
     messages: [
@@ -136,9 +135,9 @@ CC後請輸入目標數字\
 	}
 	
 	//choice 指令開始於此
-		if (trigger.match(/^choice$/i)!= null && mainMsg.length >= 3) 
+		if (trigger.match(/choice|隨機|選項|選1/)!= null && mainMsg.length >= 3) 
 	{        
-		return choice(inputStr,msgSplitor);
+		return choice(inputStr,mainMsg);
 	}
 
 	//tarot 指令
@@ -747,9 +746,9 @@ function tarotRevReply(count) {
 	return returnStr;
 }
 
-function choice(input,Splitor) {
-	let a = input.replace( /choice / ,'').split(Splitor);
-	return '隨機選項 ['+ a + '] → ' + a[Dice(a.length)-1];
+function choice(input,str) {
+	let a = input.replace(str[0], '').match(/\S+/ig);
+	return str[0] + '['+ a + '] → ' + a[Dice(a.length)-1];
 }
 
 function tarotCardReply(count) {
