@@ -139,7 +139,7 @@ CC後請輸入目標數字\
 		if (trigger.match(/^choice$/i)!= null && inputStr.length >= 3) 
 	{        
 		return choice(inputStr);
-	
+	}
 
 	//tarot 指令
 	if (trigger.match(/tarot|塔羅牌|塔羅/) != null) {
