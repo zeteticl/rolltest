@@ -379,13 +379,9 @@ function ArrMax (Arr){
 //////////////// 擲骰子運算
 ////////////////////////////////////////
 
-        function Dice(diceSided){
-          let ddd =  Math.floor((Math.random() * diceSided)+1 );
-          if(ddd <=9){
-            ddd = '0' + ddd;
-          }
-          return ddd;
-        }                        
+        function Dice(diceSided){          
+          return Math.floor((Math.random() * diceSided) + 1)
+        }              
 		
 	function RollDice(inputStr){
   //先把inputStr變成字串（不知道為什麼非這樣不可）
