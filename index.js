@@ -92,7 +92,7 @@ function parseInput(rplyToken, inputStr) {
 		_isNaN = function(obj) {
 			return isNaN(parseInt(obj));
         }                   
-        let msgSplitor = (/ |  |   |    |     /);	
+        let msgSplitor = (/     |    |   |  | /);	
 		let mainMsg = inputStr.split(msgSplitor); //定義輸入字串，以空格切開     
 		let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
                        
