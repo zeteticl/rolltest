@@ -136,6 +136,7 @@ CC後請輸入目標數字\
 	
 	/**
 	* Fisher–Yates shuffle
+	  SortIt 指令開始於此
 	*/
 			if (trigger.match(/排序/)!= null && mainMsg.length >= 3) 
 	{        
