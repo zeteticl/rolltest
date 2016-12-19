@@ -854,7 +854,7 @@ function tarotCardReply(count) {
 }
 		function Help() {
 			return randomReply() + '\n' + '\
-【擲骰BOT】v1.0 \
+【擲骰BOT】v1.2 \
 \n 例如輸入2d6+1　攻撃！\
 \n 會輸出）2d6+1：攻撃  9[6+3]+1 = 10\
 \n 如上面一樣,在骰子數字後方隔空白位打字,可以進行發言。\
