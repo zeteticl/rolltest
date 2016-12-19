@@ -886,15 +886,14 @@ function tarotCardReply(count) {
  function SortIt(input,mainMsg) {   
 
 	let a = input.replace(mainMsg[0], '').match(/\S+/ig);
-    for (var i = input.length-1; i >=0; i--) {
+    for (var i = a.length-1; i >=0; i--) {
 
         var randomIndex = Math.floor(Math.random()*(i+1));
         var itemAtIndex = a[randomIndex];
-
         a[randomIndex] = a[i];
         a[i] = itemAtIndex;
     }
-    	return mainMsg[0] + '['+ a + '] → ' + input;
+    	return mainMsg[0] + ' → ['+ a + ']' ;
 }
 
 		
