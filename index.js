@@ -134,6 +134,14 @@ CC後請輸入目標數字\
 		return wod(trigger,mainMsg[1]);
 	}
 	
+	/**
+	* Fisher–Yates shuffle
+	*/
+			if (trigger.match(/排序/)!= null && mainMsg.length >= 3) 
+	{        
+		return SortIt(inputStr,mainMsg);
+	}
+	
 	//choice 指令開始於此
 		if (trigger.match(/choice|隨機|選項|選1/)!= null && mainMsg.length >= 3) 
 	{        
@@ -874,4 +882,19 @@ function tarotCardReply(count) {
 ';		
 		}
 		
+		
+ function SortIt(input,mainMsg) {   
+
+	let a = input.replace(mainMsg[0], '').match(/\S+/ig);
+    for (var i = input.length-1; i >=0; i--) {
+
+        var randomIndex = Math.floor(Math.random()*(i+1));
+        var itemAtIndex = a[randomIndex];
+
+        a[randomIndex] = a[i];
+        a[i] = itemAtIndex;
+    }
+    	return mainMsg[0] + '['+ a + '] → ' + input;
+}
+
 		
