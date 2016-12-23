@@ -330,7 +330,7 @@ function ArrMax (Arr){
 	aaa = aaa.replace(']', ')' );
 	let answer = eval(aaa.toString());
 	
-    finalStr = finalStr + i + '# ' + equation + ' = ' + answer + '\n';
+    finalStr = finalStr + i + '# ' + equation + ' = ' + answer + 'a\n';
     }
         
   }
@@ -360,10 +360,10 @@ function ArrMax (Arr){
 	let answer = eval(aaa.toString());
       
   if(text1 != null){
-	  finalStr= text0 + '：' + text1 + '\n' + equation + ' = ' + answer;
+	  finalStr= text0 + '：' + text1 + '\n' + equation + ' = ' + answer + 'b';
     	  }
 		  else{
-		  finalStr= text0 + '：\n' + equation + ' = ' + answer;
+		  finalStr= text0 + '：\n' + equation + ' = ' + answer+ 'c';
     		  }
 
   }
