@@ -328,7 +328,7 @@ function ArrMax (Arr){
     let aaa = equation;
 	let answer = eval(aaa.replace(/]|[[]\d+/ig,"").toString());
 	aaa = aaa.replace(/\d+[[]/, '(' );
-	aaa = aaa.replace(']', ')' );
+	aaa = aaa.replace(']', ')' ); 
 	 
     finalStr = finalStr + i + '# ' + equation + ' = ' + answer + '\n';
     }
