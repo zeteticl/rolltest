@@ -330,7 +330,7 @@ function ArrMax (Arr){
 	aaa = aaa.replace(']', ')' );
 	let answer = eval(aaa.toString());
 	
-    finalStr = finalStr + i + '# ' + equation + ' = ' + answer + 'a\n';
+    finalStr = finalStr + i + '# ' + equation + ' = ' + answer + '\n';
     }
         
   }
@@ -349,7 +349,8 @@ function ArrMax (Arr){
     let tempMatch = equation.match(/\d+d\d+/);    
     if (tempMatch.toString().split('d')[0]>300) return undefined;
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>1000000) return undefined;
-    equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
+	let abc = RollDice(tempMatch);
+    equation = equation.replace(/\d+d\d+/, abc.[0] );
 	
   }
   
@@ -357,13 +358,13 @@ function ArrMax (Arr){
 	let aaa = equation;
 	aaa = aaa.replace(/\d+[[]/, '(' );
 	aaa = aaa.replace(']', ')' );
-	let answer = eval(aaa.toString());
+	let answer = eval(abc.[1].toString());
       
   if(text1 != null){
-	  finalStr= text0 + '：' + text1 + '\n' + equation + ' = ' + answer + 'b';
+	  finalStr= text0 + '：' + text1 + '\n' + equation + ' = ' + answer;
     	  }
 		  else{
-		  finalStr= text0 + '：\n' + equation + ' = ' + answer+ 'c';
+		  finalStr= text0 + '：\n' + equation + ' = ' + answer;
     		  }
 
   }
@@ -395,7 +396,8 @@ function ArrMax (Arr){
      }
 
   finalStr = finalStr.substring(0, finalStr.length - 1) + ']';
-  finalStr = finalStr.replace('[', totally +'[');
+  finalStr[0] = finalStr.replace('[', totally +'[');
+  finalStr[1] =totally;
   return finalStr;
 }
 
