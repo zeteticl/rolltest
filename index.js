@@ -350,7 +350,7 @@ function ArrMax (Arr){
     if (tempMatch.toString().split('d')[0]>300) return undefined;
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>1000000) return undefined;
 	let abc = RollDice(tempMatch);
-    equation = equation.replace(/\d+d\d+/, abc.[0] );
+    equation = equation.replace(/\d+d\d+/, abc[0] );
 	
   }
   
@@ -358,7 +358,7 @@ function ArrMax (Arr){
 	let aaa = equation;
 	aaa = aaa.replace(/\d+[[]/, '(' );
 	aaa = aaa.replace(']', ')' );
-	let answer = eval(abc.[1].toString());
+	let answer = eval(abc[1].toString());
       
   if(text1 != null){
 	  finalStr= text0 + '：' + text1 + '\n' + equation + ' = ' + answer;
