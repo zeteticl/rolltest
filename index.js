@@ -397,7 +397,7 @@ function ArrMax (Arr){
 
   finalStr = finalStr.substring(0, finalStr.length - 1) + ']';
   finalStr[0] = finalStr.replace('[', totally +'[');
-  finalStr[1] =totally;
+  finalStr[1] = totally;
   return finalStr;
 }
 
