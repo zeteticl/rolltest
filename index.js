@@ -349,8 +349,7 @@ function ArrMax (Arr){
     let tempMatch = equation.match(/\d+d\d+/);    
     if (tempMatch.toString().split('d')[0]>300) return undefined;
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>1000000) return undefined;
-	let abc = RollDice(tempMatch);
-    equation = equation.replace(/\d+d\d+/, abc[0] );
+    equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
 	
   }
   
@@ -358,7 +357,7 @@ function ArrMax (Arr){
 	let aaa = equation;
 	aaa = aaa.replace(/\d+[[]/, '(' );
 	aaa = aaa.replace(']', ')' );
-	let answer = eval(abc[1].toString());
+	let answer = eval(aaa.toString());
       
   if(text1 != null){
 	  finalStr= text0 + '：' + text1 + '\n' + equation + ' = ' + answer;
@@ -396,8 +395,7 @@ function ArrMax (Arr){
      }
 
   finalStr = finalStr.substring(0, finalStr.length - 1) + ']';
-  finalStr[0] = finalStr.replace('[', totally +'[');
-  finalStr[1] = totally;
+  finalStr = finalStr.replace('[', totally +'[');
   return finalStr;
 }
 
