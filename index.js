@@ -159,6 +159,19 @@ CC後請輸入目標數字\
 			return RockPaperScissors(inputStr, mainMsg[1]);
 		}
 */
+
+	//xBy>A 指令開始於此
+	if (trigger.match(/^(\d+)(b)(\d+)$/i)!= null)
+	{        
+		return xBy(trigger,mainMsg[1],mainMsg[2]);
+	}
+	//xSy 指令開始於此	
+	if (trigger.match(/^(\d+)(s)(\d+)$/i)!= null)
+	{        
+		return xSy(trigger,mainMsg[1]);
+	}
+
+
          //普通ROLL擲骰判定在此        
      if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) {
           return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
@@ -379,6 +392,12 @@ function ArrMax (Arr){
 //////////////// 擲骰子運算
 ////////////////////////////////////////
 
+function sortNumber(a,b)
+{
+return a - b
+}
+
+
         function Dice(diceSided){          
           return Math.floor((Math.random() * diceSided) + 1)
         }              
@@ -497,6 +516,38 @@ function d66s(text) {
 	
 }
 
+////////////////////////////////////////
+//////////////// xBy
+////////////////////////////////////////
+function xBy(triggermsg ,text01, text02) {
+if (text01 ==undefined) text01 ='';
+if (text02 ==undefined) text02 ='';
+	
+let  match = /^(\d+)(B)(\d+)$/i.exec(triggermsg);  //判斷式  [0]3B8,[1]3,[2]B,[3]8
+let varcou =  new Array();
+let varsu = 0;
+for (var i = 0; i < Number(match[1]); i++)	
+	{
+             varcou[i] =  Dice(match[3].sort);
+			
+			 
+			 
+	}
+varcou.sort(sortNumber);
+//(5B7>6) → 7,5,6,4,4 → 成功数1
+
+if(Number(text01) <= Number(match[3])){
+for (let i = 0; i < Number(match[1]); i++)	
+	{
+             if(Number(varcou[i])>=Number(text01)) varsu++;        
+	}
+    varcou+= ' → 成功數'+varsu + ' ' +text02 ;
+	}
+else
+	varcou+=+ ' ' +text01 ;
+
+	}
+return varcou;
 
 ////////////////////////////////////////
 //////////////// WOD黑暗世界
@@ -508,7 +559,7 @@ function wod(triggermsg ,text) {
 	var varsu = 0;
 	var match = /^(\d+)(wd|wod)(\d|)((\+|-)(\d+)|)$/i.exec(triggermsg);   //判斷式  [0]3wd8+10,[1]3,[2]wd,[3]8,[4]+10,[5]+,[6]10  
 	if (match[3]=="") { match[3] =10 }
-	if (match[3]<=1) { return '加骰最少比1高'; }
+	if (match[3]<=2) { return '加骰最少比2高'; }
 			
 for (var i = 0; i < Number(match[1]); i++)	
 	{
