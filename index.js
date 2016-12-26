@@ -520,8 +520,7 @@ function d66s(text) {
 //////////////// xBy
 ////////////////////////////////////////
 function xBy(triggermsg ,text01, text02) {
-if (text01 ==undefined) text01 =' ';
-if (text02 ==undefined) text02 =' ';
+
 let returnStr = '(' + triggermsg +')';
 let match = /^(\d+)(B)(\d+)$/i.exec(triggermsg);  //判斷式  [0]3B8,[1]3,[2]B,[3]8
 let varcou =  new Array();
@@ -539,10 +538,12 @@ for (let i = 0; i < Number(match[1]); i++)
 	{
              if(Number(varcou[i])>=Number(text01)) varsu++;        
 	}
+	if (text02 ==undefined) text02 ='';
     returnStr+= ' → ' + varcou + ' → 成功數'+varsu + ' ' +text02 ;
 	
 }
 else{
+	if (text01 ==undefined) text01 ='';
 	returnStr+=  ' → ' + varcou + ' ' +text01 ;
 
 	}
