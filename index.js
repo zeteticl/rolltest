@@ -533,17 +533,17 @@ for (var i = 0; i < Number(match[1]); i++)
 varcou.sort(sortNumber);
 //(5B7>6) → 7,5,6,4,4 → 成功数1
 
-if(isNaN(text01)&&text01 <= match[3])
+if(isNaN(text01) ==false &&text01 <= match[3])
 {
-	returnStr+=  ' → ' + varcou + ' ' +text01 ;
-	
-}
-else{
 for (let i = 0; i < Number(match[1]); i++)	
 	{
              if(Number(varcou[i])>=Number(text01)) varsu++;        
 	}
     returnStr+= ' → ' + varcou + ' → 成功數'+varsu + ' ' +text02 ;
+	
+}
+else{
+	returnStr+=  ' → ' + varcou + ' ' +text01 ;
 
 	}
 	
