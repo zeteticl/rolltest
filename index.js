@@ -528,7 +528,7 @@ let varcou =  new Array();
 let varsu = 0;
 for (var i = 0; i < Number(match[1]); i++)	
 	{
-             varcou[i] =  Dice(match[3].sort);
+             varcou[i] =  Dice(match[3]);
 					 
 			 
 	}
