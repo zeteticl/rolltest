@@ -92,7 +92,7 @@ function parseInput(rplyToken, inputStr) {
 			return isNaN(parseInt(obj));
         }                   
         let msgSplitor = (/\S+/ig);	
-		let mainMsg = inputStr.match(msgSplitor); //定義輸入字串，以空格切開     
+		let mainMsg = inputStr.match(msgSplitor); //定義輸入字串
 		let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
                        
         //鴨霸獸指令開始於此
@@ -535,15 +535,15 @@ varcou.sort(sortNumber);
 
 if(isNaN(text01)&&text01 <= match[3])
 {
+	returnStr+=  ' → ' + varcou + ' ' +text01 ;
+	
+}
+else{
 for (let i = 0; i < Number(match[1]); i++)	
 	{
              if(Number(varcou[i])>=Number(text01)) varsu++;        
 	}
     returnStr+= ' → ' + varcou + ' → 成功數'+varsu + ' ' +text02 ;
-	
-}
-else{
-	returnStr+=  ' → ' + varcou + ' ' +text01 ;
 
 	}
 	
