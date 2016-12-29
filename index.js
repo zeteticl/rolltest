@@ -572,7 +572,7 @@ return returnStr;
 function xUy(triggermsg ,text01, text02, text03) {
 	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg);   //判斷式  5u19,5,u,19, 
 	var returnStr = '('+triggermsg+'['+text01+']';
-	if(text02 <= match[3] && text02!=null) 
+	if(text02 <= match[3] && text02 != undefined) 
 	{
 		returnStr+= '>'+text02+ ') → ';
 		if(text03!=null) returnStr += text03 +' → ';
@@ -586,7 +586,7 @@ function xUy(triggermsg ,text01, text02, text03) {
 	let varcoufanl =  new Array();
 	let varcounew =  new Array();
 	var varsu = 0;
-	if (text01<=2) { returnStr = '加骰最少比2高'; }
+	if (text01<=2) { return  '加骰最少比2高'; }
 
 for (var i = 0; i < Number(match[1]); i++)	
 	{
