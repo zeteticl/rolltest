@@ -574,12 +574,12 @@ function xUy(triggermsg ,text01, text02, text03) {
 	var returnStr = '('+triggermsg+'['+text01+']';
 	if(text02 <= match[3] && text02 != undefined) 
 	{
-		returnStr+= '>'+text02+ ') → ';
-		if(text03!=undefined) returnStr += text03 +' → ';
+		returnStr+= '>'+text02+ '1) → ';
+		if(text03!=undefined) returnStr += text03 +' 2→ ';
 	}
 	else{
-	returnStr+= ') → ';
-		if(text02!=undefined) returnStr += text02 +' → ';	
+	returnStr+= '3) → ';
+		if(text02!=undefined) returnStr += text02 +' 4→ ';	
 	}	
 	let varcou =  new Array();
 	let varcouloop =  new Array();
@@ -635,7 +635,7 @@ returnStr  += '/' + varcou.reduce(function(previousValue,currentValue){
 	}
 	return returnStr;
 	
-		}
+	}
 
 
 ////////////////////////////////////////
