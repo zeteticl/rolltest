@@ -874,7 +874,6 @@ function NomalDrawTarot(CardToCal, text) {
 		returnStr = tarotCardReply(FunnyDice(22)) + ' ' + tarotRevReply(FunnyDice(2));
 	else
 		returnStr = tarotCardReply(FunnyDice(22)) + ' ' + tarotRevReply(FunnyDice(2)) + ' ; ' + text;
-
 	return returnStr;
 }
 
@@ -908,7 +907,6 @@ function choice(input,str) {
 
 function tarotCardReply(count) {
 	let returnStr = '';
-
 	// returnStr = count + '愚者';
 	if (count == 0) returnStr = '愚者';
 	if (count == 1) returnStr = '魔術師';
@@ -932,7 +930,6 @@ function tarotCardReply(count) {
 	if (count == 19) returnStr = '太陽';
 	if (count == 20) returnStr = '審判';
 	if (count == 21) returnStr = '世界';
-
 	if (count == 22) returnStr = '權杖一';
 	if (count == 23) returnStr = '權杖二';
 	if (count == 24) returnStr = '權杖三';
@@ -947,7 +944,6 @@ function tarotCardReply(count) {
 	if (count == 33) returnStr = '權杖騎士';
 	if (count == 34) returnStr = '權杖皇后';
 	if (count == 35) returnStr = '權杖國王';
-
 	if (count == 36) returnStr = '聖杯一';
 	if (count == 37) returnStr = '聖杯二';
 	if (count == 38) returnStr = '聖杯三';
@@ -962,7 +958,6 @@ function tarotCardReply(count) {
 	if (count == 47) returnStr = '聖杯騎士';
 	if (count == 48) returnStr = '聖杯皇后';
 	if (count == 49) returnStr = '聖杯國王';
-
 	if (count == 50) returnStr = '寶劍一';
 	if (count == 51) returnStr = '寶劍二';
 	if (count == 52) returnStr = '寶劍三';
@@ -977,7 +972,6 @@ function tarotCardReply(count) {
 	if (count == 61) returnStr = '寶劍騎士';
 	if (count == 62) returnStr = '寶劍皇后';
 	if (count == 63) returnStr = '寶劍國王';
-
 	if (count == 64) returnStr = '錢幣一';
 	if (count == 65) returnStr = '錢幣二';
 	if (count == 66) returnStr = '錢幣三';
@@ -992,7 +986,6 @@ function tarotCardReply(count) {
 	if (count == 75) returnStr = '錢幣騎士';
 	if (count == 76) returnStr = '錢幣皇后';
 	if (count == 77) returnStr = '錢幣國王';
-
 	if (count == 78) returnStr = '空白牌';
 
 	return returnStr;
@@ -1007,9 +1000,15 @@ function tarotCardReply(count) {
 \n 以下還有其他例子\
 \n 5 3D6 	：分別骰出5次3d6\
 \n D66 D66s ：骰出D66 s小者固定在前\
+\n 5B10：不加總的擲骰 會進行小至大排序 \
+\n 5U10 8：進行5D10 每骰出一粒8會有一粒獎勵骰 \
+\n 5U10 8 9：如上,另外計算其中有多少粒大過9 \
 \n Choice：啓動語choice/隨機/選項/選1\
 \n (問題)(啓動語)(問題)  (選項1) (選項2) \
 \n 例子 隨機收到聖誕禮物數 1 2 3 >4  \
+\n 隨機排序：啓動語　排序\
+\n (問題)(啓動語)(問題)  (選項1) (選項2)(選項3) \
+\n 例子 交換禮物排序 A君 C君 F君 G君\
 \n \
 \n ・COC六版判定　CCb （目標値）：做出成功或失敗的判定\
 \n例）CCb 30　CCb 80\
