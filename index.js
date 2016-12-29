@@ -571,7 +571,16 @@ return returnStr;
 
 function xUy(triggermsg ,text01, text02, text03) {
 	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg);   //判斷式  5u19,5,u,19, 
-	var returnStr = '('+triggermsg+')['+text01+'] → ';
+	var returnStr = '('+triggermsg+'['+text01+']';
+	if(text02 <= match[3] ) 
+	{
+		returnStr+= '>'+text02+ ') → ';
+		if(text03!=null) returnStr += text03 +' → ';
+	}
+	else{
+	returnStr+= ') → ';
+		if(text02!=null) returnStr += text02 +' → ';	
+	}	
 	let varcou =  new Array();
 	let varcouloop =  new Array();
 	let varcoufanl =  new Array();
