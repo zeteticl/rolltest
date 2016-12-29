@@ -570,13 +570,13 @@ return returnStr;
 ////////////////////////////////////////
 
 function xUy(triggermsg ,text01, text02, text03) {
+	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg);   //判斷式  5u19,5,u,19, 
 	var returnStr = '('+triggermsg+') → ';
 	let varcou =  new Array();
 	let varcouloop =  new Array();
 	let varcoufanl =  new Array();
 	let varcounew =  new Array();
 	var varsu = 0;
-	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg);   //判斷式  5u19,5,u,19, 
 	if (text01<=2) { returnStr = '加骰最少比2高'; }
 			
 for (var i = 0; i < Number(match[1]); i++)	
@@ -591,7 +591,7 @@ for (var i = 0; i < Number(match[1]); i++)
 				varcou[i] += varcounew[i];
 			}
 
-			}
+	}
 
     for(var i = 0; i < varcouloop.length; i++)	
   {
@@ -599,16 +599,17 @@ for (var i = 0; i < Number(match[1]); i++)
     else     returnStr += varcou[i]+'['+varcouloop[i]+ '], '; 
     
   }
- returnStr = returnStr.replace(/, $/ig,'');
+		returnStr = returnStr.replace(/, $/ig,'');
  
  
  ////////////////  (5U10[8]) → 17[10,7],4,5,7,4 → 17/37(最大/合計)
  
  //if(text02==null) 
-returnStr  +=' → ' + Math.max.apply(null, varcou)
-returnStr  += '/' + varcou.reduce(function(previousValue,currentValue){
+		returnStr  +=' → ' + Math.max.apply(null, varcou)
+		returnStr  += '/' + varcou.reduce(function(previousValue,currentValue){
         return previousValue + currentValue;} ) +'(最大/合計)';
-}
+		return returnStr;
+		}
 
 
 ////////////////////////////////////////
