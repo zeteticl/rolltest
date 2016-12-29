@@ -572,7 +572,7 @@ return returnStr;
 function xUy(triggermsg ,text01, text02, text03) {
 	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg);   //判斷式  5u19,5,u,19, 
 	var returnStr = '('+triggermsg+'['+text01+']';
-	if(text02 <= match[3] && text02 != undefined) 
+	if(Number(text02) <= Number(match[3]) && text02 != undefined) 
 	{
 		returnStr+= '>'+text02+ '1) → ';
 		if(text03!=undefined) returnStr += text03 +' 2→ ';
