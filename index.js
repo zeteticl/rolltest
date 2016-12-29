@@ -612,13 +612,13 @@ for (var i = 0; i < Number(match[1]); i++)
  
  
  
- if(text02 <= match[3] ){
+ if(Number(text02) <= Number(match[3]) ){
 let suc =0;
 
 ////////////////  (5U10[8]>8) → 1,30[9,8,8,5],1,3,4 → 成功数1
 for(var i=0;i<varcou.length;i++)
 {
-if(varcou[i]>=text02) suc++;
+if(Number(varcou[i])>=Number(text02)) suc++;
 }
 
 returnStr  += ' → 成功数' +suc;
