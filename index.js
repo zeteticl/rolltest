@@ -575,11 +575,11 @@ function xUy(triggermsg ,text01, text02, text03) {
 	if(text02 <= match[3] && text02 != undefined) 
 	{
 		returnStr+= '>'+text02+ ') → ';
-		if(text03!=null) returnStr += text03 +' → ';
+		if(text03!=undefined) returnStr += text03 +' → ';
 	}
 	else{
 	returnStr+= ') → ';
-		if(text02!=null) returnStr += text02 +' → ';	
+		if(text02!=undefined) returnStr += text02 +' → ';	
 	}	
 	let varcou =  new Array();
 	let varcouloop =  new Array();
