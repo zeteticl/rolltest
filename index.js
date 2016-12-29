@@ -105,6 +105,16 @@ function parseInput(rplyToken, inputStr) {
   
 		if (trigger.match(/^help$|^幫助$/)!= null ) return Help();
 		
+			/**
+ 	* Fisher–Yates shuffle
+ 	  SortIt 指令開始於此
+ 	*/
+ 			if (trigger.match(/排序/)!= null && mainMsg.length >= 3) 
+ 	{        
+ 		return SortIt(inputStr,mainMsg);
+ 	}
+ 	
+		
         if (trigger.match(/^d66$/)!= null ) return d66(mainMsg[1]);
 	
 		if (trigger.match(/^d66s$/)!= null ) return d66s(mainMsg[1]);
@@ -165,10 +175,10 @@ CC後請輸入目標數字\
 	{        
 		return xBy(trigger,mainMsg[1],mainMsg[2]);
 	}
-	//xSy 指令開始於此	
-	if (trigger.match(/^(\d+)(s)(\d+)$/i)!= null)
+	//xUy 指令開始於此	
+	if (trigger.match(/^(\d+)(u)(\d+)$/i)!= null && isNaN(mainMsg[1])== false)
 	{        
-		return xSy(trigger,mainMsg[1]);
+		return xUy(trigger,mainMsg[1],mainMsg[2],mainMsg[3]);
 	}
 
 
@@ -539,6 +549,7 @@ for (let i = 0; i < Number(match[1]); i++)
              if(Number(varcou[i])>=Number(text01)) varsu++;        
 	}
 	if (text02 ==undefined) text02 ='';
+
     returnStr+= ' → ' + varcou + ' → 成功數'+varsu + ' ' +text02 ;
 	
 }
@@ -551,6 +562,59 @@ else{
 
 return returnStr;
 }
+
+////////////////////////////////////////
+//////////////// xUy
+////////////////  (5U10[8]) → 17[10,7],4,5,7,4 → 17/37(最大/合計)
+////////////////  (5U10[8]>8) → 1,30[9,8,8,5],1,3,4 → 成功数1
+////////////////////////////////////////
+
+function xUy(triggermsg ,text01, text02, text03) {
+	var returnStr = '('+triggermsg+') → ';
+	let varcou =  new Array();
+	let varcouloop =  new Array();
+	let varcoufanl =  new Array();
+	let varcounew =  new Array();
+	var varsu = 0;
+	
+            function Dice(diceSided){          
+          return Math.floor((Math.random() * diceSided) + 1)
+        }              
+
+	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg);   //判斷式  5u19,5,u,19, 
+	if (text01<=2) { returnStr = '加骰最少比2高'; }
+			
+for (var i = 0; i < Number(match[1]); i++)	
+	{
+			varcou[i] =  Dice(match[3]);
+			varcounew[i] = varcou[i];
+			varcouloop[i] = varcounew[i];
+			for(;varcounew[i]>=text01;)
+			{
+				varcounew[i] =Dice(match[3]);
+				varcouloop[i] += ', ' +varcounew[i];
+				varcou[i] += varcounew[i];
+			}
+
+			}
+
+    for(var i = 0; i < varcouloop.length; i++)	
+  {
+	if(varcouloop[i]==varcou[i])   {returnStr += varcou[i]+', ';}
+    else     returnStr += varcou[i]+'['+varcouloop[i]+ '], '; 
+    
+  }
+ returnStr = returnStr.replace(/, $/ig,'');
+ 
+ 
+ ////////////////  (5U10[8]) → 17[10,7],4,5,7,4 → 17/37(最大/合計)
+ 
+ //if(text02==null) 
+returnStr  +=' → ' + Math.max.apply(null, varcou)
+returnStr  += '/' + varcou.reduce(function(previousValue,currentValue){
+        return previousValue + currentValue;} ) +'(最大/合計)';
+}
+
 
 ////////////////////////////////////////
 //////////////// WOD黑暗世界
@@ -791,6 +855,20 @@ function NomalDrawTarot(CardToCal, text) {
 
 	return returnStr;
 }
+
+
+ function SortIt(input,mainMsg) {   
+ 
+ 	let a = input.replace(mainMsg[0], '').match(/\S+/ig);
+     for (var i = a.length-1; i >=0; i--) {
+ 
+         var randomIndex = Math.floor(Math.random()*(i+1));
+         var itemAtIndex = a[randomIndex];
+         a[randomIndex] = a[i];
+         a[i] = itemAtIndex;
+     }
+     	return mainMsg[0] + ' → ['+ a + ']' ;
+ }
 
 function tarotRevReply(count) {
 	let returnStr = '';
