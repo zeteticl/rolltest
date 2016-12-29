@@ -602,7 +602,6 @@ for (var i = 0; i < Number(match[1]); i++)
 		returnStr = returnStr.replace(/, $/ig,'');
  
  
-  ////////////////  (5U10[8]) → 17[10,7],4,5,7,4 → 17/37(最大/合計)
  
  if(text02 <= match[3] ){
 let suc =0;
@@ -617,12 +616,16 @@ returnStr  += ' → 成功数' +suc;
 
  }
  else
-	{
+  ////////////////  (5U10[8]) → 17[10,7],4,5,7,4 → 17/37(最大/合計)
+
+	 {
  returnStr  +=' → ' + Math.max.apply(null, varcou)
 returnStr  += '/' + varcou.reduce(function(previousValue,currentValue){
         return previousValue + currentValue;} ) +'(最大/合計)';
 
 	}
+	return returnStr;
+	
 		}
 
 
