@@ -574,12 +574,12 @@ function xUy(triggermsg ,text01, text02, text03) {
 	var returnStr = '('+triggermsg+'['+text01+']';
 	if(Number(text02) <= Number(match[3]) && text02 != undefined) 
 	{
-		returnStr+= '>'+text02+ '1) → ';
-		if(text03!=undefined) returnStr += text03 +' 2→ ';
+		returnStr+= '>'+text02+ ') → ';
+		if(text03!=undefined) returnStr += text03 +' → ';
 	}
 	else{
-	returnStr+= '3) → ';
-		if(text02!=undefined) returnStr += text02 +' 4→ ';	
+	returnStr+= ') → ';
+		if(text02!=undefined) returnStr += text02 +' → ';	
 	}	
 	let varcou =  new Array();
 	let varcouloop =  new Array();
