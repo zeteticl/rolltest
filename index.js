@@ -576,11 +576,6 @@ function xUy(triggermsg ,text01, text02, text03) {
 	let varcoufanl =  new Array();
 	let varcounew =  new Array();
 	var varsu = 0;
-	
-            function Dice(diceSided){          
-          return Math.floor((Math.random() * diceSided) + 1)
-        }              
-
 	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg);   //判斷式  5u19,5,u,19, 
 	if (text01<=2) { returnStr = '加骰最少比2高'; }
 			
