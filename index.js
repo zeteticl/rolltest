@@ -100,7 +100,7 @@ function parseInput(rplyToken, inputStr) {
         if (trigger.match(/運氣|運勢/) != null) return randomLuck(mainMsg) ; //占卜運氣        
         
 		//FLAG指令開始於此
-        if (trigger.match(/立FLAG|死亡FLAG/) != null) return BStyleFlagSCRIPTS() ;        
+        if (trigger.match(/立flag|死亡flag/) != null) return BStyleFlagSCRIPTS() ;        
        
         
 		
