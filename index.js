@@ -693,8 +693,7 @@ for (var i = 0; i < Number(match[1]); i++)
 ////////////////////////////////////////
 
 
-function BStyleFlagSCRIPTS {
-	function randomReply() {
+function BStyleFlagSCRIPTS() {
           let rplyArr = ['\
 「打完這仗我就回老家結婚（この戦いが終わったら、故郷に帰って結婚するんだ）」', '\
 「打完這一仗後我請你喝酒」', '\
@@ -751,8 +750,6 @@ function BStyleFlagSCRIPTS {
 「我可以好好利用這件事」'];
           return rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
         }
-	
-	
 	
         function randomReply() {
           let rplyArr = ['\
