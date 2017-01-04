@@ -123,13 +123,9 @@ function parseInput(rplyToken, inputStr) {
         if (trigger.match(/^d66$/)!= null ) return d66(mainMsg[1]);
 	
 		if (trigger.match(/^d66s$/)!= null ) return d66s(mainMsg[1]);
-		if (trigger.match(/^ccb$|^cc$|^ccn$[1-2]$|^cc[1-2]$/)!= null && mainMsg[1]<=1000 )
+		if (trigger.match(/^ccb$|^cc$|^ccn[1-2]$|^cc[1-2]$/)!= null && mainMsg[1]<=1000 )
 	{       		
 
-		if (inputStr.split(msgSplitor).length == 1) return randomReply() + '\n' + '\
-CC後請輸入目標數字\
-\n 詳情請輸入help\
-';
         //ccb指令開始於此
 		if (trigger == 'ccb'&& mainMsg[1]<=99) return coc6(mainMsg[1],mainMsg[2]);
           
