@@ -134,7 +134,7 @@ function parseInput(rplyToken, inputStr) {
         //cc指令開始於此
         if (trigger == 'cc'&& mainMsg[1]<=1000) return coc7(mainMsg[1],mainMsg[2]);
 		
-		if (trigger == '7版創角' && mainMsg[1] >=1 && mainMsg[1] <=100 )  return NewPC7(mainMsg);
+		if (trigger == '7版創角' && mainMsg[1] != null )  return NewPC7(mainMsg);
 
         
         //獎懲骰設定於此    
@@ -584,6 +584,7 @@ function d66(text) {
 
 		//讀取年齡
 		let old = parseInt(inputStr[1]);
+		if (old == NaN) return undefined;
 		let ReStr = '調查員年齡設為：' + old + '\n';
 		//設定 因年齡減少的點數 和 EDU加骰次數
     let Debuff = 0;
