@@ -380,7 +380,6 @@ function ArrMax (Arr){
     if (tempMatch.toString().split('d')[0]>300) return undefined;
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>1000000) return undefined;
     equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
-	
   }
   
   //計算算式
@@ -411,6 +410,20 @@ function ArrMax (Arr){
 function sortNumber(a,b)
 {
 return a - b
+}
+
+//用來把d給展開成算式的函數
+function RollDice2(inputStr){
+  //先把inputStr變成字串（不知道為什麼非這樣不可）
+  let comStr=inputStr.toString().toLowerCase();
+  let finalStr = '(';
+
+  for (let i = 1; i <= comStr.split('d')[0]; i++) {
+    finalStr = finalStr + Dice(comStr.split('d')[1]) + '+';
+     }
+
+  finalStr = finalStr.substring(0, finalStr.length - 1) + ')';
+  return finalStr;
 }
 
 
@@ -461,7 +474,7 @@ function DiceCal(inputStr){
     let tempMatch = equation.match(/\d+d\d+/);    
     if (tempMatch.toString().split('d')[0]>200) return '欸欸，不支援200D以上擲骰；哪個時候會骰到兩百次以上？想被淨灘嗎？';
     if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return '不支援D1和超過D500的擲骰；想被淨灘嗎？';
-    equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
+    equation = equation.replace(/\d+d\d+/, RollDice2(tempMatch));
   }
   
   //計算算式
@@ -581,7 +594,6 @@ function d66(text) {
 
 	function NewPC7(inputStr){
 
-
 		//讀取年齡
 		let old = parseInt(inputStr);
 		if (old == NaN) return undefined;
@@ -630,7 +642,7 @@ function d66(text) {
     ReStr = ReStr + '\nＩＮＴ：' + DiceCal('(2d6+6)*5');         
     if (old<20) ReStr = ReStr + '\nＥＤＵ：' + DiceCal('3d6*5-5');
     else {
-      let firstEDU = '(' + RollDice('2d6') + '+6)*5';
+      let firstEDU = '(' + RollDice2('2d6') + '+6)*5';
       ReStr = ReStr + '\n==';
       ReStr = ReStr + '\nＥＤＵ初始值：' + firstEDU + ' = ' + eval(firstEDU);
       
