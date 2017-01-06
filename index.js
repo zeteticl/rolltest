@@ -134,7 +134,7 @@ function parseInput(rplyToken, inputStr) {
         //cc指令開始於此
         if (trigger == 'cc'&& mainMsg[1]<=1000) return coc7(mainMsg[1],mainMsg[2]);
 		
-		if (inputStr.match(/7版創角/ig) != null && mainMsg[1] >=1 && mainMsg[1] <=80 )  return NewPC7(mainMsg);
+		if (trigger == '7版創角' && mainMsg[1] >=1 && mainMsg[1] <=100 )  return NewPC7(mainMsg);
 
         
         //獎懲骰設定於此    
