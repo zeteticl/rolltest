@@ -1135,6 +1135,8 @@ function tarotCardReply(count) {
 \n・NC 永遠的後日談擲骰\
 \n (骰數)NC/NA (問題)\
 \n  例子 1NC 2Na+4 3na-2\
+\n 	依戀  NM (問題) \
+\n  例子 NM NM 我的依戀\
 \n  \
 \n・WOD 黑暗世界擲骰\
 \n (骰數)WOD/Wd(加骰)(+成功數) (問題)\
@@ -1144,6 +1146,8 @@ function tarotCardReply(count) {
 \n・塔羅牌占卜 塔羅/大十字塔羅/每日塔羅牌\
 \n  時間tarot 等關键字可啓動\
 \n  死亡FLAG：啓動語 立Flag/死亡flag\
+\n  coc7角色背景：啓動語 coc7角色背景\
+
 ';		
 		}
 		
