@@ -550,7 +550,6 @@ function d66(text) {
 
 		//讀取年齡
 		let old = parseInt(inputStr[1]);
-		if (old == NaN) return undefined;
 		let ReStr = '調查員年齡設為：' + old + '\n';
 		//設定 因年齡減少的點數 和 EDU加骰次數
 		let Debuff = 0;
