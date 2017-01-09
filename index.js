@@ -1147,7 +1147,6 @@ function tarotCardReply(count) {
 \n  時間tarot 等關键字可啓動\
 \n  死亡FLAG：啓動語 立Flag/死亡flag\
 \n  coc7角色背景：啓動語 coc7角色背景\
-
 ';		
 		}
 		
