@@ -322,7 +322,7 @@ function ArrMax (Arr){
 
   
 function build7char(text01){
-	let old =""
+	let old ="";
 	let ReStr = '調查員年齡設為：';
     //讀取年齡
 	if (text01 == undefined) {
