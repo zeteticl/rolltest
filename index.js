@@ -455,7 +455,7 @@ function build6char(){
     ReStr = ReStr + '\nＳＩＺ：' + BuildDiceCal('(2d6+6)');         
     ReStr = ReStr + '\nＥＤＵ：' + BuildDiceCal('(3d6+3)');         
 	ReStr = ReStr + '\n年收入：' + BuildDiceCal('(1d10)'); 	  
-	ReStr = ReStr + '\n調查員的最小起始年齡等於EDU+6，每比起始年齡年老十年，調查員增加一點EDU並且加20點職業技能點數。當超過40歲後，每老十年，從STR,CON,DEX,APP中選擇一個減少一點。';
+	ReStr = ReStr + '\n調查員的最小起始年齡等於EDU+6，每比起始年齡年老十年，\n調查員增加一點EDU並且加20點職業技能點數。\n當超過40歲後，每老十年，\n從STR,CON,DEX,APP中選擇一個減少一點。';
     return ReStr;
   } 
         
@@ -1324,7 +1324,7 @@ function tarotCardReply(count) {
 \n　x：獎勵骰/懲罰骰 (2～n2)。沒有的話可以省略。\
 \n  \
 \n cc六版創角\
-\n cc七版創角\
+\n cc七版創角 （年齡）\
 \n  \
 \n・NC 永遠的後日談擲骰\
 \n (骰數)NC/NA (問題)\
