@@ -355,22 +355,23 @@ function build7char (text01){
     ReStr = ReStr + '\n==';
     if (old>=40) ReStr = ReStr + '\n（以下箭號三項，自選共減' + Debuff + '點。）' ;
     if (old<20) ReStr = ReStr + '\n（以下箭號兩項，擇一減去' + Debuff + '點。）' ;
-    ReStr = ReStr + '\nＳＴＲ：' + DiceCal('3d6*5');
+    ReStr = ReStr + '\nＳＴＲ：' + BuildDiceCal('3d6*5');
+	ReStr = ReStr + '\nＳＴＲ：' + Dice('3d6*5');
     if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff ;
     if (old<20) ReStr = ReStr + ' ←擇一減' + Debuff ;
-    ReStr = ReStr + '\nＣＯＮ：' + DiceCal('3d6*5');
+    ReStr = ReStr + '\nＣＯＮ：' + BuildDiceCal('3d6*5');
     if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff;
-    ReStr = ReStr + '\nＤＥＸ：' + DiceCal('3d6*5');
+    ReStr = ReStr + '\nＤＥＸ：' + BuildDiceCal('3d6*5');
     if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff ;
-    if (old>=40) ReStr = ReStr + '\nＡＰＰ：' + DiceCal('3d6*5-' + AppDebuff);
-    else ReStr = ReStr + '\nＡＰＰ：' + DiceCal('3d6*5');
-    ReStr = ReStr + '\nＰＯＷ：' + DiceCal('3d6*5');
-    ReStr = ReStr + '\nＳＩＺ：' + DiceCal('(2d6+6)*5');
+    if (old>=40) ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6*5-' + AppDebuff);
+    else ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6*5');
+    ReStr = ReStr + '\nＰＯＷ：' + BuildDiceCal('3d6*5');
+    ReStr = ReStr + '\nＳＩＺ：' + BuildDiceCal('(2d6+6)*5');
     if (old<20) ReStr = ReStr + ' ←擇一減' + Debuff ;
-    ReStr = ReStr + '\nＩＮＴ：' + DiceCal('(2d6+6)*5');         
-    if (old<20) ReStr = ReStr + '\nＥＤＵ：' + DiceCal('3d6*5-5');
+    ReStr = ReStr + '\nＩＮＴ：' + BuildDiceCal('(2d6+6)*5');         
+    if (old<20) ReStr = ReStr + '\nＥＤＵ：' + BuildDiceCal('3d6*5-5');
     else {
-      let firstEDU = '(' + RollDice('2d6') + '+6)*5';
+      let firstEDU = '(' + BuildRollDice('2d6') + '+6)*5';
       ReStr = ReStr + '\n==';
       ReStr = ReStr + '\nＥＤＵ初始值：' + firstEDU + ' = ' + eval(firstEDU);
       
@@ -395,8 +396,8 @@ function build7char (text01){
     }
     ReStr = ReStr + '\n==';
 
-    ReStr = ReStr + '\nＬＵＫ：' + DiceCal('3d6*5');    
-    if (old<20) ReStr = ReStr + '\nＬＵＫ加骰：' + DiceCal('3D6*5');
+    ReStr = ReStr + '\nＬＵＫ：' + BuildDiceCal('3d6*5');    
+    if (old<20) ReStr = ReStr + '\nＬＵＫ加骰：' + BuildDiceCal('3D6*5');
 
 
     return ReStr;
@@ -527,6 +528,52 @@ return a - b
 function FunnyDice(diceSided) {
 	return Math.floor((Math.random() * diceSided)) //猜拳，從0開始
 }
+
+function BuildDiceCal(inputStr){
+  
+  //首先判斷是否是誤啟動（檢查是否有符合骰子格式）
+  if (inputStr.toLowerCase().match(/\d+d\d+/) == null) return undefined;
+    
+  //排除小數點
+  if (inputStr.toString().match(/\./)!=null)return undefined;
+
+  //先定義要輸出的Str
+  let finalStr = '' ;  
+  
+  //一般單次擲骰
+  let DiceToRoll = inputStr.toString().toLowerCase();  
+  if (DiceToRoll.match('d') == null) return undefined;
+  
+  //寫出算式
+  let equation = DiceToRoll;
+  while(equation.match(/\d+d\d+/)!=null) {
+    let tempMatch = equation.match(/\d+d\d+/);    
+    if (tempMatch.toString().split('d')[0]>200) return '欸欸，不支援200D以上擲骰；哪個時候會骰到兩百次以上？想被淨灘嗎？';
+    if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return '不支援D1和超過D500的擲骰；想被淨灘嗎？';
+    equation = equation.replace(/\d+d\d+/, BuildRollDice(tempMatch));
+  }
+  
+  //計算算式
+  let answer = eval(equation.toString());
+    finalStr= equation + ' = ' + answer;
+  
+  return finalStr;
+
+}        
+
+function BuildRollDice(inputStr){
+  //先把inputStr變成字串（不知道為什麼非這樣不可）
+  let comStr=inputStr.toString().toLowerCase();
+  let finalStr = '(';
+
+  for (let i = 1; i <= comStr.split('d')[0]; i++) {
+    finalStr = finalStr + Dice(comStr.split('d')[1]) + '+';
+     }
+
+  finalStr = finalStr.substring(0, finalStr.length - 1) + ')';
+  return finalStr;
+}
+            
 
 ////////////////////////////////////////
 //////////////// nechronica (NC)
