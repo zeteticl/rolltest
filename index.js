@@ -110,7 +110,7 @@ function parseInput(rplyToken, inputStr) {
 		//依戀
 		if (trigger.match(/(^nm$)/) != null)	 return nechronica_mirenn(mainMsg[1]);
 			
-		if (trigger.match(/(^7版創角$)/) != null && mainMsg[1] != NaN )	 return build7char(mainMsg[1]);
+		if (trigger.match(/(^7版創角$|^七版創角$)/) != null && mainMsg[1] != NaN )	 return build7char(mainMsg[1]);
 	
   
 		if (trigger.match(/^help$|^幫助$/)!= null ) return Help();
@@ -320,11 +320,10 @@ function ArrMax (Arr){
 
 
   
-function build7char (text01){
+function build7char(text01){
 
     //讀取年齡
-    let old = parseInt(inputStr.split(' ',3)[2]);
-    if (old == NaN) return undefined;
+    let old = text01;
     let ReStr = '調查員年齡設為：' + old + '\n';
     //設定 因年齡減少的點數 和 EDU加骰次數
     let Debuff = 0;
