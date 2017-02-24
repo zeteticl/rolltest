@@ -355,7 +355,6 @@ function build7char(text01){
     if (old>=40) ReStr = ReStr + '\n（以下箭號三項，自選共減' + Debuff + '點。）' ;
     if (old<20) ReStr = ReStr + '\n（以下箭號兩項，擇一減去' + Debuff + '點。）' ;
     ReStr = ReStr + '\nＳＴＲ：' + BuildDiceCal('3d6*5');
-	ReStr = ReStr + '\nＳＴＲ：' + Dice('3d6*5');
     if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff ;
     if (old<20) ReStr = ReStr + ' ←擇一減' + Debuff ;
     ReStr = ReStr + '\nＣＯＮ：' + BuildDiceCal('3d6*5');
