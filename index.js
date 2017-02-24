@@ -323,6 +323,7 @@ function ArrMax (Arr){
 function build7char(text01){
 
     //讀取年齡
+	if (text01 = undefined) text01=18;
     let old = text01;
     let ReStr = '調查員年齡設為：' + old + '\n';
     //設定 因年齡減少的點數 和 EDU加骰次數
