@@ -322,15 +322,17 @@ function ArrMax (Arr){
 
   
 function build7char(text01){
-
+	let old =""
+	let ReStr = '調查員年齡設為：';
     //讀取年齡
 	if (text01 == undefined) {
-		let old = 18;
-    let ReStr = '調查員年齡設為：' + old + '(沒有填寫使用預設值)\n';
+	old = 18;
+    ReStr = ReStr + old + '(沒有填寫使用預設值)\n';
 	}
 	else 
-	{    let old = text01;
-    let ReStr = '調查員年齡設為：' + old + '\n';
+	{
+	old = text01;
+    ReStr = ReStr + old + '\n';
 	}
     //設定 因年齡減少的點數 和 EDU加骰次數
     let Debuff = 0;
