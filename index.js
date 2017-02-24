@@ -110,8 +110,9 @@ function parseInput(rplyToken, inputStr) {
 		//依戀
 		if (trigger.match(/(^nm$)/) != null)	 return nechronica_mirenn(mainMsg[1]);
 			
-		if (trigger.match(/(^7版創角$|^七版創角$)/) != null && mainMsg[1] != NaN )	 return build7char(mainMsg[1]);
+		if (trigger.match(/(^cc7版創角$|^cc七版創角$)/) != null && mainMsg[1] != NaN )	 return build7char(mainMsg[1]);
 	
+		if (trigger.match(/(^cc6版創角$|^cc六版創角$)/) != null && mainMsg[1] != NaN )	 return build6char(mainMsg[1]);
   
 		if (trigger.match(/^help$|^幫助$/)!= null ) return Help();
 		
@@ -402,6 +403,61 @@ function build7char(text01){
     return ReStr;
   } 
 
+////////////////////////////////////////
+//////////////// COC7傳統創角
+////////////////////////////////////////      
+
+
+  
+function build6char(){
+
+/*    //讀取年齡
+	if (text01 == undefined) text01 = 18;
+    let old = text01;
+    let ReStr = '調查員年齡設為：' + old + '\n';
+    //設定 因年齡減少的點數 和 EDU加骰次數
+    let Debuff = 0;
+    let AppDebuff = 0;
+    let EDUinc = 0;
+
+
+    let oldArr = [15,20,40,50,60,70,80]
+    let DebuffArr = [5,0,5,10,20,40,80]
+    let AppDebuffArr = [0,0,5,10,15,20,25]
+    let EDUincArr = [0,1,2,3,4,4,4]
+
+    if (old < 15) return ReStr + '等等，核心規則不允許小於15歲的人物哦。';    
+    if (old >= 90) return ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
+
+    for ( i=0 ; old >= oldArr[i] ; i ++){
+      Debuff = DebuffArr[i];
+      AppDebuff = AppDebuffArr[i];
+      EDUinc = EDUincArr[i];
+    }
+
+    ReStr = ReStr + '==\n';
+    if (old < 20) ReStr = ReStr + '年齡調整：從STR、SIZ擇一減去' + Debuff + '點\n（請自行手動選擇計算）。\n將EDU減去5點。LUK可擲兩次取高。' ;
+    else
+      if (old >= 40)  ReStr = ReStr + '年齡調整：從STR、CON或DEX中「總共」減去' + Debuff + '點\n（請自行手動選擇計算）。\n將APP減去' + AppDebuff +'點。可做' + EDUinc + '次EDU的成長擲骰。' ;
+
+    else ReStr = ReStr + '年齡調整：可做' + EDUinc + '次EDU的成長擲骰。' ;
+    ReStr = ReStr + '\n=='; 
+ if (old>=40) ReStr = ReStr + '\n（以下箭號三項，自選共減' + Debuff + '點。）' ;
+    if (old<20) ReStr = ReStr + '\n（以下箭號兩項，擇一減去' + Debuff + '點。）' ;
+ */
+	let ReStr = '六版核心創角：';
+	ReStr = ReStr + '\nＳＴＲ：' + BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＤＥＸ：' + BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＣＯＮ：' + BuildDiceCal('3d6');
+	ReStr = ReStr + '\nＰＯＷ：' + BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＩＮＴ：' + BuildDiceCal('(2d6+6)');
+    ReStr = ReStr + '\nＳＩＺ：' + BuildDiceCal('(2d6+6)');         
+    ReStr = ReStr + '\nＥＤＵ：' + BuildDiceCal('(3d6+3)');         
+	ReStr = ReStr + '\n年收入：' + BuildDiceCal('(1d10)'); 	  
+	ReStr = ReStr + '\n調查員的最小起始年齡等於EDU+6，每比起始年齡年老十年，調查員增加一點EDU並且加20點職業技能點數。當超過40歲後，每老十年，從STR,CON,DEX,APP中選擇一個減少一點。';
+    return ReStr;
+  } 
         
 ////////////////////////////////////////
 //////////////// 普通ROLL
@@ -1243,7 +1299,7 @@ function tarotCardReply(count) {
 
 		function Help() {
 			return randomReply() + '\n' + '\
-【擲骰BOT】v1.22 \
+【擲骰BOT】v1.26 \
 \n 例如輸入2d6+1　攻撃！\
 \n 會輸出）2d6+1：攻撃  9[6+3]+1 = 10\
 \n 如上面一樣,在骰子數字後方隔空白位打字,可以進行發言。\
@@ -1266,7 +1322,9 @@ function tarotCardReply(count) {
 \n例）CCb 30　CCb 80\
 \n ・COC七版判定　CCx（目標値）\
 \n　x：獎勵骰/懲罰骰 (2～n2)。沒有的話可以省略。\
-\n例）CC 30　CC1 50　CCn2 75\
+\n  \
+\n cc六版創角\
+\n cc七版創角\
 \n  \
 \n・NC 永遠的後日談擲骰\
 \n (骰數)NC/NA (問題)\
