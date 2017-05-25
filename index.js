@@ -48,7 +48,7 @@ app.post('/', jsonParser, function(req, res) {
 
   }
 
-  res.send('ok');
+//  res.send('ok');
 });
 
 app.listen(app.get('port'), function() {
