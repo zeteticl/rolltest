@@ -1,964 +1,942 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var https = require('https');
+var https = require('https');  
 var app = express();
- 
+
 var jsonParser = bodyParser.json();
 
-var outType = 'text';
-var event = '';
-var v_path = '/v2/bot/message/reply';
-
-
-// 房間入口
-// key:value
-// GroupMid : room Object
-var TRPG = { 
-    first : {
-	KP_MID: '',
-	GP_MID: '',
-	players : []
-    }
-};
-TRPG.createRoom = function(p_mid,room_Obj){
-    eval('TRPG.'+p_mid+' = room_Obj');
+var options = {
+  host: 'api.line.me',
+  port: 443,
+  path: '/v2/bot/message/reply',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization':'Bearer L/rv6DxG3fHK7SOuQOz4mvHxX5mjN7+Axpy1IJJBg6ENFEKVV1Z+kApbryOPP77P03OF7O80JNHmjl6Ncxt/dgIml8n4UOD71jQPhI+wiEKhnagEmiqxC2sLKROX/GSrLcbxa0fei67hhh5QyfDLngdB04t89/1O/w1cDnyilFU='
+  }
 }
-
-// 紀錄使用者的資訊，以及進入的房間
-// key:value
-// UserMid: {GP_MID,displayName,userId,pictureUrl,statusMessage}
-var userToRoom={};
-
 app.set('port', (process.env.PORT || 5000));
 
-app.get('/', function (req, res) {
-    //  res.send(parseInput(req.query.input));
-    res.send('Hello');
+// views is directory for all template files
+
+app.get('/', function(req, res) {
+//  res.send(parseInput(req.query.input));
+  res.send('Hello');
 });
 
-app.post('/', jsonParser, function (req, res) {
-    event = req.body.events[0];
-    let type = event.type;
-	
-    if(type == 'leave' && TRPG.hasOwnProperty(event.source.groupId)){
-    	eval('delete TRPG.'+event.source.groupId);
-	console.log('room existance: '+TRPG.hasOwnProperty(event.source.groupId));
-    }
-	
-    let msgType = event.message.type;
-    let msg = event.message.text;
-    let rplyToken = event.replyToken;
+app.post('/', jsonParser, function(req, res) {
+  let event = req.body.events[0];
+  let type = event.type;
+  let msgType = event.message.type;
+  let msg = event.message.text;
+  let rplyToken = event.replyToken;
 
-    let rplyVal = null;
-
-    var roomMID = 'first';
-	
-    // 先找是否已經進入房間
-    if(event.source.type == 'user'){
-	for (var p in userToRoom) {
-	    if( p == event.source.userId ) {
-		for(var r in TRPG){
-		    if(userToRoom[p].GP_MID == r){
-			    roomMID = r;
-			    break;
-		    }
-		}
-	    }
-	    if(roomMID != 'first'){
-		break;
-	    }
-	}
-    }else if(event.source.type == 'group'){
-	for(var r in TRPG){
-	    if(r == event.source.groupId ){
-		roomMID = r;
-		break;
-	    }
-	}
+  let rplyVal = null;
+  console.log(msg);
+  if (type == 'message' && msgType == 'text') {
+    try {
+      rplyVal = parseInput(rplyToken, msg); 
+    } 
+    catch(e) {
+      console.log('catch error');
     }
-	
-    outType = 'text';
+  }
 
-    console.log(msg);
-    if (type == 'message' && msgType == 'text') {
-        try {
-            rplyVal = parseInput(roomMID,rplyToken, msg);
-        }
-        catch (e) {
-            console.log('catch error');
-	    console.log(e.toString());
-        }
-    }
-	
-    if (rplyVal) {
-        if (outType == 'ccd') {
-            replyMsgToLine('push', TRPG[roomMID].KP_MID, rplyVal);
-        }else {
-            replyMsgToLine(outType, rplyToken, rplyVal);
-        }
-    } else {
-        console.log('Do not trigger');
-    }
+  if (rplyVal) {
+    replyMsgToLine(rplyToken, rplyVal); 
+  } else {
+    console.log('Do not trigger'); 
+  }
 
-    res.send('ok');
+  res.send('ok');
 });
 
-app.listen(app.get('port'), function () {
-    console.log('Node app is running on port', app.get('port'));
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
 
-function replyMsgToLine(outType, rplyToken, rplyVal) {
+function replyMsgToLine(rplyToken, rplyVal) {
+	let rplyObj = {
+    replyToken: rplyToken,
+    messages: [
+      {
+        type: "text",
+        text: rplyVal
+      }
+    ]
+  }
 
-    let rplyObj;
-    if (outType == 'image') {
-        v_path = '/v2/bot/message/reply';
-        rplyObj = {
-            replyToken: rplyToken,
-            messages: [
-              {
-                  type: "image",
-                  originalContentUrl: rplyVal,
-                  previewImageUrl: rplyVal
-              }
-            ]
-        }
-    } else if (outType == 'push') {
-        v_path = '/v2/bot/message/push';
-        rplyObj = {
-            to: rplyToken,
-            messages: [
-              {
-                  type: "text",
-                  text: rplyVal
-              }
-            ]
-        }
-    } else {
-        v_path = '/v2/bot/message/reply';
-        rplyObj = {
-            replyToken: rplyToken,
-            messages: [
-              {
-                  type: "text",
-                  text: rplyVal
-              }
-            ]
-        }
-    }
-
-    let rplyJson = JSON.stringify(rplyObj);
-    var options = setOptions();
-    var request = https.request(options, function (response) {
-        console.log('Status: ' + response.statusCode);
-        console.log('Headers: ' + JSON.stringify(response.headers));
-        response.setEncoding('utf8');
-        response.on('data', function (body) {
-            console.log(body);
-        });
+  let rplyJson = JSON.stringify(rplyObj); 
+  
+  var request = https.request(options, function(response) {
+    console.log('Status: ' + response.statusCode);
+    console.log('Headers: ' + JSON.stringify(response.headers));
+    response.setEncoding('utf8');
+    response.on('data', function(body) {
+      console.log(body); 
     });
-    request.on('error', function (e) {
-        console.log('Request error: ' + e.message);
-    })
-    request.end(rplyJson);
-}
-
-function setOptions() {
-    var options = {
-        host: 'api.line.me',
-        port: 443,
-        path: v_path,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer L/rv6DxG3fHK7SOuQOz4mvHxX5mjN7+Axpy1IJJBg6ENFEKVV1Z+kApbryOPP77P03OF7O80JNHmjl6Ncxt/dgIml8n4UOD71jQPhI+wiEKhnagEmiqxC2sLKROX/GSrLcbxa0fei67hhh5QyfDLngdB04t89/1O/w1cDnyilFU='
-        }
-    }
-    return options;
-}
-
-function getUserProfile(p_MID) {
-
-    v_path = '/v2/bot/profile/'+p_MID;
-    var options = {
-        host: 'api.line.me',
-        port: 443,
-        path: v_path,
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer L/rv6DxG3fHK7SOuQOz4mvHxX5mjN7+Axpy1IJJBg6ENFEKVV1Z+kApbryOPP77P03OF7O80JNHmjl6Ncxt/dgIml8n4UOD71jQPhI+wiEKhnagEmiqxC2sLKROX/GSrLcbxa0fei67hhh5QyfDLngdB04t89/1O/w1cDnyilFU='
-        }
-    };
-    v_path = null;
-    var request = https.request(options, function (response) {
-        console.log('Status: ' + response.statusCode);
-        console.log('Headers: ' + JSON.stringify(response.headers));
-        response.setEncoding('utf8');
-        response.on('data', function (body) {
-	    var newBody = MyJSONStringify(body);
-	    userToRoom[p_MID].displayName = newBody.displayName;
-	    userToRoom[p_MID].userId = newBody.userId;
-	    userToRoom[p_MID].pictureUrl = newBody.pictureUrl;
-	    userToRoom[p_MID].statusMessage = newBody.statusMessage;
-	    //eval('replyMsgToLine(\'push\', userToRoom.'+ p_MID +'.GP_MID , newBody.displayName + \' 加入群組囉!!\' )');
-	    replyMsgToLine('push',userToRoom[p_MID].GP_MID , userToRoom[p_MID].displayName + ' 加入房間囉!!');
-	    newBody = null;
-        });
-    });
-
-    request.on('error', function (e) {
-        console.log('Request error: ' + e.message);
-    });
-    request.end();
-}
-
-///////////////////////////////////////
-/////////////////角色功能///////////////
-///////////////////////////////////////
-
-function createChar(p_name,p_uid){
-     var player = {
-	status:{
-	name: p_name,	uid: p_uid,	db: '0',	item: '無',
-	status: '正常',	str: '0',	dex: '0',	con: '0',
-	pow: '0',	app: '0',	int: '0',	siz: '0',
-	edu: '0',	hp: '0',	mp: '0',	san: '0',
-	luck: '0',	職業: '無',	
-	靈感: '75',	知識: '75',	信用: '0',	魅惑: '15',
-	恐嚇: '15',	說服: '10',	話術: '5',	心理學: '10',
-	心理分析: '1',	調查: '25',	聆聽: '20',	圖書館使用: '20',
-	追蹤: '10',	急救: '30',	醫學: '30',	鎖匠: '1',
-	手上功夫: '10',	隱密行動: '10',	生存: '10',	閃避: '0',
-	攀爬: '20',	跳躍: '20',	游泳: '20',	駕駛: '20',
-	領航: '10',	騎術: '5',	自然學: '10',	神秘學: '5',
-	歷史: '5',	會計: '5',	估價: '5',	法律: '5',
-	喬裝: '5',	電腦使用: '5',	電器維修: '10',	機械維修: '10',
-	重機械操作: '1',	數學: '10',	化學: '1',	藥學: '1',
-	人類學: '1',	考古學: '1',	電子學: '1',	物理學: '1',
-	工程學: '1',	密碼學: '1',	天文學: '1',	地質學: '1',
-	生物學: '1',	動物學: '1',	植物學: '1',	物證學: '1',
-	投擲: '20',	鬥毆: '25',	劍: '20',	矛: '20',
-	斧頭: '15',	絞殺: '15',	電鋸: '10',	連枷: '10',
-	鞭子: '5',	弓箭: '15',	手槍: '20',	步槍: '25',
-	衝鋒槍: '15',	機關槍: '10',	重武器: '10',	火焰噴射器: '10',
-	美術: '5',	演技: '5',	偽造: '5',	攝影: '5',
-	克蘇魯神話: '0'
-	}
-     };
-     player.getVal = function(p_sta) {
-	return eval('this.status.'+p_sta);
-     };
-     player.setVal = function(p_sta,p_val){
-	if(p_sta == 'name' || p_sta == '職業'){
-	       this.status.name = p_val;
-	}else if(isNaN(Number(p_val))){
-	    eval('this.status.'+p_sta+' = \''+p_val+'\'');
-	}else{
-	    if(Number(p_val)<0){
-		eval('this.status.'+p_sta+' = \''+0+'\'');
-	    }else if(Number(p_val)>99){
-		eval('this.status.'+p_sta+' = \''+99+'\'');
-	    }else{
-		eval('this.status.'+p_sta+' = \''+p_val+'\'');
-	    }
-	}
-     };
-     player.delVal = function(p_sta){
-	eval('delete this.status.'+p_sta);
-     };
-     player.showAll = function(){
-	var result = "";
-	var v_cnt = 0;
-	for (var p in this.status) {
-	    if( this.status.hasOwnProperty(p) ) {
-		v_cnt = Number(v_cnt)+1;
-		if( v_cnt%3 == 0)
-		   result += p + ": " + this.status[p] + "\n";
-		else
-		   result += p + ": " + this.status[p] + "\t";
-	    } 
-	};
-	return result;
-     };
-     player.show = function() {
-	var MaxHP = Math.round((parseInt(this.getVal('con')) + parseInt(this.getVal('siz'))) / 2);
-	var MaxMP = this.getVal('pow');
-	var MaxSan = 99-parseInt(this.getVal('克蘇魯神話'));
-	var tempstr = '+=====================+\n';
-	tempstr += this.getVal('name') + '\n';
-	tempstr += this.getVal('職業') + '\n';
-	tempstr += padRight('STR:',4) + padRight(this.getVal('str'),3) + padRight('DEX:',4) + padRight(this.getVal('dex'),3) + padRight('CON:',4) + padRight(this.getVal('con'),3) + '\n';
-	tempstr += padRight('POW:',4) + padRight(this.getVal('pow'),3) + padRight('APP:',4) + padRight(this.getVal('app'),3) + padRight('INT:',4) + padRight(this.getVal('int'),3) + '\n';
-	tempstr += padRight('SIZ:',4) + padRight(this.getVal('siz'),3) + padRight('EDU:',4) + padRight(this.getVal('edu'),3) + padRight('DB:',4)  + padRight(this.getVal('db'),3) + '\n';
-	tempstr += '+=====================+\n';
-	tempstr += padRight('HP:',4)  + padRight(this.getVal('hp'),3)  + '/' + MaxHP + '\n';
-	tempstr += padRight('MP:',4)  + padRight(this.getVal('mp'),3)  + '/' + MaxMP + '\n';
-	tempstr += padRight('SAN:',4) + padRight(this.getVal('san'),3) + '/' + MaxSan + '\n';
-	tempstr += padRight('STATUS:',8) + this.getVal('status') + '\n';
-	tempstr += padRight('ITEM:',8)  + this.getVal('item') + '\n';
-	tempstr += '+=====================+';
-	return tempstr;
-     };
-     player.export = function() {
-	var retStr = JSON.stringify(this.status);
-	return retStr;
-     };
-     player.import = function(p_str) {
-	var newChar = JSON.parse(p_str);
-	var oriName = this.getVal('name');
-	this.status = newChar;
-	this.setVal('name',oriName);
-	return '成功匯入角色 ' + this.getVal('name') + ' !!!!';
-     };
-     player.importFromTRPG = function(p_str){
-	var tempChar = JSON.parse(p_str);
-	var newChar = tempChar.skill;
-	for (var p in newChar){
-	   if(this.status.hasOwnProperty(JSONmapping[p])){
-		eval('this.status.'+ JSONmapping[p] +'=\''+ newChar[p] +'\'');
-	   }
-	}
-	return '成功匯入角色 ' + this.getVal('name') + ' !!!!';
-	//return JSON.stringify(newChar);
-     };
-     return player;
+  });
+  request.on('error', function(e) {
+    console.log('Request error: ' + e.message);
+  })
+  request.end(rplyJson);
 }
 
 ////////////////////////////////////////
-//////////////// 創房間 ////////////////
+//////////////// 分析開始
 ////////////////////////////////////////
+function parseInput(rplyToken, inputStr) {
+          
+		console.log('InputStr: ' + inputStr);
+		_isNaN = function(obj) {
+			return isNaN(parseInt(obj));
+        }                   
+        let msgSplitor = (/\S+/ig);	
+		let mainMsg = inputStr.match(msgSplitor); //定義輸入字串
+		let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
+                       
+        //鴨霸獸指令開始於此
+        if (trigger.match(/鴨霸獸|巴獸/) != null) return randomReply() ;        
+        if (trigger.match(/運氣|運勢/) != null) return randomLuck(mainMsg) ; //占卜運氣        
+        
+		//FLAG指令開始於此
+        if (trigger.match(/立flag|死亡flag/) != null) return BStyleFlagSCRIPTS() ;        
+       
+        if (trigger.match(/^coc7角色背景$/)!= null ) return PcBG();
+		
+		//nc指令開始於此 來自Rainsting/TarotLineBot 
+		if (trigger.match(/^[1-4]n[c|a][+|-][1-99]$|^[1-4]n[c|a]$/)!= null ) return nechronica(trigger,mainMsg[1]);
 
-function createNewRoom(p_Mid){
-     var room = {
-	GP_MID: p_Mid,
-	KP_MID:'',
-	players: []
-     };
-     room.setkp = function(p_Mid){
-	this.KP_MID = p_Mid;
-     };
-     room.getGPMid = function(){
-	return this.GP_MID;
-     };
-     room.getKPMid = function(){
-	return this.KP_MID;
-     };
-     room.newChar = function(p_char){
-	this.players.push(p_char);
-     };
-     return room;
-}
-
-////////////////////////////////////////
-//////////////// 分析開始 //////////////
-////////////////////////////////////////
-function parseInput(roomMID,rplyToken, inputStr) {
-
-    console.log('InputStr: ' + inputStr);
-    _isNaN = function (obj) {
-        return isNaN(parseInt(obj));
-    }
-    let msgSplitor = (/\S+/ig);
-    let mainMsg = inputStr.match(msgSplitor); //定義輸入字串
-    let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
-
-    //角卡功能快速入口//
-    for (i = 0; i < TRPG[roomMID].players.length; i++) {
-	if (mainMsg[0].toString() == TRPG[roomMID].players[i].getVal('name'))
-		return CharacterControll( roomMID, mainMsg[0], mainMsg[1], mainMsg[2],mainMsg[3]);
-    }
-
-    if (trigger.match(/運氣|運勢/) != null) {
-        return randomLuck(mainMsg); //占卜運氣
-    }
-    else if (trigger.match(/立flag|死亡flag/) != null) {
-        return BStyleFlagSCRIPTS();
-    }
-    else if (trigger.match(/coc創角/) != null && mainMsg[1] != NaN) {
-        return build6char(mainMsg[1]);
-    }
-    else if (trigger == 'db') {
-        return db(mainMsg[1], 1);
-    }
-    else if (trigger == '角色' || trigger == 'char') {
-	if(roomMID == 'first'){
-	    if(event.source.type =='user'){
-		return '你還沒進入房間喵!!!';
-	    }else{
-		return '房間還沒有建立!!\n請先輸入  setgp';
-	    }
-    	}else{
-	    return CharacterControll(roomMID,mainMsg[1], mainMsg[2], mainMsg[3],mainMsg[4]);
-	}
-    }
-    else if (trigger == 'join') {
-	if(event.source.type == 'user' &&
-	   userToRoom.hasOwnProperty(event.source.userId) &&
-	   userToRoom[event.source.userId].GP_MID == mainMsg[1] ){
-		return '你已經在房間裡了喵!';
-	}else if(event.source.type == 'user'){
-	    eval('userToRoom.'+event.source.userId+' = {}');
-	    userToRoom[event.source.userId] = {
-		    GP_MID: mainMsg[1],
-		    displayName: '',
-		    userId: '',
-		    pictureUrl: '',
-		    statusMessage: ''
-	    };
-	    getUserProfile(event.source.userId)	    
-	    return '加入房間喵!\n請到群組確認加入訊息~';
-	}else{
-	    return '你想幹嘛啦~~~';
-	}
-    }
-    else if (trigger == '貓咪') {
-        return MeowHelp();
-    }
-    else if (trigger.match(/喵/) != null) {
-        return Meow();
-    }
-    else if (trigger.match(/貓/) != null) {
-        return Cat();
-    }
-    else if (trigger == 'help' || trigger == '幫助') {
-        return Help();
-    }
-    else if (trigger.match(/排序/) != null && mainMsg.length >= 3) {
-        return SortIt(inputStr, mainMsg);
-    }   //ccb指令開始於此
-    else if (trigger == 'ccb') {
-        return ccb(roomMID,mainMsg[1], mainMsg[2]);
-    }   //ccd指令開始於此
-    else if (trigger == 'ccd') {
-	for (i = 0; i < TRPG[roomMID].players.length; i++) {
-	    if (mainMsg[1].toString() == TRPG[roomMID].players[i].getVal('name'))
-	    	return CharacterControll( roomMID, mainMsg[1], mainMsg[0], mainMsg[2],mainMsg[3]);
-	}
-	if(TRPG[roomMID].KP_MID != ''){
-	   replyMsgToLine('push', TRPG[roomMID].KP_MID, ccd_dice(mainMsg[3],mainMsg[1],mainMsg[2]));
-           if (TRPG[roomMID].KP_MID == event.source.userId){
-	       replyMsgToLine('push',TRPG[roomMID].GP_MID,'')
-	   }else{
-	       return '成功執行暗骰';
-	   }
-	}else if(roomMID == 'first'){ // 房間還沒創或是沒進入房間
-	   return '你還沒進入房間';
-	}else{
-	   return '現在房間沒有KP，你想傳給誰喵?';
-	}
-    }    //房間相關指令開始於此
-    else if (trigger == 'getkp') {
-	if(TRPG[roomMID].KP_MID != ''){
-           return TRPG[roomMID].KP_MID;
-	}else if (event.source.type != 'group'){
-	   return '在群組才能使用唷!!!';
-	}else{
-	   return '目前沒有設置KP喵!!!';
-	}
-    }
-    else if (trigger == 'setkp') {
-        if (event.source.type == 'user') {
-	    if( TRPG[roomMID].KP_MID == '' || TRPG[roomMID].KP_MID == event.source.userId ){
-		if(roomMID=='first'){
-			return '你還沒有進入房間';
-		}
-		TRPG[roomMID].KP_MID = event.source.userId;
-            	return '設定完成喵';	//，KP的MID是\n' + TRPG[roomMID].KP_MID;
-	    }else{
-		return '如果要更換KP，請現任KP先卸任之後，才能重新"setkp"';
-	    }
-        } else {
-            return '私密BOT才能設定KP哦!!!';
-        }
-    }
-    else if(trigger == 'killkp'){
-	if (event.source.type == 'user' && TRPG[roomMID].KP_MID == event.source.userId){
-	   TRPG[roomMID].KP_MID = '';
-	   return '已經沒有KP了喵';
-	}else{
-	   if(TRPG[roomMID].KP_MID!=''){
-		return '只有KP在私下密語才能使用這個功能哦!';
-	   }else if(roomMID=='first'){
-		return '你還沒有進入房間';
-	   }else{
-		return '現在沒有KP喵~';
-	   }
-	}
-    }
-    else if (trigger == 'getgp') {
-	if(TRPG[roomMID].GP_MID != ''){
-           return TRPG[roomMID].GP_MID;
-	}else{
-	   return '你還沒有進房間哦!!!';
-	}
-    }
-    else if (trigger == 'setgp') {
-	if(event.source.type == 'group'){
-	    if(TRPG.hasOwnProperty(event.source.groupId)){
-		return '在群組開啟了遊戲房間!!!';
-	    }else{
-		TRPG.createRoom(event.source.groupId,createNewRoom(event.source.groupId));
-		return '房間建立成功，請PL私密輸入\njoin '+event.source.groupId;
-	    }
-	}else{
-	    return '必須是群組才能開房間唷 <3 ';
-	}
-    }
-    else if((trigger == 'leaveroom' || event.type == 'leave') && TRPG.hasOwnProperty(event.source.groupId)){
-    	eval('delete TRPG.'+event.source.groupId);
-	console.log('room existance: '+TRPG.hasOwnProperty(event.source.groupId));
-	return '已經刪除房間資訊了喵~';
-    }
-    else if(trigger == 'getuid'){
-	if(event.source.type == 'user' )
-	   return '你的uid是:' + event.source.userId;
-	//else if(event.source.type =='group')
-	//   return '群組的uid是' + event.source.groupId;
-	else
-	   return eval('\'群組的uid是: \' + event.source.+'+event.source.type+'Id');
-    }
-        //生科火大圖指令開始於此
-    else if (trigger == '生科') {
-        outType = 'image';
-        return 'https://i.imgur.com/jYxRe8wl.jpg';//coc6(mainMsg[1],mainMsg[2]);
-    }
-        //choice 指令開始於此
-    else if (trigger.match(/choice|隨機|選項|幫我選/) != null && mainMsg.length >= 3) {
-        return choice(inputStr, mainMsg);
-    }
-        //tarot 指令
-    else if (trigger.match(/tarot|塔羅牌|塔羅/) != null) {
-        return NomalDrawTarot();
-    }
-        //普通ROLL擲骰判定
-    else if (inputStr.match(/\w/) != null && inputStr.toLowerCase().match(/\d+d+\d/) != null) {
-        return nomalDiceRoller(inputStr, mainMsg[0], mainMsg[1], mainMsg[2]);
-    }else if(trigger == 'getprofile' && event.source.type =='user'){
-	return userToRoom[event.source.userId].displayName + '\n'+
-	       userToRoom[event.source.userId].userId + '\n'+
-	       userToRoom[event.source.userId].pictureUrl + '\n'+
-	       userToRoom[event.source.userId].statusMessage;
-    }else if(trigger == 'template'){
-	//replyMsgToLine('template', rplyToken,'');    
-    }
-}
-
-////////////////////////////////////////
-//////////////// 角色卡 測試功能
-////////////////////////////////////////
-
-function CharacterControll(roomMID,trigger, str1, str2, str3) {
-    if (trigger == undefined || trigger == null || trigger == '') {
-        return Meow() + '請輸入更多資訊';
-    }
+		//依戀
+		if (trigger.match(/(^nm$)/) != null)	 return nechronica_mirenn(mainMsg[1]);
+			
+		if (trigger.match(/(^cc7版創角$|^cc七版創角$)/) != null && mainMsg[1] != NaN )	 return build7char(mainMsg[1]);
 	
-    //建立新角
-    if (trigger == 'new' || trigger == '建立') {
-        if (str1 == undefined || str1 == null || str1 == '') return '沒有輸入名稱喵!';
-        for (i = 0; i < TRPG[roomMID].players.length; i++) {
-            if (TRPG[roomMID].players[i].getVal('name') == str1) return '已經有同名的角色了!';
-        }
-	var newPlayer;
-	if(event.source.type == 'user'){
-	   newPlayer = createChar(str1,event.source.userId);
-	}else{
-	   newPlayer = createChar(str1,'');
-	}
-	TRPG[roomMID].players.push(newPlayer);
-	if(str2 == undefined || str2 == null || str2 == ''){
-	    return '成功建立角色 ' + str1 + ' 請補充他/她的能力值!';
-	}else if (str2 == 'trpg'){
-	    return newPlayer.importFromTRPG(str3);
-	}else{
-	    return newPlayer.import(str2);
-	}
-    }
+		if (trigger.match(/(^cc6版創角$|^cc六版創角$)/) != null && mainMsg[1] != NaN )	 return build6char(mainMsg[1]);
+  
+		if (trigger.match(/^help$|^幫助$/)!= null ) return Help();
+		
+			/**
+ 	* Fisher–Yates shuffle
+ 	  SortIt 指令開始於此
+ 	*/
+ 			if (trigger.match(/排序/)!= null && mainMsg.length >= 3) 
+ 	{        
+ 		return SortIt(inputStr,mainMsg);
+ 	}
+ 	
+		
+        if (trigger.match(/^d66$/)!= null ) return d66(mainMsg[1]);
+	
+		if (trigger.match(/^d66s$/)!= null ) return d66s(mainMsg[1]);
+		if (trigger.match(/^ccb$|^cc$|^ccn[1-2]$|^cc[1-2]$/)!= null && mainMsg[1]<=1000 )
+	{       		
 
-    //角色設定(特定狀態查詢) 刪除 查看
-    for (i = 0; i < TRPG[roomMID].players.length; i++) {
-        if (trigger == TRPG[roomMID].players[i].getVal('name')) {
-            if (str1 == 'debug') {
-                return TRPG[roomMID].players[i].debug(str1);//players[i].show();
-            }
-            else if (str1 == 'ccb') {
-                return coc6(TRPG[roomMID].players[i].getVal(str2), str2);
-            }
-	    else if (str1 == 'ccd'){
-		if(TRPG[roomMID].KP_MID != ''){
-		   if(event.source.type == 'user' && event.source.userId == TRPG[roomMID].KP_MID){
-			replyMsgToLine('push', TRPG[roomMID].GP_MID, '剛剛好像發生了什麼事');
-			return ccd_dice(TRPG[roomMID].players[i].getVal('name'),TRPG[roomMID].players[i].getVal(str2), str2);
-		   }else if(event.source.type == 'group' ||
-			   (event.source.type == 'user' && event.source.userId == TRPG[roomMID].players[i].getVal('uid'))){
-			replyMsgToLine('push', TRPG[roomMID].KP_MID, ccd_dice(TRPG[roomMID].players[i].getVal('name'),TRPG[roomMID].players[i].getVal(str2), str2));
-			return '成功執行暗骰';
-		   }
-		   return Meow();
-		}else{
-			return '現在沒有KP，你是想傳給誰辣';
-		}
-	    }
-            else if (str1 == 'skills') {
-                return TRPG[roomMID].players[i].showAll();
-            }
-            else if (str1 == 'addskill') {
-		if(TRPG[roomMID].players[i].status.hasOwnProperty(str2)){
-		   return '該技能之前就學過了';
-		}else{
-		   if(str3 == '' || str3 == undefined){
-			TRPG[roomMID].players[i].setVal(str2,'0')
-		   }else{
-			TRPG[roomMID].players[i].setVal(str2,str3)
-		   }
-		}
-		return TRPG[roomMID].players[i].getVal('name') + ' 學會了 ' + str2 + ' !!! ';
-            }
-            else if (str1 == 'deleteskill') {
-		if(TRPG[roomMID].players[i].status.hasOwnProperty(str2)){
-		   TRPG[roomMID].players[i].delVal(str2)
-                   return '已經刪除技能: '+str2 + '.';
-		}else{
-		   return '你沒有這個技能.';
-		}
-            }
-            else if (str1 == 'output') {
-                return TRPG[roomMID].players[i].export();
-            }
-            else if (str1 == undefined || str1 == '' || str1 == '狀態' || str1 == '屬性') {
-                return TRPG[roomMID].players[i].show();
-            }
-            else if (str1 == 'delete' || str1 == '刪除') {
-		TRPG[roomMID].players.splice(i,1);
-                return '已刪除 ' + trigger + ' 角色資料喵~';
-            }
-            else {
-                try {
-                    if (str2 == undefined || str2 == null || str2 == '') {
-                        return trigger + ': ' + str1 + '[' + TRPG[roomMID].players[i].getVal(str1) + ']';
-                    } else {
-			if( TRPG[roomMID].players[i].status.hasOwnProperty(str1) &&
-			   (event.source.type == 'group' ||
-			    (event.source.type == 'user' && event.source.userId == TRPG[roomMID].KP_MID)||
-			    (event.source.type == 'user' && TRPG[roomMID].KP_MID == '')
-			   )
-			){
-			   var tempVal = TRPG[roomMID].players[i].getVal(str1);
-			   var afterVal = str2;
-			   if(afterVal.charAt(0) == '+' && str1 != 'db'){
-				afterVal = Number(tempVal) + Number(afterVal.substring(1));
-			   }else if(afterVal.charAt(0) == '-' && str1 != 'db'){
-				afterVal = Number(tempVal) - Number(afterVal.substring(1));
-			   }
-			   TRPG[roomMID].players[i].setVal(str1,afterVal);
-                           return trigger + ': ' + str1 + '[' + tempVal + '->' + TRPG[roomMID].players[i].getVal(str1) + ']';
-			}else{
-				return Meow();
+        //ccb指令開始於此
+		if (trigger == 'ccb'&& mainMsg[1]<=99) return coc6(mainMsg[1],mainMsg[2]);
+          
+        //cc指令開始於此
+        if (trigger == 'cc'&& mainMsg[1]<=1000) return coc7(mainMsg[1],mainMsg[2]);
+        
+        //獎懲骰設定於此    
+          if (trigger == 'cc1'&& mainMsg[1]<=1000) return coc7bp(mainMsg[1],'1',mainMsg[2]);        
+          if (trigger == 'cc2'&& mainMsg[1]<=1000) return coc7bp(mainMsg[1],'2',mainMsg[2]);   
+          if (trigger == 'ccn1'&& mainMsg[1]<=1000) return coc7bp(mainMsg[1],'-1',mainMsg[2]);   
+          if (trigger == 'ccn2'&& mainMsg[1]<=1000) return coc7bp(mainMsg[1],'-2',mainMsg[2]);   
+
+	}
+	//wod 指令開始於此
+		if (trigger.match(/^(\d+)(wd|wod)(\d|)((\+|-)(\d+)|)$/i)!= null)
+	{        
+		return wod(trigger,mainMsg[1]);
+	}
+	
+	//choice 指令開始於此
+		if (trigger.match(/choice|隨機|選項|選1/)!= null && mainMsg.length >= 3) 
+	{        
+		return choice(inputStr,mainMsg);
+	}
+
+	//tarot 指令
+	if (trigger.match(/tarot|塔羅牌|塔羅/) != null) {
+			if (trigger.match(/每日|daily/)!= null) {
+				return NomalDrawTarot(mainMsg[1], mainMsg[2]);
 			}
-                    }
-                } catch (err) {
-                    return err.toString();
-                }
-            }
+			if (trigger.match(/時間|time/)!= null) {
+				return MultiDrawTarot(mainMsg[1], mainMsg[2], 1);
+			}
+			if (trigger.match(/大十字|cross/)!= null) {
+				return MultiDrawTarot(mainMsg[1], mainMsg[2], 2);
+			}
+			return MultiDrawTarot(mainMsg[1], mainMsg[2], 3); //預設抽 79 張
+		}
+
+		/*tarot 指令
+	if (trigger.match(/猜拳/) != null) {
+			return RockPaperScissors(inputStr, mainMsg[1]);
+		}
+*/
+
+	//xBy>A 指令開始於此
+	if (trigger.match(/^(\d+)(b)(\d+)$/i)!= null)
+	{        
+		return xBy(trigger,mainMsg[1],mainMsg[2]);
+	}
+	//xUy 指令開始於此	
+	if (trigger.match(/^(\d+)(u)(\d+)$/i)!= null && isNaN(mainMsg[1])== false)
+	{        
+		return xUy(trigger,mainMsg[1],mainMsg[2],mainMsg[3]);
+	}
+
+	
+
+         //普通ROLL擲骰判定在此        
+     if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) {
+          return nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
         }
-    }
-    //列出所有角色
-    if (trigger == 'list' || trigger == '清單') {
-        var tempstr = '角色清單:\n';
-        for (i = 1; i < TRPG[roomMID].players.length+1; i++) {
-            tempstr += i + '. ' + TRPG[roomMID].players[i - 1].getVal('name') + '\n';
-        }
-        return tempstr;
-    }
-    return '沒有這個角色喵~';
+	
 }
 
 
 ////////////////////////////////////////
-//////////////// COC6 CCB成功率骰
-////////////////////////////////////////
-function ccb( roomMID, chack, text) {
-    var val_status = chack;
-    for (i = 0; i < TRPG[roomMID].players.length; i++) {
-        if (val_status.toString() == TRPG[roomMID].players[i].getVal('name')) {
-	    val_status = TRPG[roomMID].players[i].getVal(text);
-	    break;
-        }
-    }
-    if (val_status <= 99) {
-        return coc6(val_status, text);
-    } else {
-        return '**Error**\n找不到該角色或者輸入錯誤';
-    }
-}
-
-function ccd(chack, text, who) {
-    if (chack <= 99) {
-	return ccd_dice(who,chack,text)
-    } else {
-        return '**Error**\n輸入錯誤';
-    }
-}
-
-function coc6(chack, text) {
-
-    let temp = Dice(100);
-    if (text == null) {
-        if (temp > 95) return 'ccb<=' + chack + ' ' + temp + ' → 大失敗！哈哈哈！';
-        if (temp <= chack) {
-            if (temp <= 5) return 'ccb<=' + chack + ' ' + temp + ' → 喔喔！大成功！';
-            else return 'ccb<=' + chack + ' ' + temp + ' → 成功';
-        }
-        else return 'ccb<=' + chack + ' ' + temp + ' → 失敗';
-    } else {
-        if (temp > 95) return 'ccb<=' + chack + ' ' + temp + ' → ' + text + ' 大失敗！哈哈哈！';
-        if (temp <= chack) {
-            if (temp <= 5) return 'ccb<=' + chack + ' ' + temp + ' → ' + text + ' 大成功！';
-            else return 'ccb<=' + chack + ' ' + temp + ' → ' + text + ' 成功';
-        }
-        else return 'ccb<=' + chack + ' ' + temp + ' → ' + text + ' 失敗';
-    }
-}
-function ccd_dice(p_name,chack, text) {
-
-    let temp = Dice(100);
-    if (text == null) {
-        if (temp > 95) return p_name+'做了'+'ccd<=' + chack + ' ' + temp + ' → 大失敗！哈哈哈！';
-        if (temp <= chack) {
-            if (temp <= 5) return p_name+'做了'+'ccd<=' + chack + ' ' + temp + ' → 喔喔！大成功！';
-            else return p_name+'做了'+'ccd<=' + chack + ' ' + temp + ' → 成功';
-        }
-        else return p_name+'做了'+'ccd<=' + chack + ' ' + temp + ' → 失敗';
-    } else {
-        if (temp > 95) return p_name+'做了'+'ccd<=' + chack + ' ' + temp + ' → ' + text + ' 大失敗！哈哈哈！';
-        if (temp <= chack) {
-            if (temp <= 5) return p_name+'做了'+'ccd<=' + chack + ' ' + temp + ' → ' + text + ' 大成功！';
-            else return p_name+'做了'+'ccd<=' + chack + ' ' + temp + ' → ' + text + ' 成功';
-        }
-        else return p_name+'做了'+'ccd<=' + chack + ' ' + temp + ' → ' + text + ' 失敗';
-    }
-}
-
-////////////////////////////////////////
-//////////////// COC6傳統創角
+//////////////// 骰組開始
 ////////////////////////////////////////      
 
 
+               
+////////////////////////////////////////
+//////////////// COC6
+////////////////////////////////////////      
+    
 
-function build6char() {
+function coc6(chack,text){
+          let temp = Dice(100);
+          if (text == null ) {
+            if (temp == 100) return 'ccb<=' + chack  + ' ' + temp + ' → 啊！大失敗！';
+            if (temp <= chack) return 'ccb<=' + chack + ' '  + temp + ' → 成功';
+            else return 'ccb<=' + chack  + ' ' + temp + ' → 失敗' ;
+          }
+          else
+    {
+            if (temp == 100) return 'ccb<=' + chack + ' ' + temp + ' → 啊！大失敗！；' + text;
+            if (temp <= chack) return 'ccb<=' + chack +  ' ' + temp + ' → 成功；' + text;
+            else return 'ccb<=' + chack  + ' ' +  temp + ' → 失敗；' + text;
+    }
+}        
 
-    let ReStr = '六版核心創角：';
-    let str = BuildDiceCal('3d6', 0);
-    let siz = BuildDiceCal('(2d6+6)', 0);
+////////////////////////////////////////
+//////////////// COC7
+////////////////////////////////////////      
 
-    ReStr = ReStr + '\nＳＴＲ：' + str;
-    ReStr = ReStr + '\nＤＥＸ：' + BuildDiceCal('3d6', 0);
-    ReStr = ReStr + '\nＣＯＮ：' + BuildDiceCal('3d6', 0);
-    ReStr = ReStr + '\nＰＯＷ：' + BuildDiceCal('3d6', 0);
-    ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6', 0);
-    ReStr = ReStr + '\nＩＮＴ：' + BuildDiceCal('(2d6+6)', 0);
-    ReStr = ReStr + '\nＳＩＺ：' + siz;
-    ReStr = ReStr + '\nＥＤＵ：' + BuildDiceCal('(3d6+3)', 0);
-
-    let strArr = str.split(' ');
-    let sizArr = siz.split(' ');
-    let temp = parseInt(strArr[2]) + parseInt(sizArr[2]);
-
-    ReStr = ReStr + '\nＤＢ：' + db(temp, 0);
-    return ReStr;
+        
+function coc7(chack,text){
+  let temp = Dice(100);  
+  if (text == null ) {
+    if (temp == 1) return temp + ' → 恭喜！大成功！';
+    if (temp == 100) return temp + ' → 啊！大失敗！';
+    if (temp <= chack/5) return temp + ' → 極限成功';
+    if (temp <= chack/2) return temp + ' → 困難成功';
+    if (temp <= chack) return temp + ' → 通常成功';
+    else return temp + ' → 失敗' ;
+  }
+  else
+  {
+  if (temp == 1) return temp + ' → 恭喜！大成功！；' + text;
+  if (temp == 100) return temp + ' → 啊！大失敗！；' + text;
+  if (temp <= chack/5) return temp + ' → 極限成功；' + text;
+  if (temp <= chack/2) return temp + ' → 困難成功；' + text;
+  if (temp <= chack) return temp + ' → 通常成功；' + text;
+  else return temp + ' → 失敗；' + text;
+  }
+}
+        
+function coc7chack(temp,chack,text){
+  if (text == null ) {
+    if (temp == 1) return temp + ' → 恭喜！大成功！';
+    if (temp == 100) return temp + ' → 啊！大失敗！';
+    if (temp <= chack/5) return temp + ' → 極限成功';
+    if (temp <= chack/2) return temp + ' → 困難成功';
+    if (temp <= chack) return temp + ' → 通常成功';
+    else return temp + ' → 失敗' ;
+  }
+else
+  {
+    if (temp == 1) return temp + ' → 恭喜！大成功！；' + text;
+    if (temp == 100) return temp + ' → 啊！大失敗！；' + text;
+    if (temp <= chack/5) return temp + ' → 極限成功；' + text;
+    if (temp <= chack/2) return temp + ' → 困難成功；' + text;
+    if (temp <= chack) return temp + ' → 通常成功；' + text;
+    else return temp + ' → 失敗；' + text;
+  }
 }
 
+
+function coc7bp (chack,bpdiceNum,text){
+  let temp0 = Dice(10) - 1;
+  let countStr = '';
+  
+  if (bpdiceNum > 0){
+  for (let i = 0; i <= bpdiceNum; i++ ){
+    let temp = Dice(10);
+    let temp2 = temp.toString() + temp0.toString();
+    if (temp2 > 100) temp2 = parseInt(temp2) - 100;  
+    countStr = countStr + temp2 + '、';
+  }
+  countStr = countStr.substring(0, countStr.length - 1) 
+    let countArr = countStr.split('、'); 
+    
+  countStr = countStr + ' → ' + coc7chack(Math.min(...countArr),chack,text);
+  return countStr;
+  }
+  
+  if (bpdiceNum < 0){
+    bpdiceNum = Math.abs(bpdiceNum);
+    for (let i = 0; i <= bpdiceNum; i++ ){
+      let temp = Dice(10);
+      let temp2 = temp.toString() + temp0.toString();
+      if (temp2 > 100) temp2 = parseInt(temp2) - 100;  
+      countStr = countStr + temp2 + '、';
+    }
+    countStr = countStr.substring(0, countStr.length - 1) 
+    let countArr = countStr.split('、'); 
+
+    countStr = countStr + ' → ' + coc7chack(Math.max(...countArr),chack,text);
+    return countStr;
+  }
+  
+}
+        
+function ArrMax (Arr){
+  var max = this[0];
+  this.forEach (function(ele,index,arr){
+    if(ele > max) {
+      max = ele;
+    }
+  })
+  return max;
+}
+////////////////////////////////////////
+//////////////// COC7傳統創角
+////////////////////////////////////////      
+
+
+  
+function build7char(text01){
+	let old ="";
+	let ReStr = '調查員年齡設為：';
+    //讀取年齡
+	if (text01 == undefined) {
+	old = 18;
+    ReStr = ReStr + old + '(沒有填寫使用預設值)\n';
+	}
+	else 
+	{
+	old = text01;
+    ReStr = ReStr + old + '\n';
+	}
+    //設定 因年齡減少的點數 和 EDU加骰次數
+    let Debuff = 0;
+    let AppDebuff = 0;
+    let EDUinc = 0;
+
+
+    let oldArr = [15,20,40,50,60,70,80]
+    let DebuffArr = [5,0,5,10,20,40,80]
+    let AppDebuffArr = [0,0,5,10,15,20,25]
+    let EDUincArr = [0,1,2,3,4,4,4]
+
+    if (old < 15) return ReStr + '等等，核心規則不允許小於15歲的人物哦。';    
+    if (old >= 90) return ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
+
+    for ( i=0 ; old >= oldArr[i] ; i ++){
+      Debuff = DebuffArr[i];
+      AppDebuff = AppDebuffArr[i];
+      EDUinc = EDUincArr[i];
+    }
+
+    ReStr = ReStr + '==\n';
+    if (old < 20) ReStr = ReStr + '年齡調整：從STR、SIZ擇一減去' + Debuff + '點\n（請自行手動選擇計算）。\n將EDU減去5點。LUK可擲兩次取高。' ;
+    else
+      if (old >= 40)  ReStr = ReStr + '年齡調整：從STR、CON或DEX中「總共」減去' + Debuff + '點\n（請自行手動選擇計算）。\n將APP減去' + AppDebuff +'點。可做' + EDUinc + '次EDU的成長擲骰。' ;
+
+    else ReStr = ReStr + '年齡調整：可做' + EDUinc + '次EDU的成長擲骰。' ;
+    ReStr = ReStr + '\n==';
+    if (old>=40) ReStr = ReStr + '\n（以下箭號三項，自選共減' + Debuff + '點。）' ;
+    if (old<20) ReStr = ReStr + '\n（以下箭號兩項，擇一減去' + Debuff + '點。）' ;
+    ReStr = ReStr + '\nＳＴＲ：' + BuildDiceCal('3d6*5');
+    if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff ;
+    if (old<20) ReStr = ReStr + ' ←擇一減' + Debuff ;
+    ReStr = ReStr + '\nＣＯＮ：' + BuildDiceCal('3d6*5');
+    if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff;
+    ReStr = ReStr + '\nＤＥＸ：' + BuildDiceCal('3d6*5');
+    if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff ;
+    if (old>=40) ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6*5-' + AppDebuff);
+    else ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6*5');
+    ReStr = ReStr + '\nＰＯＷ：' + BuildDiceCal('3d6*5');
+    ReStr = ReStr + '\nＳＩＺ：' + BuildDiceCal('(2d6+6)*5');
+    if (old<20) ReStr = ReStr + ' ←擇一減' + Debuff ;
+    ReStr = ReStr + '\nＩＮＴ：' + BuildDiceCal('(2d6+6)*5');         
+    if (old<20) ReStr = ReStr + '\nＥＤＵ：' + BuildDiceCal('3d6*5-5');
+    else {
+      let firstEDU = '(' + BuildRollDice('2d6') + '+6)*5';
+      ReStr = ReStr + '\n==';
+      ReStr = ReStr + '\nＥＤＵ初始值：' + firstEDU + ' = ' + eval(firstEDU);
+      
+      let tempEDU = eval(firstEDU);
+
+      for (i = 1 ; i <= EDUinc ; i++){
+        let EDURoll = Dice(100);
+        ReStr = ReStr + '\n第' + i + '次EDU成長 → ' + EDURoll;
+
+
+        if (EDURoll>tempEDU) {
+          let EDUplus = Dice(10);
+          ReStr = ReStr + ' → 成長' + EDUplus +'點';
+          tempEDU = tempEDU + EDUplus;
+        }
+        else{
+          ReStr = ReStr + ' → 沒有成長';       
+        }
+      }
+      ReStr = ReStr + '\n';
+      ReStr = ReStr + '\nＥＤＵ最終值：' +tempEDU;
+    }
+    ReStr = ReStr + '\n==';
+
+    ReStr = ReStr + '\nＬＵＫ：' + BuildDiceCal('3d6*5');    
+    if (old<20) ReStr = ReStr + '\nＬＵＫ加骰：' + BuildDiceCal('3D6*5');
+
+
+    return ReStr;
+  } 
+
+////////////////////////////////////////
+//////////////// COC7傳統創角
+////////////////////////////////////////      
+
+
+  
+function build6char(){
+
+/*    //讀取年齡
+	if (text01 == undefined) text01 = 18;
+    let old = text01;
+    let ReStr = '調查員年齡設為：' + old + '\n';
+    //設定 因年齡減少的點數 和 EDU加骰次數
+    let Debuff = 0;
+    let AppDebuff = 0;
+    let EDUinc = 0;
+
+
+    let oldArr = [15,20,40,50,60,70,80]
+    let DebuffArr = [5,0,5,10,20,40,80]
+    let AppDebuffArr = [0,0,5,10,15,20,25]
+    let EDUincArr = [0,1,2,3,4,4,4]
+
+    if (old < 15) return ReStr + '等等，核心規則不允許小於15歲的人物哦。';    
+    if (old >= 90) return ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
+
+    for ( i=0 ; old >= oldArr[i] ; i ++){
+      Debuff = DebuffArr[i];
+      AppDebuff = AppDebuffArr[i];
+      EDUinc = EDUincArr[i];
+    }
+
+    ReStr = ReStr + '==\n';
+    if (old < 20) ReStr = ReStr + '年齡調整：從STR、SIZ擇一減去' + Debuff + '點\n（請自行手動選擇計算）。\n將EDU減去5點。LUK可擲兩次取高。' ;
+    else
+      if (old >= 40)  ReStr = ReStr + '年齡調整：從STR、CON或DEX中「總共」減去' + Debuff + '點\n（請自行手動選擇計算）。\n將APP減去' + AppDebuff +'點。可做' + EDUinc + '次EDU的成長擲骰。' ;
+
+    else ReStr = ReStr + '年齡調整：可做' + EDUinc + '次EDU的成長擲骰。' ;
+    ReStr = ReStr + '\n=='; 
+ if (old>=40) ReStr = ReStr + '\n（以下箭號三項，自選共減' + Debuff + '點。）' ;
+    if (old<20) ReStr = ReStr + '\n（以下箭號兩項，擇一減去' + Debuff + '點。）' ;
+ */
+	let ReStr = '六版核心創角：';
+	ReStr = ReStr + '\nＳＴＲ：' + BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＤＥＸ：' + BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＣＯＮ：' + BuildDiceCal('3d6');
+	ReStr = ReStr + '\nＰＯＷ：' + BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＩＮＴ：' + BuildDiceCal('(2d6+6)');
+    ReStr = ReStr + '\nＳＩＺ：' + BuildDiceCal('(2d6+6)');         
+    ReStr = ReStr + '\nＥＤＵ：' + BuildDiceCal('(3d6+3)');         
+	ReStr = ReStr + '\n年收入：' + BuildDiceCal('(1d10)'); 	  
+	ReStr = ReStr + '\n調查員的最小起始年齡等於EDU+6，每比起始年齡年老十年，\n調查員增加一點EDU並且加20點職業技能點數。\n當超過40歲後，每老十年，\n從STR,CON,DEX,APP中選擇一個減少一點。';
+    return ReStr;
+  } 
+        
 ////////////////////////////////////////
 //////////////// 普通ROLL
 ////////////////////////////////////////
-function nomalDiceRoller(inputStr, text0, text1, text2) {
+ function nomalDiceRoller(inputStr,text0,text1,text2){
+  
+  //首先判斷是否是誤啟動（檢查是否有符合骰子格式）
+ // if (inputStr.toLowerCase().match(/\d+d\d+/) == null) return undefined;
+  
+  //再來先把第一個分段拆出來，待會判斷是否是複數擲骰
+  let mutiOrNot = text0.toLowerCase();
+  
+  //排除小數點
+  if (mutiOrNot.toString().match(/\./)!=null)return undefined;
 
-    //首先判斷是否是誤啟動（檢查是否有符合骰子格式）
-    // if (inputStr.toLowerCase().match(/\d+d\d+/) == null) return undefined;
+  //先定義要輸出的Str
+  let finalStr = '' ;  
+  
+  
+  //是複數擲骰喔
+  if(mutiOrNot.toString().match(/\D/)==null ) {
+	  if(text2 != null){
+	  finalStr= text0 + '次擲骰：\n' + text1 +' ' + text2 + '\n';
+    	  }
+		  else{
+		  finalStr= text0 + '次擲骰：\n' + text1 +'\n';
+    		  }
+    if(mutiOrNot>30) return '不支援30次以上的複數擲骰。';
+    
+    for (i=1 ; i<=mutiOrNot ;i++){
+    let DiceToRoll = text1.toLowerCase();
+    if (DiceToRoll.match('d') == null) return undefined;
 
-    //再來先把第一個分段拆出來，待會判斷是否是複數擲骰
-    let mutiOrNot = text0.toLowerCase();
-
-    //排除小數點
-    if (mutiOrNot.toString().match(/\./) != null) return undefined;
-
-    //先定義要輸出的Str
-    let finalStr = '';
-
-
-    //是複數擲骰喔
-    if (mutiOrNot.toString().match(/\D/) == null) {
-        if (text2 != null) {
-            finalStr = text0 + '次擲骰：\n' + text1 + ' ' + text2 + '\n';
-        } else {
-            finalStr = text0 + '次擲骰：\n' + text1 + '\n';
-        }
-        if (mutiOrNot > 30) return '不支援30次以上的複數擲骰。';
-
-        for (i = 1 ; i <= mutiOrNot ; i++) {
-            let DiceToRoll = text1.toLowerCase();
-            if (DiceToRoll.match('d') == null) return undefined;
-
-            //寫出算式
-            let equation = DiceToRoll;
-            while (equation.match(/\d+d\d+/) != null) {
-                let tempMatch = equation.match(/\d+d\d+/);
-                equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
-            }
-
-            //計算算式
-            let aaa = equation;
-            aaa = aaa.replace(/\d+[[]/ig, '(');
-            aaa = aaa.replace(/]/ig, ')');
-            //aaa = aaa.replace(/[[]\d+|]/ig, "");
-            let answer = eval(aaa.toString());
-
-            finalStr = finalStr + i + '# ' + equation + ' = ' + answer + '\n';
-        }
-
-    } else {
-        //一般單次擲骰
-        let DiceToRoll = mutiOrNot.toString().toLowerCase();
-        DiceToRoll = DiceToRoll.toLowerCase();
-        if (DiceToRoll.match('d') == null) return undefined;
-
-        //寫出算式
-        let equation = DiceToRoll;
-        while (equation.match(/\d+d\d+/) != null) {
-            let totally = 0;
-            let tempMatch = equation.match(/\d+d\d+/);
-            if (tempMatch.toString().split('d')[0] > 300) return undefined;
-            if (tempMatch.toString().split('d')[1] == 1 || tempMatch.toString().split('d')[1] > 1000000) return undefined;
-            equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
-        }
-
-        //計算算式
-        let aaa = equation;
-        aaa = aaa.replace(/\d+[[]/ig, '(');
-        aaa = aaa.replace(/]/ig, ')');
-        let answer = eval(aaa.toString());
-
-        if (text1 != null) {
-            finalStr = text0 + '：' + text1 + '\n' + equation + ' = ' + answer;
-        } else {
-            finalStr = text0 + '：\n' + equation + ' = ' + answer;
-        }
-
+    //寫出算式
+    let equation = DiceToRoll;
+    while(equation.match(/\d+d\d+/)!=null) {
+      let tempMatch = equation.match(/\d+d\d+/);
+      equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
     }
 
-    return finalStr;
-}
+    //計算算式
+    let aaa = equation;
+	aaa = aaa.replace(/\d+[[]/ig, '(' );
+	aaa = aaa.replace(/]/ig, ')' );
+	//aaa = aaa.replace(/[[]\d+|]/ig, "");
+	let answer = eval(aaa.toString());
+	
+    finalStr = finalStr + i + '# ' + equation + ' = ' + answer + '\n';
+    }
+        
+  }
+  
+  else
+  {
+  //一般單次擲骰
+  let DiceToRoll = mutiOrNot.toString().toLowerCase();
+  DiceToRoll = DiceToRoll.toLowerCase();
+  if (DiceToRoll.match('d') == null) return undefined;
+  
+  //寫出算式
+  let equation = DiceToRoll;
+  while(equation.match(/\d+d\d+/)!=null) {
+	let totally = 0;
+    let tempMatch = equation.match(/\d+d\d+/);    
+    if (tempMatch.toString().split('d')[0]>300) return undefined;
+    if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>1000000) return undefined;
+    equation = equation.replace(/\d+d\d+/, RollDice(tempMatch));
+	
+  }
+  
+  //計算算式
+	let aaa = equation;
+	aaa = aaa.replace(/\d+[[]/ig, '(' );
+	aaa = aaa.replace(/]/ig, ')' );
+	let answer = eval(aaa.toString());
+      
+  if(text1 != null){
+	  finalStr= text0 + '：' + text1 + '\n' + equation + ' = ' + answer;
+    	  }
+		  else{
+		  finalStr= text0 + '：\n' + equation + ' = ' + answer;
+    		  }
+
+  }
+  
+  return finalStr;
+
+
+}        
 
 
 ////////////////////////////////////////
 //////////////// 擲骰子運算
 ////////////////////////////////////////
 
-function sortNumber(a, b) {
-    return a - b
+function sortNumber(a,b)
+{
+return a - b
 }
 
 
-function Dice(diceSided) {
-    return Math.floor((Math.random() * diceSided) + 1)
-}
+        function Dice(diceSided){          
+          return Math.floor((Math.random() * diceSided) + 1)
+        }              
+		
+	function RollDice(inputStr){
+  //先把inputStr變成字串（不知道為什麼非這樣不可）
+  let comStr=inputStr.toString();
+  let finalStr = '[';
+  let temp = 0;
+  var totally = 0;
+  for (let i = 1; i <= comStr.split('d')[0]; i++) {
+	temp = Dice(comStr.split('d')[1]);
+	totally +=temp;
+    finalStr = finalStr + temp + '+';
+     }
 
-function RollDice(inputStr) {
-    //先把inputStr變成字串（不知道為什麼非這樣不可）
-    let comStr = inputStr.toString();
-    let finalStr = '[';
-    let temp = 0;
-    var totally = 0;
-    for (let i = 1; i <= comStr.split('d')[0]; i++) {
-        temp = Dice(comStr.split('d')[1]);
-        totally += temp;
-        finalStr = finalStr + temp + '+';
-    }
-
-    finalStr = finalStr.substring(0, finalStr.length - 1) + ']';
-    finalStr = finalStr.replace('[', totally + '[');
-    return finalStr;
+  finalStr = finalStr.substring(0, finalStr.length - 1) + ']';
+  finalStr = finalStr.replace('[', totally +'[');
+  return finalStr;
 }
 
 function FunnyDice(diceSided) {
-    return Math.floor((Math.random() * diceSided)) //猜拳，從0開始
+	return Math.floor((Math.random() * diceSided)) //猜拳，從0開始
 }
 
-function BuildDiceCal(inputStr, flag) {
+function BuildDiceCal(inputStr){
+  
+  //首先判斷是否是誤啟動（檢查是否有符合骰子格式）
+  if (inputStr.toLowerCase().match(/\d+d\d+/) == null) return undefined;
+    
+  //排除小數點
+  if (inputStr.toString().match(/\./)!=null)return undefined;
 
-    //首先判斷是否是誤啟動（檢查是否有符合骰子格式）
-    if (inputStr.toLowerCase().match(/\d+d\d+/) == null) return undefined;
+  //先定義要輸出的Str
+  let finalStr = '' ;  
+  
+  //一般單次擲骰
+  let DiceToRoll = inputStr.toString().toLowerCase();  
+  if (DiceToRoll.match('d') == null) return undefined;
+  
+  //寫出算式
+  let equation = DiceToRoll;
+  while(equation.match(/\d+d\d+/)!=null) {
+    let tempMatch = equation.match(/\d+d\d+/);    
+    if (tempMatch.toString().split('d')[0]>200) return '欸欸，不支援200D以上擲骰；哪個時候會骰到兩百次以上？想被淨灘嗎？';
+    if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return '不支援D1和超過D500的擲骰；想被淨灘嗎？';
+    equation = equation.replace(/\d+d\d+/, BuildRollDice(tempMatch));
+  }
+  
+  //計算算式
+  let answer = eval(equation.toString());
+    finalStr= equation + ' = ' + answer;
+  
+  return finalStr;
 
-    //排除小數點
-    if (inputStr.toString().match(/\./) != null) return undefined;
+}        
 
-    //先定義要輸出的Str
-    let finalStr = '';
+function BuildRollDice(inputStr){
+  //先把inputStr變成字串（不知道為什麼非這樣不可）
+  let comStr=inputStr.toString().toLowerCase();
+  let finalStr = '(';
 
-    //一般單次擲骰
-    let DiceToRoll = inputStr.toString().toLowerCase();
-    if (DiceToRoll.match('d') == null) return undefined;
+  for (let i = 1; i <= comStr.split('d')[0]; i++) {
+    finalStr = finalStr + Dice(comStr.split('d')[1]) + '+';
+     }
 
-    //寫出算式
-    let equation = DiceToRoll;
-    while (equation.match(/\d+d\d+/) != null) {
-        let tempMatch = equation.match(/\d+d\d+/);
-        if (tempMatch.toString().split('d')[0] > 200) return '不支援200D以上擲骰唷';
-        if (tempMatch.toString().split('d')[1] == 1 || tempMatch.toString().split('d')[1] > 500) return '不支援D1和超過D500的擲骰唷';
-        equation = equation.replace(/\d+d\d+/, BuildRollDice(tempMatch));
-    }
-
-    //計算算式
-    let answer = eval(equation.toString());
-    finalStr = equation + ' = ' + answer;
-    if (flag == 0) return finalStr;
-    if (flag == 1) return answer;
-
-
+  finalStr = finalStr.substring(0, finalStr.length - 1) + ')';
+  return finalStr;
 }
+            
 
-function BuildRollDice(inputStr) {
-    //先把inputStr變成字串（不知道為什麼非這樣不可）
-    let comStr = inputStr.toString().toLowerCase();
-    let finalStr = '(';
+////////////////////////////////////////
+//////////////// nechronica (NC)
+////////////////////////////////////////
+function nechronica(triggermsg ,text) {
+	let returnStr = '';
+	var ncarray = [];
+	var dicemax = 0, dicemin = 0, dicenew = 0;
 
-    for (let i = 1; i <= comStr.split('d')[0]; i++) {
-        finalStr = finalStr + Dice(comStr.split('d')[1]) + '+';
-    }
+	var match = /^(\d+)(NC|NA)((\+|-)(\d+)|)$/i.exec(triggermsg);	//判斷式
 
-    finalStr = finalStr.substring(0, finalStr.length - 1) + ')';
-    return finalStr;
+	for (var i = 0; i < Number(match[1]); i++)	
+	{
+		dicenew = Dice(10) + Number(match[3]);
+		ncarray.push(dicenew);
+	}
+
+	dicemax = Math.max(...ncarray);	//判斷最大最小值
+	dicemin = Math.min(...ncarray);
+
+	if (Number(match[1]) == 1)
+		returnStr += dicemax + '[' + ncarray.pop() + ']'; 
+	else
+	{
+		returnStr += dicemax + '[';
+		for (i = 0; i < Number(match[1]); i++)
+		{
+			if (i != Number(match[1]) - 1)
+				returnStr += ncarray.pop() + ',';
+			else
+				returnStr += ncarray.pop();
+		}
+		returnStr += ']';
+	}
+
+	if (dicemax > 5)
+		if (dicemax > 10)
+			returnStr += ' → 大成功';
+		else
+			returnStr += ' → 成功';
+	else
+		if (dicemin <= 1)
+			returnStr += ' → 大失敗';
+		else
+			returnStr += ' → 失敗';
+
+	if (text != null)
+		returnStr += ' ; ' + text;
+
+	return returnStr;
 }
 
 ////////////////////////////////////////
-//////////////// DB計算
+//////////////// nechronica (NM依戀)
 ////////////////////////////////////////
-function db(value, flag) {
-    let restr = '';
-    if (value >= 2 && value <= 12) restr = '-1D6';
-    if (value >= 13 && value <= 16) restr = '-1D4';
-    if (value >= 17 && value <= 24) restr = '+0';
-    if (value >= 25 && value <= 32) restr = '+1D4';
-    if (value >= 33 && value <= 40) restr = '+1D6';
-    if (value < 2 || value > 40) restr = '?????';
-    //return restr;	
-    if (flag == 0) return restr;
-    if (flag == 1) return 'db -> ' + restr;
-}	
+
+function nechronica_mirenn(text) {
+	let returnStr = '';
+	var dicenew = 0;
+	dicenew = Dice(10)-1;
+
+	// 產生格式
+	if (text != null)
+		returnStr = text + ': \n' + '依戀 (' + (dicenew+1) + '[' + (dicenew+1) + ']) → ' + nechronica_mirenn_table(dicenew);
+	else
+		returnStr = '依戀 (' + (dicenew+1) + '[' + (dicenew+1) + ']) → ' + nechronica_mirenn_table(dicenew);
+
+	return returnStr;
+}
+
+/* 這邊預留 mode 以便未來可以加入其他依戀 */
+function nechronica_mirenn_table(mode) {
+	if (mode == 0) returnStr = '【嫌惡】\n[發狂：敵對認識] 戰鬥中，沒有命中敵方的攻擊，全部都會擊中嫌惡的對象。(如果有在射程內的話)';
+	if (mode == 1) returnStr = '【獨占】\n[發狂：獨占衝動] 戰鬥開始與戰鬥結束，各別選擇損傷1個對象的部件。';
+	if (mode == 2) returnStr = '【依存】\n[發狂：幼兒退行] 妳的最大行動值減少2。';
+	if (mode == 3) returnStr = '【執著】\n[發狂：跟蹤監視] 戰鬥開始與戰鬥結束時，對象對妳的依戀精神壓力點數各增加1點。(如果已經處在精神崩壞狀態，可以不用作此處理)';
+	if (mode == 4) returnStr = '【戀心】\n[發狂：自傷行為] 戰鬥開始與戰鬥結束時，各別選擇損傷1個自己的部件。';
+	if (mode == 5) returnStr = '【對抗】\n[發狂：過度競爭] 戰鬥開始與戰鬥結束時，各別選擇任意依戀，增加1點精神壓力點數。(如果已經處在精神崩壞狀態，可以不用作此處理)';
+	if (mode == 6) returnStr = '【友情】\n[發狂：共鳴依存] 單元結束時，對象的損傷部件比妳還要多的時候，妳的部件損傷數，要增加到與對方相同。';
+	if (mode == 7) returnStr = '【保護】\n[發狂：過度保護] 戰鬥當中，妳跟「依戀的對象」處於不同區域的時候，無法宣告「移動以外的戰鬥宣言」，此外妳沒有辦法把「自身」與「依戀對象」以外的單位當成移動對象。';
+	if (mode == 8) returnStr = '【憧憬】\n[發狂：贗作妄想] 戰鬥當中，妳跟「依戀的對象」處於同樣區域的時候，無法宣告「移動以外的戰鬥宣言」，此外妳沒有辦法把「自身」與「依戀對象」以外的單位當成移動對象。';
+	if (mode == 9) returnStr = '【信賴】\n[發狂：疑心暗鬼] 除了妳以外的所有姊妹，最大行動值減少1。';
+	return returnStr;
+}
+
+
+
+////////////////////////////////////////
+//////////////// D66
+////////////////////////////////////////
+
+function d66(text) {
+
+	let returnStr = '';
+	if(text != null){
+	returnStr =   'D66：' + text + ' → ' + Dice(6) + Dice(6);
+	}
+	else{
+	returnStr = 'D66 → ' + Dice(6) + Dice(6);
+	}
+	return returnStr;
 	
+}
+
+////////////////////////////////////////
+//////////////// D66s
+////////////////////////////////////////
+
+function d66s(text) {
+
+	let temp0 = Dice(6);
+	let temp1 = Dice(6);
+	let returnStr = '';
+	if (temp0>= temp1){
+		let temp2 = temp0;
+		temp0 = temp1;
+		temp1 = temp2;
+	}
+	if(text != null){
+	
+	returnStr =   'D66s：' + text + ' → ' + temp0 + temp1;
+	}
+	else{
+	returnStr = 'D66s → ' +  temp0 + temp1;
+	}
+	return returnStr;
+	
+}
+
+////////////////////////////////////////
+//////////////// xBy
+////////////////////////////////////////
+function xBy(triggermsg ,text01, text02) {
+
+let returnStr = '(' + triggermsg +')';
+let match = /^(\d+)(B)(\d+)$/i.exec(triggermsg);  //判斷式  [0]3B8,[1]3,[2]B,[3]8
+let varcou =  new Array();
+let varsu = 0;
+for (var i = 0; i < Number(match[1]); i++)	
+	{
+             varcou[i] =  Dice(match[3]);
+	}
+varcou.sort(sortNumber);
+//(5B7>6) → 7,5,6,4,4 → 成功数1
+
+if(isNaN(text01) ==false &&Number(text01) <= Number(match[3]))
+{
+for (let i = 0; i < Number(match[1]); i++)	
+	{
+             if(Number(varcou[i])>=Number(text01)) varsu++;        
+	}
+	if (text02 ==undefined) text02 ='';
+
+    returnStr+= ' → ' + varcou + ' → 成功數'+varsu + ' ' +text02 ;
+	
+}
+else{
+	if (text01 ==undefined) text01 ='';
+	returnStr+=  ' → ' + varcou + ' ' +text01 ;
+
+	}
+	
+
+return returnStr;
+}
+
+////////////////////////////////////////
+//////////////// xUy
+////////////////  (5U10[8]) → 17[10,7],4,5,7,4 → 17/37(最大/合計)
+////////////////  (5U10[8]>8) → 1,30[9,8,8,5],1,3,4 → 成功数1
+////////////////////////////////////////
+
+function xUy(triggermsg ,text01, text02, text03) {
+	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg);   //判斷式  5u19,5,u,19, 
+	var returnStr = '('+triggermsg+'['+text01+']';
+	if(Number(text02) <= Number(match[3]) && text02 != undefined) 
+	{
+		returnStr+= '>'+text02+ ') → ';
+		if(text03!=undefined) returnStr += text03 +' → ';
+	}
+	else{
+	returnStr+= ') → ';
+		if(text02!=undefined) returnStr += text02 +' → ';	
+	}	
+	let varcou =  new Array();
+	let varcouloop =  new Array();
+	let varcoufanl =  new Array();
+	let varcounew =  new Array();
+	var varsu = 0;
+	if (text01<=2) { return  '加骰最少比2高'; }
+
+for (var i = 0; i < Number(match[1]); i++)	
+	{
+			varcou[i] =  Dice(match[3]);
+			varcounew[i] = varcou[i];
+			varcouloop[i] = varcounew[i];
+			for(;varcounew[i]>=text01;)
+			{
+				varcounew[i] =Dice(match[3]);
+				varcouloop[i] += ', ' +varcounew[i];
+				varcou[i] += varcounew[i];
+			}
+
+	}
+
+    for(var i = 0; i < varcouloop.length; i++)	
+  {
+	if(varcouloop[i]==varcou[i])   {returnStr += varcou[i]+', ';}
+    else     returnStr += varcou[i]+'['+varcouloop[i]+ '], '; 
+    
+  }
+		returnStr = returnStr.replace(/, $/ig,'');
+ 
+ 
+ 
+ if(Number(text02) <= Number(match[3]) ){
+let suc =0;
+
+////////////////  (5U10[8]>8) → 1,30[9,8,8,5],1,3,4 → 成功数1
+for(var i=0;i<varcou.length;i++)
+{
+if(Number(varcou[i])>=Number(text02)) suc++;
+}
+
+returnStr  += ' → 成功数' +suc;
+
+ }
+ else
+  ////////////////  (5U10[8]) → 17[10,7],4,5,7,4 → 17/37(最大/合計)
+
+	 {
+ returnStr  +=' → ' + Math.max.apply(null, varcou)
+returnStr  += '/' + varcou.reduce(function(previousValue,currentValue){
+        return previousValue + currentValue;} ) +'(最大/合計)';
+
+	}
+	return returnStr;
+	
+	}
+
+
+////////////////////////////////////////
+//////////////// WOD黑暗世界
+////////////////////////////////////////
+
+function wod(triggermsg ,text) {
+	var returnStr = triggermsg+' [';
+	var varcou = 0;
+	var varsu = 0;
+	var match = /^(\d+)(wd|wod)(\d|)((\+|-)(\d+)|)$/i.exec(triggermsg);   //判斷式  [0]3wd8+10,[1]3,[2]wd,[3]8,[4]+10,[5]+,[6]10  
+	if (match[3]=="") { match[3] =10 }
+	if (match[3]<=2) { return '加骰最少比2高'; }
+			
+for (var i = 0; i < Number(match[1]); i++)	
+	{
+             varcou =  Math.floor(Math.random() * 10) + 1;
+             returnStr += varcou +', ';
+             
+		
+             if (varcou >=match[3]) { i--}
+             if (varcou >=8) 
+	     {
+		     varsu++;
+	     }
+
+	}
+
+	    if(match[5]=='+'){
+    
+    for (var i = 0; i < Number(match[6]); i++)	{
+	    varsu++;
+    }
+    }
+    if(match[5]=='-'){
+    
+    for (var i = 0; i < Number(match[6]); i++)	{
+	    varsu--;
+    }
+    }
+	
+    returnStr = returnStr.replace(/[,][ ]$/,'] → '+varsu+'成功');
+	if (text != null){
+	returnStr += ' ; ' + text;
+	}
+	return returnStr;
+}
 ////////////////////////////////////////
 //////////////// 占卜&其他
 ////////////////////////////////////////
 
 
 function BStyleFlagSCRIPTS() {
-    let rplyArr = ['\
-「打完這仗我就回老家結婚」', '\
+          let rplyArr = ['\
+「打完這仗我就回老家結婚（この戦いが終わったら、故郷に帰って結婚するんだ）」', '\
 「打完這一仗後我請你喝酒」', '\
 「你、你要錢嗎！要什麼我都能給你！/我可以給你更多的錢！」', '\
 「做完這次任務，我就要結婚了。」', '\
 「幹完這一票我就金盆洗手了。」', '\
 「好想再XXX啊……」', '\
-「已經沒什麼好害怕的了」', '\
-「我一定會回來的」', '\
+「已經沒什麼好害怕的了（もう何も恐くない）」', '\
+「我一定會回來的（必ず帰る！）」', '\
 「差不多該走了」', '\
 「我只是希望你永遠不要忘記我。」', '\
 「我只是希望能永遠和你在一起。」', '\
@@ -972,27 +950,27 @@ function BStyleFlagSCRIPTS() {
 「我們三個人要永永遠遠在一起！」', '\
 「這是我女兒的照片，很可愛吧？」', '\
 「請告訴他/她，我永遠愛他/她」', '\
-「聽好，在我回來之前絕不要亂走動哦」', '\
+「聽好，在我回來之前絕不要亂走動哦（いいか、俺が帰ってくるまでここを動くんじゃないぞ）」', '\
 「要像一個乖孩子一樣等著我回來」', '\
-「我去去就來」', '\
-「快逃！」', '\
+「我去去就來（先に行って、すぐ戻るから）」', '\
+「快逃！(逃げろう！/早く逃げろう！)」', '\
 「對方只有一個人，大家一起上啊」', '\
 「我就不信，這麼多人還殺不了他一個！」', '\
-「幹，幹掉了嗎？」', '\
+「幹，幹掉了嗎？（やったのか？）」', '\
 「身體好輕」', '\
 「可惡！你給我看著！（逃跑）」', '\
 「躲在這裡就應該不會被發現了吧。」', '\
 「我不會讓任何人死的。」', '\
 「可惡！原來是這麼回事！」', '\
 「跑這麼遠應該就行了。」', '\
-「我已經甚麼都不怕了」', '\
-「這XXX是什麼，怎麼之前沒見過」', '\
-「什麼聲音……？就去看一下吧」', '\
+「我已經甚麼都不怕了（もう何も恐くない）」', '\
+「這XXX是什麼，怎麼之前沒見過（なんだこのXXX、見たことないな）」', '\
+「什麽聲音……？就去看一下吧（:「何の音だ？ちょっと見てくる」', '\
 「是我的錯覺嗎？/果然是錯覺/錯覺吧/可能是我（看/聽）錯了」', '\
 「二十年後又是一條好漢！」', '\
 「大人/將軍武運昌隆」', '\
-「這次工作的報酬是以前無法比較的」', '\
-「我才不要和罪犯呆在一起，我回自己的房間去了！」', '\
+「這次工作的報酬是以前無法比較的（:「今度の仕事でまとまったカネが入るんだ」', '\）」', '\
+「我才不要和罪犯呆在一起，我回自己的房間去了！（この中に殺人者がいるかもしれないのに、一緒に居られるか!俺は自分の部屋に戻るぞ!）」', '\
 「其實我知道事情的真相…（各種廢話）…犯人就是……」', '\
 「我已經天下無敵了~~」', '\
 「大人！這邊就交給小的吧，請快離開這邊吧」', '\
@@ -1004,189 +982,371 @@ function BStyleFlagSCRIPTS() {
 「騙人的吧，我們不是朋友嗎？」', '\
 「我老爸是....你有種就....」', '\
 「我可以好好利用這件事」'];
-
-    return rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
-}
-
-
-function randomLuck(TEXT) {
-    let rplyArr = ['超大吉', '大吉', '大吉', '中吉', '中吉', '中吉', '小吉', '小吉', '小吉', '小吉', '凶', '凶', '凶', '大凶', '大凶', '你還是，不要知道比較好', '這應該不關我的事'];
-    return TEXT[0] + ' ： ' + rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
-}
-
-////////////////////////////////////////
-//////////////// Others
-////////////////////////////////////////
-
-function SortIt(input, mainMsg) {
-
-    let a = input.replace(mainMsg[0], '').match(/\S+/ig);
-    for (var i = a.length - 1; i >= 0; i--) {
-        var randomIndex = Math.floor(Math.random() * (i + 1));
-        var itemAtIndex = a[randomIndex];
-        a[randomIndex] = a[i];
-        a[i] = itemAtIndex;
-    }
-    return mainMsg[0] + ' → [' + a + ']';
-}
-
-function choice(input, str) {
-    let a = input.replace(str[0], '').match(/\S+/ig);
-    return str[0] + '[' + a + '] → ' + a[Dice(a.length) - 1];
-}
-
-function MyJSONStringify (object){
-    var simpleObject = '';
-    for (var prop in object ){
-        if (!object.hasOwnProperty(prop)){
-            continue;
+          return rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
         }
-        if (typeof(object[prop]) == 'object'){
-            continue;
+	
+        function randomReply() {
+          let rplyArr = ['\
+你們死定了呃呃呃不要糾結這些……所以是在糾結哪些？', '\
+在澳洲，每過一分鐘就有一隻鴨嘴獸被拔嘴。 \n我到底在共三小。', '\
+嗚噁噁噁噁噁噁，不要隨便叫我。', '\
+幹，你這學不會的豬！', '\
+嘎嘎嘎。', '\
+wwwwwwwwwwwwwwwww', '\
+為什麼你們每天都可以一直玩；玩就算了還玩我。', '\
+好棒，整點了！咦？不是嗎？', '\
+不要打擾我挖坑！', '好棒，誤點了！', '\
+在南半球，一隻鴨嘴獸拍打他的鰭，他的嘴就會掉下來。 \n我到底在共三小。', '\
+什麼東西你共三小。', '\
+哈哈哈哈哈哈哈哈！', '\
+一直叫，你4不4想拔嘴人家？', '\
+一直叫，你想被淨灘嗎？', '\
+幫主你也敢嘴？', '\
+拔嘴的話，我的嘴巴會長出觸手，然後開花成四個花瓣哦 (´×`)', '\
+看看我！！我體內的怪物已經這麼大了！！', '\
+傳說中，凡是拔嘴過鴨嘴獸的人，有高機率在100年內死去。 \n我到底在共三小。', '\
+人類每花60秒拔嘴，就減少一分鐘的壽命。 \n我到底在共三小。', '\
+嘴被拔，就會掉。', '\
+你在大聲什麼啦！！！！', '\
+公道價，八萬一（伸手）。', '\
+你的嘴裡有異音（指）', '\
+幫主說，有人打你的左臉，你就要用肉食性猛擊咬斷他的小腿。'];
+          return rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
         }
-        if (typeof(object[prop]) == 'function'){
-            continue;
+		
+       function randomLuck(TEXT) {
+           let rplyArr = ['超吉','超級上吉','大吉','吉','中吉','小吉','吉','小吉','吉','吉','中吉','吉','中吉','吉','中吉','小吉','末吉','吉','中吉','小吉','末吉','中吉','小吉','小吉','吉','小吉','末吉','中吉','小吉','凶','小凶','沒凶','大凶','很凶'];
+           return TEXT[0] + ' ： ' + rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
         }
-        //simpleObject[prop] = object[prop];
-	simpleObject += object[prop];
-    }
-    return JSON.parse(simpleObject);
-};
+		
+		
+////////////////////////////////////////
+//////////////// Funny
+////////////////////////////////////////
+/* 猜拳功能 */
+	function RockPaperScissors(HandToCal, text) {
+	let returnStr = '';
+	if (HandToCal.match(/石頭|布|剪刀|1|2|3/) != null) {
+		let aHand = ['石頭','布','剪刀'];
+           HandToCal = aHand[Math.floor((Math.random() * (aHand.length)) + 0)];
+	}
+	var hand = FunnyDice(3); // 0:石頭 1:布 2:剪刀
 
-function padLeft(str,length){
-    if(str.length >= length)
-        return str;
-    else
-        return padLeft('　' + str,length);
-}
-function padRight(str,length){
-    if(str.length >= length)
-        return str;
-    else
-        return padRight(str+'　',length);
+	switch (hand) {
+		case 0: //石頭
+			returnStr = '我出石頭！\n';
+
+			if (HandToCal.match(/剪刀|1/) != null) returnStr += '哼哼你輸惹';
+			else if (HandToCal.match(/石頭|2/) != null) returnStr += '看來我們不相上下阿';
+			else if (HandToCal.match(/布|3/) != null) returnStr += '你好像有點強！';
+			else returnStr += '欸不對喔你亂出！';
+
+			break;
+
+		case 1: //布
+			returnStr = '我出布！\n';
+
+			if (HandToCal.match(/剪刀|1/) != null) returnStr += '讓你一次而已啦！';
+			else if (HandToCal.match(/布|2/) != null) returnStr += '原來平手...沒什麼嘛！';
+			else if (HandToCal.match(/石頭|3/) != null) returnStr += '哈哈你看看你！';
+			else returnStr += '別亂出阿會壞掉的';
+
+			break;
+
+		case 2: //剪刀
+			returnStr = '我出剪刀！\n';
+
+			if (HandToCal.match(/剪刀|1/) != null) returnStr += '平手 (  艸)';
+			else if (HandToCal.match(/布|2/) != null) returnStr += '贏了 (｀・ω・´)b';
+			else if (HandToCal.match(/石頭|3/) != null) returnStr += '輸惹 ゜。。゜(ノД‵)ノ・゜';
+			else returnStr += '亂出打你喔 (｀・ω・´)凸';
+
+			break;
+
+		default:
+			returnStr = '我出的是...欸不對你沒出喔！\n';
+			break;
+	}
+
+	return returnStr;
 }
 
-var JSONmapping = {
-character_name: 'name',
-char_section0_1_field1: 'hp',
-char_section0_1_field3: 'mp',
-char_section0_1_field5: 'san',
-char_section0_1_field7: 'luck',
-char_section0_1_field9: 'status',
-char_section0_1_field10: '職業',
-char_section1_1_field1: 'str',
-char_section1_1_field2: 'con',
-char_section1_1_field3: 'dex',
-char_section1_1_field4: 'app',
-char_section1_1_field5: 'pow',
-char_section1_1_field6: 'int',
-char_section1_1_field7: 'siz',
-char_section1_1_field8: 'edu',
-char_section2_1_field1: '母語',
-char_section2_1_field8: '靈感',
-char_section2_1_field10: '知識',
-char_section3_1_field1: '信用',
-char_section3_1_field2: '魅惑',
-char_section3_1_field3: '恐嚇',
-char_section3_1_field4: '說服',
-char_section3_1_field5: '話術',
-char_section3_1_field6: '心理學',
-char_section3_1_field7: '心理分析',
-char_section4_1_field1: '調查',
-char_section4_1_field2: '聆聽',
-char_section4_1_field3: '圖書館使用',
-char_section4_1_field4: '追蹤',
-char_section4_1_field5: '急救',
-char_section4_1_field6: '醫學',
-char_section4_1_field7: '鎖匠',
-char_section4_1_field8: '手上功夫',
-char_section4_1_field9: '隱密行動',
-char_section4_1_field10: '生存',
-char_section5_1_field1: '閃避',
-char_section5_1_field2: '攀爬',
-char_section5_1_field3: '跳躍',
-char_section5_1_field4: '游泳',
-char_section5_1_field5: '駕駛',
-char_section5_1_field6: '領航',
-char_section5_1_field7: '騎術',
-char_section6_1_field1: '自然學',
-char_section6_1_field2: '神祕學',
-char_section6_1_field3: '歷史',
-char_section6_1_field4: '會計',
-char_section6_1_field5: '估價',
-char_section6_1_field6: '法律',
-char_section6_1_field7: '喬裝',
-char_section6_1_field8: '電腦使用',
-char_section6_1_field9: '電器維修',
-char_section6_1_field10: '機械維修',
-char_section6_1_field11: '重機械操作',
-char_section7_1_field1: '數學',
-char_section7_1_field2: '化學',
-char_section7_1_field3: '藥學',
-char_section7_1_field4: '人類學',
-char_section7_1_field5: '考古學',
-char_section7_1_field6: '電子學',
-char_section7_1_field7: '物理學',
-char_section7_1_field8: '工程學',
-char_section7_1_field9: '密碼學',
-char_section7_1_field10: '天文學',
-char_section7_1_field11: '地質學',
-char_section7_1_field12: '生物學',
-char_section7_1_field13: '動物學',
-char_section7_1_field14: '植物學',
-char_section7_1_field15: '物證學',
-char_section8_1_field1: '投擲',
-char_section8_1_field2: '鬥毆',
-char_section8_1_field3: '劍',
-char_section8_1_field4: '矛',
-char_section8_1_field5: '斧頭',
-char_section8_1_field6: '絞殺',
-char_section8_1_field7: '電鋸',
-char_section8_1_field8: '連枷',
-char_section8_1_field9: '鞭子',
-char_section8_1_field10: '弓箭',
-char_section8_1_field11: '手槍',
-char_section8_1_field12: '步槍',
-char_section8_1_field13: '衝鋒槍',
-char_section8_1_field14: '機關槍',
-char_section8_1_field15: '重武器',
-char_section8_1_field16: '火焰噴射器',
-char_section9_1_field1: '美術',
-char_section9_1_field2: '演技',
-char_section9_1_field3: '偽造',
-char_section9_1_field4: '攝影',
-char_section10_1_field1: '克蘇魯神話'
-//,char_section11_1_field1: 'item'
-};
+
 
 ////////////////////////////////////////
-//////////////// Help
+//////////////// Tarot塔羅牌
 ////////////////////////////////////////
+function MultiDrawTarot(CardToCal, text, type) {
+	let returnStr = '';
+	var tmpcard = 0;
+	var cards = [];
+	var revs = [];
+	var i = 0;
 
-function Help() {
-    return '【擲骰BOT】 貓咪&小伙伴‧改\
-		\n 支援角卡、房間、KP、暗骰等功能\
-		\n 使用說明:\
-		\n https://github.com/sleepingcat103/RoboYabaso/blob/master/README.txt\
-		';
+	if (type == 1) //時間之流
+	{
+		cards[0] = FunnyDice(79); //先抽第0張
+		revs[0] = FunnyDice(2);
+
+		for (i = 1; i < 3; i++) {
+			for (;;) {
+				tmpcard = FunnyDice(79);
+				if (cards.indexOf(tmpcard) === -1) //沒有重複，就這張了
+				{
+					cards.push(tmpcard);
+					revs[i] = FunnyDice(2);
+					break;
+				}
+			}
+		}
+
+		if (text != null)
+			returnStr += text + ': \n';
+
+		for (i = 0; i < 3; i++) {
+			if (i == 0) returnStr += '過去: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			if (i == 1) returnStr += '現在: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			if (i == 2) returnStr += '未來: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]);
+		}
+
+	} else if (type == 2) //塞爾特大十字
+	{
+		cards[0] = FunnyDice(79); //先抽第0張
+		revs[0] = FunnyDice(2);
+
+		for (i = 1; i < 10; i++) {
+			for (;;) {
+				tmpcard = FunnyDice(79);
+				if (cards.indexOf(tmpcard) === -1) //沒有重複，就這張了
+				{
+					cards.push(tmpcard);
+					revs[i] = FunnyDice(2);
+					break;
+				}
+			}
+		}
+
+		if (text != null)
+			returnStr += text + ': \n';
+
+		for (i = 0; i < 10; i++) {
+			if (i == 0) returnStr += '現況: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			if (i == 1) {
+				if (revs[i] == 0) //正位
+					returnStr += '助力: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+				else
+					returnStr += '阻力: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			}
+			if (i == 2) returnStr += '目標: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			if (i == 3) returnStr += '基礎: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			if (i == 4) returnStr += '過去: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			if (i == 5) returnStr += '未來: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			if (i == 6) returnStr += '自我: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			if (i == 7) returnStr += '環境: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			if (i == 8) {
+				if (revs[i] == 0) //正位
+					returnStr += '希望: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+				else
+					returnStr += '恐懼: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]) + '\n';
+			}
+			if (i == 9) returnStr += '結論: ' + tarotCardReply(cards[i]) + ' ' + tarotRevReply(revs[i]);
+
+		}
+
+	} else {
+
+		if (text == null)
+			returnStr = tarotCardReply(FunnyDice(79)) + ' ' + tarotRevReply(FunnyDice(2));
+		else
+			returnStr = tarotCardReply(FunnyDice(79)) + ' ' + tarotRevReply(FunnyDice(2)) + ' ; ' + text;
+	}
+
+
+	return returnStr;
 }
 
-function MeowHelp() {
-    return Meow() + '\n要做什麼喵?\n\n(輸入 help 幫助 以獲得資訊)';
+function NomalDrawTarot(CardToCal, text) {
+	let returnStr = '';
+
+	if (text == null)
+		returnStr = tarotCardReply(FunnyDice(22)) + ' ' + tarotRevReply(FunnyDice(2));
+	else
+		returnStr = tarotCardReply(FunnyDice(22)) + ' ' + tarotRevReply(FunnyDice(2)) + ' ; ' + text;
+	return returnStr;
 }
 
-function Meow() {
-    let rplyArr = ['喵喵?', '喵喵喵', '喵?', '喵~', '喵喵喵喵!', '喵<3', '喵喵.....', '喵嗚~', '喵喵! 喵喵喵!', '喵喵', '喵', '\
-喵喵?', '喵喵喵', '喵?', '喵~', '喵喵喵喵!', '喵<3', '喵喵.....', '喵嗚~', '喵喵! 喵喵喵!', '喵喵', '喵', '\
-喵喵?', '喵喵喵', '喵?', '喵~', '喵喵喵喵!', '喵<3', '喵喵.....', '喵嗚~', '喵喵! 喵喵喵!', '喵喵', '喵', '\
-喵喵!', '喵喵....喵?', '喵!!!', '喵~喵~', '喵屁喵', '喵三小?', '玩不膩喵?'];
-    return rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
+
+ function SortIt(input,mainMsg) {   
+ 
+ 	let a = input.replace(mainMsg[0], '').match(/\S+/ig);
+     for (var i = a.length-1; i >=0; i--) {
+ 
+         var randomIndex = Math.floor(Math.random()*(i+1));
+         var itemAtIndex = a[randomIndex];
+         a[randomIndex] = a[i];
+         a[i] = itemAtIndex;
+     }
+     	return mainMsg[0] + ' → ['+ a + ']' ;
+ }
+
+function tarotRevReply(count) {
+	let returnStr = '';
+
+	if (count == 0) returnStr = '＋';
+	if (count == 1) returnStr = '－';
+
+	return returnStr;
 }
 
-function Cat() {
-    let rplyArr = ['喵喵?', '喵喵喵', '喵?', '喵~', '喵喵喵喵!', '喵<3', '喵喵.....', '喵嗚~', '喵喵! 喵喵喵!', '喵喵', '喵', '\
-喵喵?', '喵喵喵', '喵?', '喵~', '喵喵喵喵!', '喵<3', '喵喵.....', '喵嗚~', '喵喵! 喵喵喵!', '喵喵', '喵', '\
-喵喵?', '喵喵喵', '喵?', '喵~', '喵喵喵喵!', '喵<3', '喵喵.....', '喵嗚~', '喵喵! 喵喵喵!', '喵喵', '喵', '\
-喵喵!', '喵喵....喵?', '喵!!!', '喵~喵~', '衝三小', '87玩夠沒', '生ㄎㄎㄎㄎㄎㄎ'];
-    return rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
-};
+function choice(input,str) {
+	let a = input.replace(str[0], '').match(/\S+/ig);
+	return str[0] + '['+ a + '] → ' + a[Dice(a.length)-1];
+}
+
+function tarotCardReply(count) {
+	let returnStr = '';
+	// returnStr = count + '愚者';
+	if (count == 0) returnStr = '愚者';
+	if (count == 1) returnStr = '魔術師';
+	if (count == 2) returnStr = '女祭司';
+	if (count == 3) returnStr = '女皇';
+	if (count == 4) returnStr = '皇帝';
+	if (count == 5) returnStr = '教皇';
+	if (count == 6) returnStr = '戀人';
+	if (count == 7) returnStr = '戰車';
+	if (count == 8) returnStr = '力量';
+	if (count == 9) returnStr = '隱者';
+	if (count == 10) returnStr = '命運之輪';
+	if (count == 11) returnStr = '正義';
+	if (count == 12) returnStr = '吊人';
+	if (count == 13) returnStr = '死神';
+	if (count == 14) returnStr = '節制';
+	if (count == 15) returnStr = '惡魔';
+	if (count == 16) returnStr = '高塔';
+	if (count == 17) returnStr = '星星';
+	if (count == 18) returnStr = '月亮';
+	if (count == 19) returnStr = '太陽';
+	if (count == 20) returnStr = '審判';
+	if (count == 21) returnStr = '世界';
+	if (count == 22) returnStr = '權杖一';
+	if (count == 23) returnStr = '權杖二';
+	if (count == 24) returnStr = '權杖三';
+	if (count == 25) returnStr = '權杖四';
+	if (count == 26) returnStr = '權杖五';
+	if (count == 27) returnStr = '權杖六';
+	if (count == 28) returnStr = '權杖七';
+	if (count == 29) returnStr = '權杖八';
+	if (count == 30) returnStr = '權杖九';
+	if (count == 31) returnStr = '權杖十';
+	if (count == 32) returnStr = '權杖侍者';
+	if (count == 33) returnStr = '權杖騎士';
+	if (count == 34) returnStr = '權杖皇后';
+	if (count == 35) returnStr = '權杖國王';
+	if (count == 36) returnStr = '聖杯一';
+	if (count == 37) returnStr = '聖杯二';
+	if (count == 38) returnStr = '聖杯三';
+	if (count == 39) returnStr = '聖杯四';
+	if (count == 40) returnStr = '聖杯五';
+	if (count == 41) returnStr = '聖杯六';
+	if (count == 42) returnStr = '聖杯七';
+	if (count == 43) returnStr = '聖杯八';
+	if (count == 44) returnStr = '聖杯九';
+	if (count == 45) returnStr = '聖杯十';
+	if (count == 46) returnStr = '聖杯侍者';
+	if (count == 47) returnStr = '聖杯騎士';
+	if (count == 48) returnStr = '聖杯皇后';
+	if (count == 49) returnStr = '聖杯國王';
+	if (count == 50) returnStr = '寶劍一';
+	if (count == 51) returnStr = '寶劍二';
+	if (count == 52) returnStr = '寶劍三';
+	if (count == 53) returnStr = '寶劍四';
+	if (count == 54) returnStr = '寶劍五';
+	if (count == 55) returnStr = '寶劍六';
+	if (count == 56) returnStr = '寶劍七';
+	if (count == 57) returnStr = '寶劍八';
+	if (count == 58) returnStr = '寶劍九';
+	if (count == 59) returnStr = '寶劍十';
+	if (count == 60) returnStr = '寶劍侍者';
+	if (count == 61) returnStr = '寶劍騎士';
+	if (count == 62) returnStr = '寶劍皇后';
+	if (count == 63) returnStr = '寶劍國王';
+	if (count == 64) returnStr = '錢幣一';
+	if (count == 65) returnStr = '錢幣二';
+	if (count == 66) returnStr = '錢幣三';
+	if (count == 67) returnStr = '錢幣四';
+	if (count == 68) returnStr = '錢幣五';
+	if (count == 69) returnStr = '錢幣六';
+	if (count == 70) returnStr = '錢幣七';
+	if (count == 71) returnStr = '錢幣八';
+	if (count == 72) returnStr = '錢幣九';
+	if (count == 73) returnStr = '錢幣十';
+	if (count == 74) returnStr = '錢幣侍者';
+	if (count == 75) returnStr = '錢幣騎士';
+	if (count == 76) returnStr = '錢幣皇后';
+	if (count == 77) returnStr = '錢幣國王';
+	if (count == 78) returnStr = '空白牌';
+
+	return returnStr;
+
+}
+  //隨機產生角色背景
+  function PcBG(){
+    let PersonalDescriptionArr = ['結實的', '英俊的', '粗鄙的', '機靈的', '迷人的', '娃娃臉的', '聰明的', '蓬頭垢面的', '愚鈍的', '骯髒的', '耀眼的', '有書卷氣的','青春洋溢的','感覺疲憊的','豐滿的','粗壯的','毛髮茂盛的','苗條的','優雅的','邋遢的','敦實的','蒼白的','陰沉的','平庸的','臉色紅潤的','皮膚黝黑色','滿臉皺紋的','古板的','有狐臭的','狡猾的','健壯的','嬌俏的','筋肉發達的','魁梧的','遲鈍的', '虛弱的'];
+    let IdeologyBeliefsArr = ['虔誠信仰著某個神祈','覺得人類不需要依靠宗教也可以好好生活','覺得科學可以解釋所有事，並對某種科學領域有獨特的興趣','相信因果循環與命運','是一個政黨、社群或秘密結社的成員','覺得這個社會已經病了，而其中某些病灶需要被剷除','是神秘學的信徒','是積極參與政治的人，有特定的政治立場','覺得金錢至上，且為了金錢不擇手段','是一個激進主義分子，活躍於社會運動'];
+    let SignificantPeopleArr = ['他的父母', '他的祖父母', '他的兄弟姐妹', '他的孩子', '他的另一半', '那位曾經教導調查員最擅長的技能（點數最高的職業技能）的人','他的兒時好友', '他心目中的偶像或是英雄', '在遊戲中的另一位調查員', '一個由KP指定的NPC'];
+    let SignificantPeopleWhyArr = ['調查員在某種程度上受了他的幫助，欠了人情','調查員從他那裡學到了些什麼重要的東西','他給了調查員生活的意義','調查員曾經傷害過他，尋求他的原諒','和他曾有過無可磨滅的經驗與回憶','調查員想要對他證明自己','調查員崇拜著他','調查員對他有著某些使調查員後悔的過往','調查員試圖證明自己和他不同，比他更出色','他讓調查員的人生變得亂七八糟，因此調查員試圖復仇'];
+    let MeaningfulLocationsArr = ['過去就讀的學校','他的故鄉','與他的初戀之人相遇之處','某個可以安靜沉思的地方','某個類似酒吧或是熟人的家那樣的社交場所','與他的信念息息相關的地方','埋葬著某個對調查員別具意義的人的墓地','他從小長大的那個家','他生命中最快樂時的所在','他的工作場所'];
+    let TreasuredPossessionsArr = ['一個與他最擅長的技能（點數最高的職業技能）相關的物品','一件他的在工作上需要用到的必需品','一個從他童年時就保存至今的寶物','一樣由調查員最重要的人給予他的物品','一件調查員珍視的蒐藏品','一件調查員無意間發現，但不知道到底是什麼的東西，調查員正努力尋找答案','某種體育用品','一把特別的武器','他的寵物'];
+    let TraitsArr = ['慷慨大方的人','對動物很友善的人','善於夢想的人','享樂主義者','甘冒風險的賭徒或冒險者', '善於料理的人', '萬人迷','忠心耿耿的人','有好名聲的人','充滿野心的人'];
+    
+    return '背景描述生成器（僅供娛樂用，不具實際參考價值）\n==\n調查員是一個' + PersonalDescriptionArr[Math.floor((Math.random() * (PersonalDescriptionArr.length)) + 0)] + '人。\n【信念】：說到這個人，他' + IdeologyBeliefsArr[Math.floor((Math.random() * (IdeologyBeliefsArr.length)) + 0)] + '。\n【重要之人】：對他來說，最重要的人是' + SignificantPeopleArr[Math.floor((Math.random() * (SignificantPeopleArr.length)) + 0)] + '，這個人對他來說之所以重要，是因為' + SignificantPeopleWhyArr[Math.floor((Math.random() * (SignificantPeopleWhyArr.length)) + 0)] + '。\n【意義非凡之地】：對他而言，最重要的地點是' + MeaningfulLocationsArr[Math.floor((Math.random() * (MeaningfulLocationsArr.length)) + 0)] + '。\n【寶貴之物】：他最寶貴的東西就是'+ TreasuredPossessionsArr[Math.floor((Math.random() * (TreasuredPossessionsArr.length)) + 0)] + '。\n【特徵】：總括來說，調查員是一個' + TraitsArr[Math.floor((Math.random() * (TraitsArr.length)) + 0)] + '。';
+    
+  }
+
+
+		function Help() {
+			return randomReply() + '\n' + '\
+【擲骰BOT】v1.26 \
+\n 例如輸入2d6+1　攻撃！\
+\n 會輸出）2d6+1：攻撃  9[6+3]+1 = 10\
+\n 如上面一樣,在骰子數字後方隔空白位打字,可以進行發言。\
+\n 以下還有其他例子\
+\n 5 3D6 	：分別骰出5次3d6\
+\n D66 D66s ：骰出D66 s小者固定在前\
+\n 5B10：不加總的擲骰 會進行小至大排序 \
+\n 5B10 9：如上,另外計算其中有多少粒大過9 \
+\n 5U10 8：進行5D10 每骰出一粒8會有一粒獎勵骰 \
+\n 5U10 8 9：如上,另外計算其中有多少粒大過9 \
+\n Choice：啓動語choice/隨機/選項/選1\
+\n (問題)(啓動語)(問題)  (選項1) (選項2) \
+\n 例子 隨機收到聖誕禮物數 1 2 3 >4  \
+\n  \
+\n 隨機排序：啓動語　排序\
+\n (問題)(啓動語)(問題)  (選項1) (選項2)(選項3) \
+\n 例子 交換禮物排序 A君 C君 F君 G君\
+\n \
+\n ・COC六版判定　CCb （目標値）：做出成功或失敗的判定\
+\n例）CCb 30　CCb 80\
+\n ・COC七版判定　CCx（目標値）\
+\n　x：獎勵骰/懲罰骰 (2～n2)。沒有的話可以省略。\
+\n  \
+\n ・cc六版創角\
+\n ・cc七版創角 （年齡）\
+\n  \
+\n・NC 永遠的後日談擲骰\
+\n (骰數)NC/NA (問題)\
+\n  例子 1NC 2Na+4 3na-2\
+\n 	依戀  NM (問題) \
+\n  例子 NM NM 我的依戀\
+\n  \
+\n・WOD 黑暗世界擲骰\
+\n (骰數)WOD/Wd(加骰)(+成功數) (問題)\
+\n  例子 2wod 3wd8 15wd9+2\
+\n  \
+\n・占卜運氣功能 字句中包括運氣即可\
+\n・塔羅牌占卜 塔羅/大十字塔羅/每日塔羅牌\
+\n  時間tarot 等關键字可啓動\
+\n  死亡FLAG：啓動語 立Flag/死亡flag\
+\n  coc7角色背景：啓動語 coc7角色背景\
+';		
+		}
