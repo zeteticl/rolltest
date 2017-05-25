@@ -45,7 +45,7 @@ app.post('/', jsonParser, function(req, res) {
   if (rplyVal) {
     replyMsgToLine(rplyToken, rplyVal); 
   } else {
-    console.log('Do not trigger'); 
+
   }
 
   res.send('ok');
