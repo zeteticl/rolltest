@@ -69,8 +69,6 @@ function replyMsgToLine(rplyToken, rplyVal) {
   let rplyJson = JSON.stringify(rplyObj); 
   
   var request = https.request(options, function(response) {
-    console.log('Status: ' + response.statusCode);
-    console.log('Headers: ' + JSON.stringify(response.headers));
     response.setEncoding('utf8');
     response.on('data', function(body) {
       console.log(body); 
