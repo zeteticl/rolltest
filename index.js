@@ -52,7 +52,7 @@ app.post('/', jsonParser, function(req, res) {
 });
 
 app.listen(app.get('port'), function() {
-//  console.log('Node app is running on port', app.get('port'));
+  console.log('Node app is running on port', app.get('port'));
 });
 
 function replyMsgToLine(rplyToken, rplyVal) {
@@ -71,7 +71,7 @@ function replyMsgToLine(rplyToken, rplyVal) {
   var request = https.request(options, function(response) {
     response.setEncoding('utf8');
     response.on('data', function(body) {
-     // console.log(body); 
+      console.log(body); 
     });
   });
   request.on('error', function(e) {
