@@ -71,7 +71,7 @@ function replyMsgToLine(rplyToken, rplyVal) {
   var request = https.request(options, function(response) {
     response.setEncoding('utf8');
     response.on('data', function(body) {
-      console.log(body); 
+ //     console.log(body); 
     });
   });
   request.on('error', function(e) {
