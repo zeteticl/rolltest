@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');  
 var app = express();
-
+var myFunctions = require("./roll/coc.js")
 var jsonParser = bodyParser.json();
 
 var options = {

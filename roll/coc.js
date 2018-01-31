@@ -1,9 +1,4 @@
 module.exports = {
-   coc6,
-   coc7,
-   coc7chack
-}
-
 
     //...
 	
@@ -270,6 +265,13 @@ function build6char(){
 	ReStr = ReStr + '\n調查員的最小起始年齡等於EDU+6，每比起始年齡年老十年，\n調查員增加一點EDU並且加20點職業技能點數。\n當超過40歲後，每老十年，\n從STR,CON,DEX,APP中選擇一個減少一點。';
     return ReStr;
   } 
+
+
+
+}
+
+
+
 
   
   
