@@ -3,7 +3,6 @@ var bodyParser = require('body-parser');
 var https = require('https');  
 var app = express();
 var jsonParser = bodyParser.json();
-var coc26 = require("./coc26.js").coc26;
 var options = {
   host: 'api.line.me',
   port: 443,
@@ -1349,3 +1348,4 @@ function tarotCardReply(count) {
 \n  coc7角色背景：啓動語 coc7角色背景\
 ';		
 		}
+var coc26 = require('./coc26.js');
