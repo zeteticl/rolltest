@@ -22,4 +22,6 @@ function coc6(chack,text){
 
 
 
-module.exports.coc26 = coc6;  
+module.exports = {
+    coc6: coc6
+};
