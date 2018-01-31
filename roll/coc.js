@@ -1,4 +1,4 @@
-var dice = require('./roll/rollbase.js');
+var dice = require('./rollbase.js');
 
 ////////////////////////////////////////
 //////////////// COC6
