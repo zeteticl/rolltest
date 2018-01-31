@@ -270,11 +270,11 @@ function build6char(){
 
 
 module.exports = {
-    coc6: coc6,
-	coc7: coc7,
-	coc7chack: coc7chack,
-	coc7bp: coc7bp,
-	ArrMax: ArrMax,
-	build7char: build7char,
-	build6char: build6char
+    coc6,
+	coc7,
+	coc7chack,
+	coc7bp,
+	ArrMax,
+	build7char,
+	build6char
 };
