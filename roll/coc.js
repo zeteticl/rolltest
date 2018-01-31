@@ -1,6 +1,3 @@
-module.exports.coc6 = coc6;  
-module.exports.coc7 = coc7;  
-module.exports.coc7chack = coc7chack;  	
 	
 	
 	////////////////////////////////////////
@@ -267,3 +264,6 @@ function build6char(){
 
 
 
+module.exports.coc6 = coc6;  
+module.exports.coc7 = coc7;  
+module.exports.coc7chack = coc7chack;  	
