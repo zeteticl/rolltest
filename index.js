@@ -124,14 +124,10 @@ function parseInput(rplyToken, inputStr) {
  	  SortIt 指令開始於此
  	*/
  	if (trigger.match(/排序/)!= null && mainMsg.length >= 3) return SortIt(inputStr,mainMsg);
- 	
-		
-        if (trigger.match(/^d66$/)!= null ) return advroll.d66(mainMsg[1]);
-	
-		if (trigger.match(/^d66s$/)!= null ) return advroll.d66s(mainMsg[1]);
-		if (trigger.match(/^ccb$|^cc$|^ccn[1-2]$|^cc[1-2]$/)!= null && mainMsg[1]<=1000 )
+ 	if (trigger.match(/^d66$/)!= null ) return advroll.d66(mainMsg[1]);
+	if (trigger.match(/^d66s$/)!= null ) return advroll.d66s(mainMsg[1]);
+	if (trigger.match(/^ccb$|^cc$|^ccn[1-2]$|^cc[1-2]$/)!= null && mainMsg[1]<=1000 )
 	{       		
-
         //ccb指令開始於此
 		if (trigger == 'ccb'&& mainMsg[1]<=99) return coc.coc6(mainMsg[1],mainMsg[2]);
           
@@ -143,13 +139,13 @@ function parseInput(rplyToken, inputStr) {
           if (trigger == 'cc2'&& mainMsg[1]<=1000) return coc.coc7bp(mainMsg[1],'2',mainMsg[2]);   
           if (trigger == 'ccn1'&& mainMsg[1]<=1000) return coc.coc7bp(mainMsg[1],'-1',mainMsg[2]);   
           if (trigger == 'ccn2'&& mainMsg[1]<=1000) return coc.coc7bp(mainMsg[1],'-2',mainMsg[2]);   
-
 	}
+	
 	//wod 指令開始於此
-		if (trigger.match(/^(\d+)(wd|wod)(\d|)((\+|-)(\d+)|)$/i)!= null)return wod(trigger,mainMsg[1]);
+	if (trigger.match(/^(\d+)(wd|wod)(\d|)((\+|-)(\d+)|)$/i)!= null)return wod(trigger,mainMsg[1]);
 	
 	//choice 指令開始於此
-		if (trigger.match(/choice|隨機|選項|選1/)!= null && mainMsg.length >= 3) return choice(inputStr,mainMsg);
+	if (trigger.match(/choice|隨機|選項|選1/)!= null && mainMsg.length >= 3) return choice(inputStr,mainMsg);
 	//tarot 指令
 	if (trigger.match(/tarot|塔羅牌|塔羅/) != null) {
 			if (trigger.match(/每日|daily/)!= null) return NomalDrawTarot(mainMsg[1], mainMsg[2]);
@@ -165,23 +161,12 @@ function parseInput(rplyToken, inputStr) {
 */
 
 	//xBy>A 指令開始於此
-	if (trigger.match(/^(\d+)(b)(\d+)$/i)!= null)
-	{        
-		return advroll.xBy(trigger,mainMsg[1],mainMsg[2]);
-	}
+	if (trigger.match(/^(\d+)(b)(\d+)$/i)!= null) return advroll.xBy(trigger,mainMsg[1],mainMsg[2]);
 	//xUy 指令開始於此	
-	if (trigger.match(/^(\d+)(u)(\d+)$/i)!= null && isNaN(mainMsg[1])== false)
-	{        
-		return advroll.xUy(trigger,mainMsg[1],mainMsg[2],mainMsg[3]);
-	}
-
-	
-
-         //普通ROLL擲骰判定在此        
-     if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) {
-          return rollbase.nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
-        }
-	
+	if (trigger.match(/^(\d+)(u)(\d+)$/i)!= null && isNaN(mainMsg[1])== false) return advroll.xUy(trigger,mainMsg[1],mainMsg[2],mainMsg[3]);
+     //普通ROLL擲骰判定在此        
+     if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/\d+d+\d/)!=null) return rollbase.nomalDiceRoller(inputStr,mainMsg[0],mainMsg[1],mainMsg[2]);
+  
 }
 
 
