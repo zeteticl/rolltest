@@ -5,7 +5,7 @@
 ////////////////////////////////////////      
     
 
-function coc6(chack,text){
+function coc26(chack,text){
           let temp = Dice(100);
           if (text == null ) {
             if (temp == 100) return 'ccb<=' + chack  + ' ' + temp + ' ¡÷ °Ú¡I¤j¥¢±Ñ¡I';
@@ -23,5 +23,5 @@ function coc6(chack,text){
 
 
 module.exports = {
-    coc26: coc6
+    coc26: coc26
 };
