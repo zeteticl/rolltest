@@ -38,6 +38,7 @@ app.post('/', jsonParser, function(req, res) {
     } 
     catch(e) {
       console.log('catch error');
+	  console.log(msg);
     }
   }
 
