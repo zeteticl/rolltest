@@ -315,7 +315,7 @@ function nechronica(triggermsg ,text) {
 
 	for (var i = 0; i < Number(match[1]); i++)	
 	{
-		dicenew = Dice(10) + Number(match[3]);
+		dicenew = rollbase.Dice(10) + Number(match[3]);
 		ncarray.push(dicenew);
 	}
 
@@ -361,7 +361,7 @@ function nechronica(triggermsg ,text) {
 function nechronica_mirenn(text) {
 	let returnStr = '';
 	var dicenew = 0;
-	dicenew = Dice(10)-1;
+	dicenew = rollbase.Dice(10)-1;
 
 	// 產生格式
 	if (text != null)
@@ -397,10 +397,10 @@ function d66(text) {
 
 	let returnStr = '';
 	if(text != null){
-	returnStr =   'D66：' + text + ' → ' + Dice(6) + Dice(6);
+	returnStr =   'D66：' + text + ' → ' + rollbase.Dice(6) + rollbase.Dice(6);
 	}
 	else{
-	returnStr = 'D66 → ' + Dice(6) + Dice(6);
+	returnStr = 'D66 → ' + rollbase.Dice(6) + rollbase.Dice(6);
 	}
 	return returnStr;
 	
@@ -412,8 +412,8 @@ function d66(text) {
 
 function d66s(text) {
 
-	let temp0 = Dice(6);
-	let temp1 = Dice(6);
+	let temp0 = rollbase.Dice(6);
+	let temp1 = rollbase.Dice(6);
 	let returnStr = '';
 	if (temp0>= temp1){
 		let temp2 = temp0;
@@ -442,7 +442,7 @@ let varcou =  new Array();
 let varsu = 0;
 for (var i = 0; i < Number(match[1]); i++)	
 	{
-             varcou[i] =  Dice(match[3]);
+             varcou[i] =  rollbase.Dice(match[3]);
 	}
 varcou.sort(sortNumber);
 //(5B7>6) → 7,5,6,4,4 → 成功数1
@@ -495,12 +495,12 @@ function xUy(triggermsg ,text01, text02, text03) {
 
 for (var i = 0; i < Number(match[1]); i++)	
 	{
-			varcou[i] =  Dice(match[3]);
+			varcou[i] =  rollbase.Dice(match[3]);
 			varcounew[i] = varcou[i];
 			varcouloop[i] = varcounew[i];
 			for(;varcounew[i]>=text01;)
 			{
-				varcounew[i] =Dice(match[3]);
+				varcounew[i] =rollbase.Dice(match[3]);
 				varcouloop[i] += ', ' +varcounew[i];
 				varcou[i] += varcounew[i];
 			}
@@ -866,7 +866,7 @@ function tarotRevReply(count) {
 
 function choice(input,str) {
 	let a = input.replace(str[0], '').match(/\S+/ig);
-	return str[0] + '['+ a + '] → ' + a[Dice(a.length)-1];
+	return str[0] + '['+ a + '] → ' + a[rollbase.Dice(a.length)-1];
 }
 
 function tarotCardReply(count) {
