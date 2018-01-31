@@ -264,6 +264,6 @@ function build6char(){
 
 
 
-module.exports.coc6 = coc6;  
-module.exports.coc7 = coc7;  
-module.exports.coc7chack = coc7chack;  	
+module.exports.coc26 = coc6;  
+module.exports.coc27 = coc7;  
+module.exports.coc27chack = coc7chack;  	
