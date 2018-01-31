@@ -1348,4 +1348,4 @@ function tarotCardReply(count) {
 \n  coc7角色背景：啓動語 coc7角色背景\
 ';		
 		}
-var coc26 = require('./coc26.js');
+var coc26 = require('./coc262.js');
