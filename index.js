@@ -2,9 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');  
 var app = express();
-const Coc = require('./roll/coc.js');
+var coc = require("./roll/coc.js")
 // Instantiate User:
-let coc = new Coc();
 var jsonParser = bodyParser.json();
 
 var options = {
@@ -135,10 +134,10 @@ function parseInput(rplyToken, inputStr) {
 	{       		
 
         //ccb指令開始於此
-		if (trigger == 'ccb'&& mainMsg[1]<=99) return coc6(mainMsg[1],mainMsg[2]);
+		if (trigger == 'ccb'&& mainMsg[1]<=99) return coc.coc6(mainMsg[1],mainMsg[2]);
           
         //cc指令開始於此
-        if (trigger == 'cc'&& mainMsg[1]<=1000) return coc7(mainMsg[1],mainMsg[2]);
+        if (trigger == 'cc'&& mainMsg[1]<=1000) return coc.coc7(mainMsg[1],mainMsg[2]);
         
         //獎懲骰設定於此    
           if (trigger == 'cc1'&& mainMsg[1]<=1000) return coc7bp(mainMsg[1],'1',mainMsg[2]);        

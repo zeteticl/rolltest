@@ -1,4 +1,10 @@
-class Coc {
+module.exports = {
+   coc6,
+   coc7,
+   coc7chack
+}
+
+
     //...
 	
 	
@@ -267,7 +273,3 @@ function build6char(){
 
   
   
-  
-};
-
-module.exports = Coc;
