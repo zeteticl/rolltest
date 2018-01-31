@@ -8,15 +8,15 @@
 function coc26(chack,text){
           let temp = Dice(100);
           if (text == null ) {
-            if (temp == 100) return 'ccb<=' + chack  + ' ' + temp + ' ¡÷ °Ú¡I¤j¥¢±Ñ¡I';
-            if (temp <= chack) return 'ccb<=' + chack + ' '  + temp + ' ¡÷ ¦¨¥\';
-            else return 'ccb<=' + chack  + ' ' + temp + ' ¡÷ ¥¢±Ñ' ;
+            if (temp == 100) return 'ccb<=' + chack  + ' ' + temp + ' â†’ å•Šï¼å¤§å¤±æ•—ï¼';
+            if (temp <= chack) return 'ccb<=' + chack + ' '  + temp + ' â†’ æˆåŠŸ';
+            else return 'ccb<=' + chack  + ' ' + temp + ' â†’ å¤±æ•—' ;
           }
           else
     {
-            if (temp == 100) return 'ccb<=' + chack + ' ' + temp + ' ¡÷ °Ú¡I¤j¥¢±Ñ¡I¡F' + text;
-            if (temp <= chack) return 'ccb<=' + chack +  ' ' + temp + ' ¡÷ ¦¨¥\¡F' + text;
-            else return 'ccb<=' + chack  + ' ' +  temp + ' ¡÷ ¥¢±Ñ¡F' + text;
+            if (temp == 100) return 'ccb<=' + chack + ' ' + temp + ' â†’ å•Šï¼å¤§å¤±æ•—ï¼ï¼›' + text;
+            if (temp <= chack) return 'ccb<=' + chack +  ' ' + temp + ' â†’ æˆåŠŸï¼›' + text;
+            else return 'ccb<=' + chack  + ' ' +  temp + ' â†’ å¤±æ•—ï¼›' + text;
     }
 }        
 
