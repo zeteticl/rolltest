@@ -33,7 +33,7 @@ app.post('/', jsonParser, function(req, res) {
 	console.log(msg);
 	if (type == 'message' && msgType == 'text') {
 	try {
-		rplyVal = analytics.parseInput(rplyToken, msg, options); 
+		rplyVal = analytics.parseInput(rplyToken, msg); 
 	} 
 	catch(e) {
 		console.log('catch error');
@@ -42,7 +42,7 @@ app.post('/', jsonParser, function(req, res) {
 	}
 
 	if (rplyVal) {
-	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal); 
+	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options); 
 	} else {
 	//console.log('Do not trigger'); 
 	}
