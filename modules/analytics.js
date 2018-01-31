@@ -15,7 +15,8 @@ function parseInput(rplyToken, inputStr) {
 	let msgSplitor = (/\S+/ig);	
 	let mainMsg = inputStr.match(msgSplitor); //定義輸入字串
 	let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
-		
+
+	//在下面位置開始分析trigger
 	//鴨霸獸指令開始於此
 	if (trigger.match(/鴨霸獸|巴獸/) != null) return funny.randomReply() ;	
 	if (trigger.match(/運氣|運勢/) != null) return funny.randomLuck(mainMsg) ; //占卜運氣	
@@ -37,10 +38,8 @@ function parseInput(rplyToken, inputStr) {
   
 	if (trigger.match(/^help$|^幫助$/)!= null ) return help.Help();
 	
-	/**
- 	* Fisher–Yates shuffle
- 	SortIt 指令開始於此
- 	*/
+	//Fisher–Yates shuffle
+ 	//SortIt 指令開始於此
  	if (trigger.match(/排序/)!= null && mainMsg.length >= 3) return funny.SortIt(inputStr,mainMsg);
  	if (trigger.match(/^d66$/)!= null ) return advroll.d66(mainMsg[1]);
 	if (trigger.match(/^d66s$/)!= null ) return advroll.d66s(mainMsg[1]);
@@ -77,7 +76,6 @@ function parseInput(rplyToken, inputStr) {
 		return RockPaperScissors(inputStr, mainMsg[1]);
 	}
 */
-
 	//xBy>A 指令開始於此
 	if (trigger.match(/^(\d+)(b)(\d+)$/i)!= null) return advroll.xBy(trigger,mainMsg[1],mainMsg[2]);
 	//xUy 指令開始於此	

@@ -46,7 +46,6 @@ app.post('/', jsonParser, function(req, res) {
 	} else {
 	//console.log('Do not trigger'); 
 	}
-
 	res.send('ok');
 });
 
