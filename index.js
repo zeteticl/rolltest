@@ -1090,5 +1090,5 @@ function tarotCardReply(count) {
 		}
 
 module.exports = {
-    Dice
+    Dice : Dice
 };
