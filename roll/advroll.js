@@ -155,5 +155,8 @@ returnStr  += '/' + varcou.reduce(function(previousValue,currentValue){
 
 
 module.exports = {
-d66, d66s, xBy, xUy
+d66:d66, 
+d66s:d66s, 
+xBy:xBy, 
+xUy:xUy
 };
