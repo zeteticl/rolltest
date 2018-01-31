@@ -23,5 +23,5 @@ function coc6(chack,text){
 
 
 module.exports = {
-    coc6: coc6
+    coc26: coc6
 };
