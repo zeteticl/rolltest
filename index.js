@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');  
 var app = express();
-const Coc = require('./roll/Coc.js');
+const Coc = require('./roll/coc.js');
 // Instantiate User:
 let coc = new Coc();
 var jsonParser = bodyParser.json();
