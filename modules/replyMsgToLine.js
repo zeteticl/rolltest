@@ -1,3 +1,4 @@
+var https = require('https');	
 function replyMsgToLine(rplyToken, rplyVal) {
 	let rplyObj = {
 	replyToken: rplyToken,
@@ -8,9 +9,7 @@ function replyMsgToLine(rplyToken, rplyVal) {
 		}
 	]
 	}
-
 	let rplyJson = JSON.stringify(rplyObj); 
-	
 	var request = https.request(options, function(response) {
 //	console.log('Status: ' + response.statusCode);
 //	console.log('Headers: ' + JSON.stringify(response.headers));
