@@ -1,19 +1,12 @@
-	
-	
-	////////////////////////////////////////
-//////////////// COC6
-////////////////////////////////////////      
-    
+var dice = require('./roll/rollbase.js');
 
 ////////////////////////////////////////
 //////////////// COC6
 ////////////////////////////////////////      
-    function Dice(diceSided){          
-          return Math.floor((Math.random() * diceSided) + 1)
-        }        
+
 
 function coc6(chack,text){
-          let temp = Dice(100);
+          let temp = dice.Dice(100);
           if (text == null ) {
             if (temp == 100) return 'ccb<=' + chack  + ' ' + temp + ' → 啊！大失敗！';
             if (temp <= chack) return 'ccb<=' + chack + ' '  + temp + ' → 成功';
@@ -33,7 +26,7 @@ function coc6(chack,text){
 
         
 function coc7(chack,text){
-  let temp = Dice(100);  
+  let temp = dice.Dice(100);  
   if (text == null ) {
     if (temp == 1) return temp + ' → 恭喜！大成功！';
     if (temp == 100) return temp + ' → 啊！大失敗！';
@@ -75,12 +68,12 @@ else
 
 
 function coc7bp (chack,bpdiceNum,text){
-  let temp0 = Dice(10) - 1;
+  let temp0 = dice.Dice(10) - 1;
   let countStr = '';
   
   if (bpdiceNum > 0){
   for (let i = 0; i <= bpdiceNum; i++ ){
-    let temp = Dice(10);
+    let temp = dice.Dice(10);
     let temp2 = temp.toString() + temp0.toString();
     if (temp2 > 100) temp2 = parseInt(temp2) - 100;  
     countStr = countStr + temp2 + '、';
@@ -95,7 +88,7 @@ function coc7bp (chack,bpdiceNum,text){
   if (bpdiceNum < 0){
     bpdiceNum = Math.abs(bpdiceNum);
     for (let i = 0; i <= bpdiceNum; i++ ){
-      let temp = Dice(10);
+      let temp = dice.Dice(10);
       let temp2 = temp.toString() + temp0.toString();
       if (temp2 > 100) temp2 = parseInt(temp2) - 100;  
       countStr = countStr + temp2 + '、';
@@ -188,12 +181,12 @@ function build7char(text01){
       let tempEDU = eval(firstEDU);
 
       for (i = 1 ; i <= EDUinc ; i++){
-        let EDURoll = Dice(100);
+        let EDURoll = dice.Dice(100);
         ReStr = ReStr + '\n第' + i + '次EDU成長 → ' + EDURoll;
 
 
         if (EDURoll>tempEDU) {
-          let EDUplus = Dice(10);
+          let EDUplus = dice.Dice(10);
           ReStr = ReStr + ' → 成長' + EDUplus +'點';
           tempEDU = tempEDU + EDUplus;
         }
