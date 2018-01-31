@@ -1,4 +1,4 @@
-class coc {
+class Coc {
     //...
 	
 	
@@ -270,4 +270,4 @@ function build6char(){
   
 };
 
-module.exports = coc;
+module.exports = Coc;
