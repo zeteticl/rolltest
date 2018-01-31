@@ -1,4 +1,4 @@
-var dice = require('./rollbase.js');
+var rollbase = require('./rollbase.js');
 
 ////////////////////////////////////////
 //////////////// COC6
@@ -6,7 +6,7 @@ var dice = require('./rollbase.js');
 
 
 function coc6(chack,text){
-          let temp = dice.Dice(100);
+          let temp = rollbase.Dice(100);
           if (text == null ) {
             if (temp == 100) return 'ccb<=' + chack  + ' ' + temp + ' → 啊！大失敗！';
             if (temp <= chack) return 'ccb<=' + chack + ' '  + temp + ' → 成功';
@@ -26,7 +26,7 @@ function coc6(chack,text){
 
         
 function coc7(chack,text){
-  let temp = dice.Dice(100);  
+  let temp = rollbase.Dice(100);  
   if (text == null ) {
     if (temp == 1) return temp + ' → 恭喜！大成功！';
     if (temp == 100) return temp + ' → 啊！大失敗！';
@@ -68,12 +68,12 @@ else
 
 
 function coc7bp (chack,bpdiceNum,text){
-  let temp0 = dice.Dice(10) - 1;
+  let temp0 = rollbase.Dice(10) - 1;
   let countStr = '';
   
   if (bpdiceNum > 0){
   for (let i = 0; i <= bpdiceNum; i++ ){
-    let temp = dice.Dice(10);
+    let temp = rollbase.Dice(10);
     let temp2 = temp.toString() + temp0.toString();
     if (temp2 > 100) temp2 = parseInt(temp2) - 100;  
     countStr = countStr + temp2 + '、';
@@ -88,7 +88,7 @@ function coc7bp (chack,bpdiceNum,text){
   if (bpdiceNum < 0){
     bpdiceNum = Math.abs(bpdiceNum);
     for (let i = 0; i <= bpdiceNum; i++ ){
-      let temp = dice.Dice(10);
+      let temp = rollbase.Dice(10);
       let temp2 = temp.toString() + temp0.toString();
       if (temp2 > 100) temp2 = parseInt(temp2) - 100;  
       countStr = countStr + temp2 + '、';
@@ -159,34 +159,34 @@ function build7char(text01){
     ReStr = ReStr + '\n==';
     if (old>=40) ReStr = ReStr + '\n（以下箭號三項，自選共減' + Debuff + '點。）' ;
     if (old<20) ReStr = ReStr + '\n（以下箭號兩項，擇一減去' + Debuff + '點。）' ;
-    ReStr = ReStr + '\nＳＴＲ：' + BuildDiceCal('3d6*5');
+    ReStr = ReStr + '\nＳＴＲ：' + rollbase.BuildDiceCal('3d6*5');
     if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff ;
     if (old<20) ReStr = ReStr + ' ←擇一減' + Debuff ;
-    ReStr = ReStr + '\nＣＯＮ：' + BuildDiceCal('3d6*5');
+    ReStr = ReStr + '\nＣＯＮ：' + rollbase.BuildDiceCal('3d6*5');
     if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff;
-    ReStr = ReStr + '\nＤＥＸ：' + BuildDiceCal('3d6*5');
+    ReStr = ReStr + '\nＤＥＸ：' + rollbase.BuildDiceCal('3d6*5');
     if (old>=40) ReStr = ReStr + ' ← 共減' + Debuff ;
-    if (old>=40) ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6*5-' + AppDebuff);
-    else ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6*5');
-    ReStr = ReStr + '\nＰＯＷ：' + BuildDiceCal('3d6*5');
-    ReStr = ReStr + '\nＳＩＺ：' + BuildDiceCal('(2d6+6)*5');
+    if (old>=40) ReStr = ReStr + '\nＡＰＰ：' + rollbase.BuildDiceCal('3d6*5-' + AppDebuff);
+    else ReStr = ReStr + '\nＡＰＰ：' + rollbase.BuildDiceCal('3d6*5');
+    ReStr = ReStr + '\nＰＯＷ：' + rollbase.BuildDiceCal('3d6*5');
+    ReStr = ReStr + '\nＳＩＺ：' + rollbase.BuildDiceCal('(2d6+6)*5');
     if (old<20) ReStr = ReStr + ' ←擇一減' + Debuff ;
-    ReStr = ReStr + '\nＩＮＴ：' + BuildDiceCal('(2d6+6)*5');         
-    if (old<20) ReStr = ReStr + '\nＥＤＵ：' + BuildDiceCal('3d6*5-5');
+    ReStr = ReStr + '\nＩＮＴ：' + rollbase.BuildDiceCal('(2d6+6)*5');         
+    if (old<20) ReStr = ReStr + '\nＥＤＵ：' + rollbase.BuildDiceCal('3d6*5-5');
     else {
-      let firstEDU = '(' + BuildRollDice('2d6') + '+6)*5';
+      let firstEDU = '(' + rollbase.BuildRollDice('2d6') + '+6)*5';
       ReStr = ReStr + '\n==';
       ReStr = ReStr + '\nＥＤＵ初始值：' + firstEDU + ' = ' + eval(firstEDU);
       
       let tempEDU = eval(firstEDU);
 
       for (i = 1 ; i <= EDUinc ; i++){
-        let EDURoll = dice.Dice(100);
+        let EDURoll = rollbase.Dice(100);
         ReStr = ReStr + '\n第' + i + '次EDU成長 → ' + EDURoll;
 
 
         if (EDURoll>tempEDU) {
-          let EDUplus = dice.Dice(10);
+          let EDUplus = rollbase.Dice(10);
           ReStr = ReStr + ' → 成長' + EDUplus +'點';
           tempEDU = tempEDU + EDUplus;
         }
@@ -199,8 +199,8 @@ function build7char(text01){
     }
     ReStr = ReStr + '\n==';
 
-    ReStr = ReStr + '\nＬＵＫ：' + BuildDiceCal('3d6*5');    
-    if (old<20) ReStr = ReStr + '\nＬＵＫ加骰：' + BuildDiceCal('3D6*5');
+    ReStr = ReStr + '\nＬＵＫ：' + rollbase.BuildDiceCal('3d6*5');    
+    if (old<20) ReStr = ReStr + '\nＬＵＫ加骰：' + rollbase.BuildDiceCal('3D6*5');
 
 
     return ReStr;
@@ -249,15 +249,15 @@ function build6char(){
     if (old<20) ReStr = ReStr + '\n（以下箭號兩項，擇一減去' + Debuff + '點。）' ;
  */
 	let ReStr = '六版核心創角：';
-	ReStr = ReStr + '\nＳＴＲ：' + BuildDiceCal('3d6');
-    ReStr = ReStr + '\nＤＥＸ：' + BuildDiceCal('3d6');
-    ReStr = ReStr + '\nＣＯＮ：' + BuildDiceCal('3d6');
-	ReStr = ReStr + '\nＰＯＷ：' + BuildDiceCal('3d6');
-    ReStr = ReStr + '\nＡＰＰ：' + BuildDiceCal('3d6');
-    ReStr = ReStr + '\nＩＮＴ：' + BuildDiceCal('(2d6+6)');
-    ReStr = ReStr + '\nＳＩＺ：' + BuildDiceCal('(2d6+6)');         
-    ReStr = ReStr + '\nＥＤＵ：' + BuildDiceCal('(3d6+3)');         
-	ReStr = ReStr + '\n年收入：' + BuildDiceCal('(1d10)'); 	  
+	ReStr = ReStr + '\nＳＴＲ：' + rollbase.BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＤＥＸ：' + rollbase.BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＣＯＮ：' + rollbase.BuildDiceCal('3d6');
+	ReStr = ReStr + '\nＰＯＷ：' + rollbase.BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＡＰＰ：' + rollbase.BuildDiceCal('3d6');
+    ReStr = ReStr + '\nＩＮＴ：' + rollbase.BuildDiceCal('(2d6+6)');
+    ReStr = ReStr + '\nＳＩＺ：' + rollbase.BuildDiceCal('(2d6+6)');         
+    ReStr = ReStr + '\nＥＤＵ：' + rollbase.BuildDiceCal('(3d6+3)');         
+	ReStr = ReStr + '\n年收入：' + rollbase.BuildDiceCal('(1d10)'); 	  
 	ReStr = ReStr + '\n調查員的最小起始年齡等於EDU+6，每比起始年齡年老十年，\n調查員增加一點EDU並且加20點職業技能點數。\n當超過40歲後，每老十年，\n從STR,CON,DEX,APP中選擇一個減少一點。';
     return ReStr;
   } 
