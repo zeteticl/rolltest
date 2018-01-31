@@ -29,7 +29,6 @@ app.post('/', jsonParser, function(req, res) {
   let msgType = event.message.type;
   let msg = event.message.text;
   let rplyToken = event.replyToken;
-
   let rplyVal = null;
   console.log(msg);
   if (type == 'message' && msgType == 'text') {
@@ -69,11 +68,11 @@ function replyMsgToLine(rplyToken, rplyVal) {
   let rplyJson = JSON.stringify(rplyObj); 
   
   var request = https.request(options, function(response) {
-    console.log('Status: ' + response.statusCode);
-    console.log('Headers: ' + JSON.stringify(response.headers));
+//    console.log('Status: ' + response.statusCode);
+//    console.log('Headers: ' + JSON.stringify(response.headers));
     response.setEncoding('utf8');
     response.on('data', function(body) {
-      console.log(body); 
+//      console.log(body); 
     });
   });
   request.on('error', function(e) {
