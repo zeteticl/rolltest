@@ -6,6 +6,7 @@ var jsonParser = bodyParser.json();
 var coc = require('./roll/coc.js');
 var rollbase = require('./roll/rollbase.js');
 var advroll = require('./roll/advroll.js');
+var nc = require('./roll/nc.js');
 var options = {
   host: 'api.line.me',
   port: 443,
@@ -107,10 +108,10 @@ function parseInput(rplyToken, inputStr) {
         if (trigger.match(/^coc7角色背景$/)!= null ) return PcBG();
 		
 		//nc指令開始於此 來自Rainsting/TarotLineBot 
-		if (trigger.match(/^[1-4]n[c|a][+|-][1-99]$|^[1-4]n[c|a]$/)!= null ) return nechronica(trigger,mainMsg[1]);
+		if (trigger.match(/^[1-4]n[c|a][+|-][1-99]$|^[1-4]n[c|a]$/)!= null ) return nc.nechronica(trigger,mainMsg[1]);
 
 		//依戀
-		if (trigger.match(/(^nm$)/) != null)	 return nechronica_mirenn(mainMsg[1]);
+		if (trigger.match(/(^nm$)/) != null)	 return nc.nechronica_mirenn(mainMsg[1]);
 			
 		if (trigger.match(/(^cc7版創角$|^cc七版創角$)/) != null && mainMsg[1] != NaN )	 return coc.build7char(mainMsg[1]);
 	
@@ -122,10 +123,7 @@ function parseInput(rplyToken, inputStr) {
  	* Fisher–Yates shuffle
  	  SortIt 指令開始於此
  	*/
- 			if (trigger.match(/排序/)!= null && mainMsg.length >= 3) 
- 	{        
- 		return SortIt(inputStr,mainMsg);
- 	}
+ 	if (trigger.match(/排序/)!= null && mainMsg.length >= 3) return SortIt(inputStr,mainMsg);
  	
 		
         if (trigger.match(/^d66$/)!= null ) return advroll.d66(mainMsg[1]);
@@ -148,28 +146,15 @@ function parseInput(rplyToken, inputStr) {
 
 	}
 	//wod 指令開始於此
-		if (trigger.match(/^(\d+)(wd|wod)(\d|)((\+|-)(\d+)|)$/i)!= null)
-	{        
-		return wod(trigger,mainMsg[1]);
-	}
+		if (trigger.match(/^(\d+)(wd|wod)(\d|)((\+|-)(\d+)|)$/i)!= null)return wod(trigger,mainMsg[1]);
 	
 	//choice 指令開始於此
-		if (trigger.match(/choice|隨機|選項|選1/)!= null && mainMsg.length >= 3) 
-	{        
-		return choice(inputStr,mainMsg);
-	}
-
+		if (trigger.match(/choice|隨機|選項|選1/)!= null && mainMsg.length >= 3) return choice(inputStr,mainMsg);
 	//tarot 指令
 	if (trigger.match(/tarot|塔羅牌|塔羅/) != null) {
-			if (trigger.match(/每日|daily/)!= null) {
-				return NomalDrawTarot(mainMsg[1], mainMsg[2]);
-			}
-			if (trigger.match(/時間|time/)!= null) {
-				return MultiDrawTarot(mainMsg[1], mainMsg[2], 1);
-			}
-			if (trigger.match(/大十字|cross/)!= null) {
-				return MultiDrawTarot(mainMsg[1], mainMsg[2], 2);
-			}
+			if (trigger.match(/每日|daily/)!= null) return NomalDrawTarot(mainMsg[1], mainMsg[2]);
+			if (trigger.match(/時間|time/)!= null) 	return MultiDrawTarot(mainMsg[1], mainMsg[2], 1);
+			if (trigger.match(/大十字|cross/)!= null) return MultiDrawTarot(mainMsg[1], mainMsg[2], 2);
 			return MultiDrawTarot(mainMsg[1], mainMsg[2], 3); //預設抽 79 張
 		}
 
