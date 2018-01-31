@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var https = require('https');  
 var app = express();
 var jsonParser = bodyParser.json();
-var coc = require('./roll/coc.js');
+
 var options = {
   host: 'api.line.me',
   port: 443,
@@ -38,7 +38,7 @@ app.post('/', jsonParser, function(req, res) {
     } 
     catch(e) {
       console.log('catch error');
-	  console.log(msg);
+	  console.log('Request error: ' + e.message);
     }
   }
 
@@ -54,7 +54,7 @@ app.post('/', jsonParser, function(req, res) {
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-
+var coc = require('./roll/coc.js');
 function replyMsgToLine(rplyToken, rplyVal) {
 	let rplyObj = {
     replyToken: rplyToken,
