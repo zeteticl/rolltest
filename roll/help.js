@@ -2,7 +2,7 @@ var rollbase = require('./rollbase.js');
 var funny = require('./funny.js');
 
 function Help() {
-	return randomReply() + '\n' + '\
+	return funny.randomReply() + '\n' + '\
 【擲骰BOT】v1.26 \
 \n 例如輸入2d6+1　攻撃！\
 \n 會輸出）2d6+1：攻撃  9[6+3]+1 = 10\
