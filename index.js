@@ -1,6 +1,5 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var https = require('https');	
 var app = express();
 var jsonParser = bodyParser.json();
 var analytics = require('./modules/analytics.js');
@@ -34,7 +33,7 @@ app.post('/', jsonParser, function(req, res) {
 	console.log(msg);
 	if (type == 'message' && msgType == 'text') {
 	try {
-		rplyVal = analytics.parseInput(rplyToken, msg); 
+		rplyVal = analytics.parseInput(rplyToken, msg, options); 
 	} 
 	catch(e) {
 		console.log('catch error');
