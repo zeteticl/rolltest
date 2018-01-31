@@ -1,4 +1,4 @@
-var dice = require('./index.js');
+var dice = require('../index.js');
 	
 	////////////////////////////////////////
 //////////////// COC6
