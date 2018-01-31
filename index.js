@@ -109,9 +109,9 @@ function parseInput(rplyToken, inputStr) {
 		//依戀
 		if (trigger.match(/(^nm$)/) != null)	 return nechronica_mirenn(mainMsg[1]);
 			
-		if (trigger.match(/(^cc7版創角$|^cc七版創角$)/) != null && mainMsg[1] != NaN )	 return build7char(mainMsg[1]);
+		if (trigger.match(/(^cc7版創角$|^cc七版創角$)/) != null && mainMsg[1] != NaN )	 return coc.build7char(mainMsg[1]);
 	
-		if (trigger.match(/(^cc6版創角$|^cc六版創角$)/) != null && mainMsg[1] != NaN )	 return build6char(mainMsg[1]);
+		if (trigger.match(/(^cc6版創角$|^cc六版創角$)/) != null && mainMsg[1] != NaN )	 return coc.build6char(mainMsg[1]);
   
 		if (trigger.match(/^help$|^幫助$/)!= null ) return Help();
 		
@@ -132,16 +132,16 @@ function parseInput(rplyToken, inputStr) {
 	{       		
 
         //ccb指令開始於此
-		if (trigger == 'ccb'&& mainMsg[1]<=99) return coc6(mainMsg[1],mainMsg[2]);
+		if (trigger == 'ccb'&& mainMsg[1]<=99) return coc.coc6(mainMsg[1],mainMsg[2]);
           
         //cc指令開始於此
-        if (trigger == 'cc'&& mainMsg[1]<=1000) return coc7(mainMsg[1],mainMsg[2]);
+        if (trigger == 'cc'&& mainMsg[1]<=1000) return coc.coc7(mainMsg[1],mainMsg[2]);
         
         //獎懲骰設定於此    
-          if (trigger == 'cc1'&& mainMsg[1]<=1000) return coc7bp(mainMsg[1],'1',mainMsg[2]);        
-          if (trigger == 'cc2'&& mainMsg[1]<=1000) return coc7bp(mainMsg[1],'2',mainMsg[2]);   
-          if (trigger == 'ccn1'&& mainMsg[1]<=1000) return coc7bp(mainMsg[1],'-1',mainMsg[2]);   
-          if (trigger == 'ccn2'&& mainMsg[1]<=1000) return coc7bp(mainMsg[1],'-2',mainMsg[2]);   
+          if (trigger == 'cc1'&& mainMsg[1]<=1000) return coc.coc7bp(mainMsg[1],'1',mainMsg[2]); 
+          if (trigger == 'cc2'&& mainMsg[1]<=1000) return coc.coc7bp(mainMsg[1],'2',mainMsg[2]);   
+          if (trigger == 'ccn1'&& mainMsg[1]<=1000) return coc.coc7bp(mainMsg[1],'-1',mainMsg[2]);   
+          if (trigger == 'ccn2'&& mainMsg[1]<=1000) return coc.coc7bp(mainMsg[1],'-2',mainMsg[2]);   
 
 	}
 	//wod 指令開始於此
@@ -1086,7 +1086,7 @@ function tarotCardReply(count) {
 \n・塔羅牌占卜 塔羅/大十字塔羅/每日塔羅牌\
 \n  時間tarot 等關键字可啓動\
 \n  死亡FLAG：啓動語 立Flag/死亡flag\
-\n  coc7角色背景：啓動語 coc7角色背景\
+\n  coc7角色背景：啓動語 coc7角色背景test01\
 ';		
 		}
 
