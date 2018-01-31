@@ -4,6 +4,7 @@ var https = require('https');
 var app = express();
 var jsonParser = bodyParser.json();
 var analytics = require('./modules/analytics.js');
+var replyMsgToLine = require('./modules/replyMsgToLine.js');
 var options = {
 	host: 'api.line.me',
 	port: 443,
@@ -37,12 +38,12 @@ app.post('/', jsonParser, function(req, res) {
 	} 
 	catch(e) {
 		console.log('catch error');
-	console.log('Request error: ' + e.message);
+		console.log('Request error: ' + e.message);
 	}
 	}
 
 	if (rplyVal) {
-	replyMsgToLine(rplyToken, rplyVal); 
+	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal); 
 	} else {
 	//console.log('Do not trigger'); 
 	}
@@ -53,35 +54,6 @@ app.post('/', jsonParser, function(req, res) {
 app.listen(app.get('port'), function() {
 	console.log('Node app is running on port', app.get('port'));
 });
-
-function replyMsgToLine(rplyToken, rplyVal) {
-	let rplyObj = {
-	replyToken: rplyToken,
-	messages: [
-		{
-	type: "text",
-	text: rplyVal
-		}
-	]
-	}
-
-	let rplyJson = JSON.stringify(rplyObj); 
-	
-	var request = https.request(options, function(response) {
-//	console.log('Status: ' + response.statusCode);
-//	console.log('Headers: ' + JSON.stringify(response.headers));
-	response.setEncoding('utf8');
-	response.on('data', function(body) {
-//		console.log(body); 
-	});
-	});
-	request.on('error', function(e) {
-	console.log('Request error: ' + e.message);
-	})
-	request.end(rplyJson);
-}
-
-
 
 
 ////////////////////////////////////////
