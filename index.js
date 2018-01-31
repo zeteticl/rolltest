@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var https = require('https');  
 var app = express();
 var jsonParser = bodyParser.json();
-var coc = require('./roll/coc.js').coc;
+var coc = require('./roll/coc.js');
 var options = {
   host: 'api.line.me',
   port: 443,
