@@ -1,4 +1,5 @@
 var rollbase = require('./rollbase.js');
+var rply ={type : 'text'};
 
 ////////////////////////////////////////
 //////////////// COC6
@@ -6,16 +7,17 @@ var rollbase = require('./rollbase.js');
 function coc6(chack,text){
 	let temp = rollbase.Dice(100);
 	if (text == null ) {
-		if (temp == 100) return 'ccb<=' + chack	+ ' ' + temp + ' → 啊！大失敗！';
-		if (temp <= chack) return 'ccb<=' + chack + ' '	+ temp + ' → 成功';
-		else return 'ccb<=' + chack	+ ' ' + temp + ' → 失敗' ;
+		if (temp == 100) rply.text = 'ccb<=' + chack	+ ' ' + temp + ' → 啊！大失敗！';
+		if (temp <= chack) rply.text = 'ccb<=' + chack + ' '	+ temp + ' → 成功';
+		else rply.text = 'ccb<=' + chack	+ ' ' + temp + ' → 失敗' ;
 	}
 	else
 	{
-		if (temp == 100) return 'ccb<=' + chack + ' ' + temp + ' → 啊！大失敗！；' + text;
-		if (temp <= chack) return 'ccb<=' + chack +	' ' + temp + ' → 成功；' + text;
-		else return 'ccb<=' + chack	+ ' ' +	temp + ' → 失敗；' + text;
+		if (temp == 100) rply.text = 'ccb<=' + chack + ' ' + temp + ' → 啊！大失敗！；' + text;
+		if (temp <= chack) rply.text = 'ccb<=' + chack +	' ' + temp + ' → 成功；' + text;
+		else rply.text = 'ccb<=' + chack	+ ' ' +	temp + ' → 失敗；' + text;
 	}
+	return rply;
 }	
 
 ////////////////////////////////////////
@@ -26,41 +28,41 @@ function coc6(chack,text){
 function coc7(chack,text){
 	let temp = rollbase.Dice(100);	
 	if (text == null ) {
-	if (temp == 1) return temp + ' → 恭喜！大成功！';
-	if (temp == 100) return temp + ' → 啊！大失敗！';
-	if (temp <= chack/5) return temp + ' → 極限成功';
-	if (temp <= chack/2) return temp + ' → 困難成功';
-	if (temp <= chack) return temp + ' → 通常成功';
-	else return temp + ' → 失敗' ;
+	if (temp == 1) rply.text = temp + ' → 恭喜！大成功！';
+	if (temp == 100) rply.text = temp + ' → 啊！大失敗！';
+	if (temp <= chack/5) rply.text = temp + ' → 極限成功';
+	if (temp <= chack/2) rply.text = temp + ' → 困難成功';
+	if (temp <= chack) rply.text = temp + ' → 通常成功';
+	else rply.text = temp + ' → 失敗' ;
 	}
 	else
 	{
-	if (temp == 1) return temp + ' → 恭喜！大成功！；' + text;
-	if (temp == 100) return temp + ' → 啊！大失敗！；' + text;
-	if (temp <= chack/5) return temp + ' → 極限成功；' + text;
-	if (temp <= chack/2) return temp + ' → 困難成功；' + text;
-	if (temp <= chack) return temp + ' → 通常成功；' + text;
-	else return temp + ' → 失敗；' + text;
+	if (temp == 1) rply.text = temp + ' → 恭喜！大成功！；' + text;
+	if (temp == 100) rply.text = temp + ' → 啊！大失敗！；' + text;
+	if (temp <= chack/5) rply.text = temp + ' → 極限成功；' + text;
+	if (temp <= chack/2) rply.text = temp + ' → 困難成功；' + text;
+	if (temp <= chack) rply.text = temp + ' → 通常成功；' + text;
+	else rply.text = temp + ' → 失敗；' + text;
 	}
 }
 	
 function coc7chack(temp,chack,text){
 	if (text == null ) {
-	if (temp == 1) return temp + ' → 恭喜！大成功！';
-	if (temp == 100) return temp + ' → 啊！大失敗！';
-	if (temp <= chack/5) return temp + ' → 極限成功';
-	if (temp <= chack/2) return temp + ' → 困難成功';
-	if (temp <= chack) return temp + ' → 通常成功';
-	else return temp + ' → 失敗' ;
+	if (temp == 1) rply.text = temp + ' → 恭喜！大成功！';
+	if (temp == 100) rply.text = temp + ' → 啊！大失敗！';
+	if (temp <= chack/5) rply.text = temp + ' → 極限成功';
+	if (temp <= chack/2) rply.text = temp + ' → 困難成功';
+	if (temp <= chack) rply.text = temp + ' → 通常成功';
+	else rply.text = temp + ' → 失敗' ;
 	}
 else
 	{
-	if (temp == 1) return temp + ' → 恭喜！大成功！；' + text;
-	if (temp == 100) return temp + ' → 啊！大失敗！；' + text;
-	if (temp <= chack/5) return temp + ' → 極限成功；' + text;
-	if (temp <= chack/2) return temp + ' → 困難成功；' + text;
-	if (temp <= chack) return temp + ' → 通常成功；' + text;
-	else return temp + ' → 失敗；' + text;
+	if (temp == 1) rply.text = temp + ' → 恭喜！大成功！；' + text;
+	if (temp == 100) rply.text = temp + ' → 啊！大失敗！；' + text;
+	if (temp <= chack/5) rply.text = temp + ' → 極限成功；' + text;
+	if (temp <= chack/2) rply.text = temp + ' → 困難成功；' + text;
+	if (temp <= chack) rply.text = temp + ' → 通常成功；' + text;
+	else rply.text = temp + ' → 失敗；' + text;
 	}
 }
 
@@ -78,7 +80,7 @@ function coc7bp (chack,bpdiceNum,text){
 	countStr = countStr.substring(0, countStr.length - 1) 
 	let countArr = countStr.split('、'); 
 	countStr = countStr + ' → ' + coc7chack(Math.min(...countArr),chack,text);
-	return countStr;
+	rply.text = countStr;
 	}
 	
 	if (bpdiceNum < 0){
@@ -92,7 +94,7 @@ function coc7bp (chack,bpdiceNum,text){
 	countStr = countStr.substring(0, countStr.length - 1) 
 	let countArr = countStr.split('、'); 
 	countStr = countStr + ' → ' + coc7chack(Math.max(...countArr),chack,text);
-	return countStr;
+	rply.text = countStr;
 	}
 }
 	
@@ -103,7 +105,7 @@ function ArrMax (Arr){
 		max = ele;
 	}
 	})
-	return max;
+	rply.text = max;
 }
 ////////////////////////////////////////
 //////////////// COC7傳統創角
@@ -130,8 +132,8 @@ function build7char(text01){
 	let AppDebuffArr = [0,0,5,10,15,20,25]
 	let EDUincArr = [0,1,2,3,4,4,4]
 
-	if (old < 15) return ReStr + '等等，核心規則不允許小於15歲的人物哦。';	
-	if (old >= 90) return ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
+	if (old < 15) rply.text = ReStr + '等等，核心規則不允許小於15歲的人物哦。';	
+	if (old >= 90) rply.text = ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
 
 	for ( i=0 ; old >= oldArr[i] ; i ++){
 		Debuff = DebuffArr[i];
@@ -188,7 +190,7 @@ function build7char(text01){
 	if (old<20) ReStr = ReStr + '\nＬＵＫ加骰：' + rollbase.BuildDiceCal('3D6*5');
 
 
-	return ReStr;
+	rply.text = ReStr;
 	} 
 
 ////////////////////////////////////////
@@ -211,8 +213,8 @@ function build6char(){
 	let AppDebuffArr = [0,0,5,10,15,20,25]
 	let EDUincArr = [0,1,2,3,4,4,4]
 
-	if (old < 15) return ReStr + '等等，核心規則不允許小於15歲的人物哦。';	
-	if (old >= 90) return ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
+	if (old < 15) rply.text = ReStr + '等等，核心規則不允許小於15歲的人物哦。';	
+	if (old >= 90) rply.text = ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
 
 	for ( i=0 ; old >= oldArr[i] ; i ++){
 		Debuff = DebuffArr[i];
@@ -239,7 +241,7 @@ function build6char(){
 	ReStr = ReStr + '\nＥＤＵ：' + rollbase.BuildDiceCal('(3d6+3)');	
 	ReStr = ReStr + '\n年收入：' + rollbase.BuildDiceCal('(1d10)'); 	
 	ReStr = ReStr + '\n調查員的最小起始年齡等於EDU+6，每比起始年齡年老十年，\n調查員增加一點EDU並且加20點職業技能點數。\n當超過40歲後，每老十年，\n從STR,CON,DEX,APP中選擇一個減少一點。';
-	return ReStr;
+	rply.text = ReStr;
 	} 
 	//隨機產生角色背景
 	function PcBG(){
@@ -251,7 +253,7 @@ function build6char(){
 	let TreasuredPossessionsArr = ['一個與他最擅長的技能（點數最高的職業技能）相關的物品','一件他的在工作上需要用到的必需品','一個從他童年時就保存至今的寶物','一樣由調查員最重要的人給予他的物品','一件調查員珍視的蒐藏品','一件調查員無意間發現，但不知道到底是什麼的東西，調查員正努力尋找答案','某種體育用品','一把特別的武器','他的寵物'];
 	let TraitsArr = ['慷慨大方的人','對動物很友善的人','善於夢想的人','享樂主義者','甘冒風險的賭徒或冒險者', '善於料理的人', '萬人迷','忠心耿耿的人','有好名聲的人','充滿野心的人'];
 	
-	return '背景描述生成器（僅供娛樂用，不具實際參考價值）\n==\n調查員是一個' + PersonalDescriptionArr[Math.floor((Math.random() * (PersonalDescriptionArr.length)) + 0)] + '人。\n【信念】：說到這個人，他' + IdeologyBeliefsArr[Math.floor((Math.random() * (IdeologyBeliefsArr.length)) + 0)] + '。\n【重要之人】：對他來說，最重要的人是' + SignificantPeopleArr[Math.floor((Math.random() * (SignificantPeopleArr.length)) + 0)] + '，這個人對他來說之所以重要，是因為' + SignificantPeopleWhyArr[Math.floor((Math.random() * (SignificantPeopleWhyArr.length)) + 0)] + '。\n【意義非凡之地】：對他而言，最重要的地點是' + MeaningfulLocationsArr[Math.floor((Math.random() * (MeaningfulLocationsArr.length)) + 0)] + '。\n【寶貴之物】：他最寶貴的東西就是'+ TreasuredPossessionsArr[Math.floor((Math.random() * (TreasuredPossessionsArr.length)) + 0)] + '。\n【特徵】：總括來說，調查員是一個' + TraitsArr[Math.floor((Math.random() * (TraitsArr.length)) + 0)] + '。';
+	rply.text = '背景描述生成器（僅供娛樂用，不具實際參考價值）\n==\n調查員是一個' + PersonalDescriptionArr[Math.floor((Math.random() * (PersonalDescriptionArr.length)) + 0)] + '人。\n【信念】：說到這個人，他' + IdeologyBeliefsArr[Math.floor((Math.random() * (IdeologyBeliefsArr.length)) + 0)] + '。\n【重要之人】：對他來說，最重要的人是' + SignificantPeopleArr[Math.floor((Math.random() * (SignificantPeopleArr.length)) + 0)] + '，這個人對他來說之所以重要，是因為' + SignificantPeopleWhyArr[Math.floor((Math.random() * (SignificantPeopleWhyArr.length)) + 0)] + '。\n【意義非凡之地】：對他而言，最重要的地點是' + MeaningfulLocationsArr[Math.floor((Math.random() * (MeaningfulLocationsArr.length)) + 0)] + '。\n【寶貴之物】：他最寶貴的東西就是'+ TreasuredPossessionsArr[Math.floor((Math.random() * (TreasuredPossessionsArr.length)) + 0)] + '。\n【特徵】：總括來說，調查員是一個' + TraitsArr[Math.floor((Math.random() * (TraitsArr.length)) + 0)] + '。';
 	}
 
 module.exports = {

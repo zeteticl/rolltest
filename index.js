@@ -29,7 +29,7 @@ app.post('/', jsonParser, function(req, res) {
 	let msgType = event.message.type;
 	let msg = event.message.text;
 	let rplyToken = event.replyToken;
-	let rplyVal = null;
+	let rplyVal = {};
 	console.log(msg);
 	if (type == 'message' && msgType == 'text') {
 	try {
@@ -40,9 +40,8 @@ app.post('/', jsonParser, function(req, res) {
 		console.log('Request error: ' + e.message);
 	}
 	}
-
 	if (rplyVal) {
-	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options); 
+	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal.text, options, rplyVal.type); 
 	} else {
 	//console.log('Do not trigger'); 
 	}
