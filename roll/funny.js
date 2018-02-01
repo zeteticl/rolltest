@@ -261,20 +261,6 @@ function NomalDrawTarot(CardToCal, text) {
 }
 
 
- function SortIt(input,mainMsg) {	
- 
- 	let a = input.replace(mainMsg[0], '').match(/\S+/ig);
-	for (var i = a.length-1; i >=0; i--) {
- 
-	var randomIndex = Math.floor(Math.random()*(i+1));
-	var itemAtIndex = a[randomIndex];
-	a[randomIndex] = a[i];
-	a[i] = itemAtIndex;
-	}
-	rply.text = mainMsg[0] + ' → ['+ a + ']' ;
-	return rply;
- }
-
 function tarotRevReply(count) {
 	let returnStr = '';
 
@@ -285,11 +271,6 @@ function tarotRevReply(count) {
 	//return rply;
 }
 
-function choice(input,str) {
-	let a = input.replace(str[0], '').match(/\S+/ig);
-	rply.text = str[0] + '['+ a + '] → ' + a[rollbase.Dice(a.length)-1];
-	return rply;
-}
 
 function tarotCardReply(count) {
 	let returnStr = '';
@@ -377,8 +358,28 @@ function tarotCardReply(count) {
 	//return rply;
 
 }
+////////////////////////////////////////
+//////////////// choice 及SORT
+////////////////////////////////////////
+function choice(input,str) {
+	let a = input.replace(str[0], '').match(/\S+/ig);
+	rply.text = str[0] + '['+ a + '] → ' + a[rollbase.Dice(a.length)-1];
+	return rply;
+}
 
-
+ function SortIt(input,mainMsg) {	
+ 
+ 	let a = input.replace(mainMsg[0], '').match(/\S+/ig);
+	for (var i = a.length-1; i >=0; i--) {
+ 
+	var randomIndex = Math.floor(Math.random()*(i+1));
+	var itemAtIndex = a[randomIndex];
+	a[randomIndex] = a[i];
+	a[i] = itemAtIndex;
+	}
+	rply.text = mainMsg[0] + ' → ['+ a + ']' ;
+	return rply;
+ }
 
 module.exports = {
 	BStyleFlagSCRIPTS,
