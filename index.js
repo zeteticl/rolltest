@@ -15,14 +15,11 @@ var options = {
 	}
 }
 app.set('port', (process.env.PORT || 5000));
-
 // views is directory for all template files
-
 app.get('/', function(req, res) {
 //	res.send(parseInput(req.query.input));
 	res.send('Hello');
 });
-
 app.post('/', jsonParser, function(req, res) {
 	let event = req.body.events[0];
 	let type = event.type;
@@ -31,8 +28,11 @@ app.post('/', jsonParser, function(req, res) {
 	let rplyToken = event.replyToken;
 	let rplyVal = {};
 	console.log(msg);
-	//如果有訊息,掉到analytics.js 分析需不要 自動回應
-	if (type == 'message' && msgType == 'text') {
+	//如果有訊息,掉到analytics.js 分析需不要 自動回應	
+	//
+handleEvent(event);
+	
+/*	if (type == 'message' && msgType == 'text') {
 	try {
 		rplyVal = analytics.parseInput(rplyToken, msg); 
 	} 
@@ -41,6 +41,7 @@ app.post('/', jsonParser, function(req, res) {
 		console.log('Request error: ' + e.message);
 	}
 	}
+	*/
 	//把回應的內容,掉到replyMsgToLine.js傳出去
 	if (rplyVal) {
 	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal.text, options, rplyVal.type); 
@@ -57,4 +58,54 @@ app.listen(app.get('port'), function() {
 
 ////////////////////////////////////////
 ///////// 骰組分析放到analytics.js 
-////////////////////////////////////////		
+////////////////////////////////////////	
+
+
+function handleEvent(event) {
+  switch (event.type) {
+    case 'message':
+      const message = event.message;
+      switch (message.type) {
+        case 'text':
+          return rplyVal = analytics.parseInput(event.rplyToken, event.message.text); 
+        case 'image':
+          return handleImage(message, event.replyToken);
+        case 'video':
+          return handleVideo(message, event.replyToken);
+        case 'audio':
+          return handleAudio(message, event.replyToken);
+        case 'location':
+          return handleLocation(message, event.replyToken);
+        case 'sticker':
+          return handleSticker(message, event.replyToken);
+        default:
+          throw new Error(`Unknown message: ${JSON.stringify(message)}`);
+      }
+
+    case 'follow':
+      return replyText(event.replyToken, 'Got followed event');
+
+    case 'unfollow':
+      return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
+
+    case 'join':
+      return replyText(event.replyToken, `Joined ${event.source.type}`);
+
+    case 'leave':
+      return console.log(`Left: ${JSON.stringify(event)}`);
+
+    case 'postback':
+      let data = event.postback.data;
+      if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
+        data += `(${JSON.stringify(event.postback.params)})`;
+      }
+      return replyText(event.replyToken, `Got postback: ${data}`);
+
+    case 'beacon':
+      return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
+
+    default:
+      throw new Error(`Unknown event: ${JSON.stringify(event)}`);
+  }
+}
+	
