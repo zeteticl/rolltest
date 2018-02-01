@@ -22,14 +22,24 @@ app.get('/', function(req, res) {
 });
 app.post('/', jsonParser, function(req, res) {
 	let event = req.body.events[0];
-//	let type = event.type;
-//	let msgType = event.message.type;
-//	let msg = event.message.text;
+	let type = event.type;
+	let msgType = event.message.type;
+	let msg = event.message.text;
 	let rplyToken = event.replyToken;
 	let rplyVal = {};
 	console.log(msg);
 	//如果有訊息, 呼叫handleEvent 分類	
 	rplyVal = handleEvent(event);
+/*	if (type == 'message' && msgType == 'text') {
+	try {
+		rplyVal = analytics.parseInput(rplyToken, msg); 
+	} 
+	catch(e) {
+		console.log('catch error');
+		console.log('Request error: ' + e.message);
+	}
+	}
+	*/
 	//把回應的內容,掉到replyMsgToLine.js傳出去
 	if (rplyVal) {
 	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal.text, options, rplyVal.type); 
@@ -57,46 +67,39 @@ function handleEvent(event) {
         case 'text':
           return analytics.parseInput(event.rplyToken, event.message.text); 
         case 'image':
-          return handleImage(message, event.replyToken);
+           break;
         case 'video':
-          return handleVideo(message, event.replyToken);
+           break;
         case 'audio':
-          return handleAudio(message, event.replyToken);
+           break;
         case 'location':
-          return handleLocation(message, event.replyToken);
+           break;
         case 'sticker':
-          return handleSticker(message, event.replyToken);
+           break;
         default:
-          throw new Error(`Unknown message: ${JSON.stringify(message)}`);
+           break;
       }
 
     case 'follow':
-      return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
+       break;
 	
     case 'unfollow':
-      return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
+       break;
 
     case 'join':
-		var replyText = {};
-		replyText.text = 'sdsdsdsd';
-		replyText.type = 'text';
-      return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
+		 break;
 
     case 'leave':
-      return console.log(`Left: ${JSON.stringify(event)}`);
+       break;
 
     case 'postback':
-      let data = event.postback.data;
-      if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
-        data += `(${JSON.stringify(event.postback.params)})`;
-      }
-      return replyText(event.replyToken, `Got postback: ${data}`);
+       break;
 
     case 'beacon':
-      return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
+      break;
 
     default:
-      throw new Error(`Unknown event: ${JSON.stringify(event)}`);
+       break;
   }
 }
 	
