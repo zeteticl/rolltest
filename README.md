@@ -1,4 +1,4 @@
-# RoboYabaso V1.30：開放原始碼的LINE骰子機器人
+# RoboYabaso@HKTRPG  V1.30：開放原始碼的LINE骰子機器人
 
 關於RoboYabaso
 ==
@@ -10,7 +10,7 @@ RoboYabaso是一個開放源碼的line骰子機器人計畫。
 
 試用
 ==
-RoboYabaso的LineID是：@utr0641o  
+RoboYabaso@HKTRPG 的LineID是：@utr0641o  
 你也可以使用QR扣：  
 ![QR](http://truth.bahamut.com.tw/s01/201612/c50dc2bd02de285983e7cf1c48926a61.JPG)  
 
@@ -19,11 +19,11 @@ RoboYabaso的LineID是：@utr0641o
 順便宣傳
 <a href="http://www.goddessfantasy.net/bbs/index.php?board=1400.0">香港TRPG區</a>
 <a href="https://www.hktrpg.com">TRPG百科</a>
-
-
 招技術人員
+</br></br></br>
 
-特色介紹
+特色介紹</br></br></br>
+
 ==
 占卜運氣功能
 支持大小階
@@ -32,7 +32,9 @@ RoboYabaso的LineID是：@utr0641o
 cc<= 改成 cc cc1 cc2 ccn1 ccn2
 增加永遠後日談的NC擲骰 來自Rainsting/TarotLineBot
 增加wod 黑暗世界的擲骰
-模組化設計
+模組化設計</br></br></br>
+</br></br></br>
+
 ==
 
 如何建立自己的Line骰子機器人
