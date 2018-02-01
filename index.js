@@ -75,16 +75,12 @@ function handleEvent(event) {
         default:
            break;
       }
-
     case 'follow':
 		break;
     case 'unfollow':
        break;
     case 'join':
-	var replyText = {};
-		replyText.text = 'sdsdsdsd';
-		replyText.type = 'text';
-	   return replyText;
+break;
     case 'leave':
        break;
 
