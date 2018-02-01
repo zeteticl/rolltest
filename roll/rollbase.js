@@ -1,14 +1,18 @@
+var rply ={type : 'text'}; //type是必需的,但可以更改
+
 ////////////////////////////////////////
 //////////////// 擲骰子運算
 ////////////////////////////////////////
 
+
 function Dice(diceSided){	
 		return Math.floor((Math.random() * diceSided) + 1)
 	}	
-	function sortNumber(a,b){
+
+function sortNumber(a,b){
 		return a - b
 		}
-	function RollDice(inputStr){
+function RollDice(inputStr){
 	//先把inputStr變成字串（不知道為什麼非這樣不可）
 	let comStr=inputStr.toString();
 	let finalStr = '[';
@@ -101,8 +105,10 @@ function BuildRollDice(inputStr){
 		else{
 		finalStr= text0 + '次擲骰：\n' + text1 +'\n';
 			}
-	if(mutiOrNot>30) return '不支援30次以上的複數擲骰。';
-	
+	if(mutiOrNot>30) {
+		rply.text = '不支援30次以上的複數擲骰。';
+		return rply;
+	}
 	for (i=1 ; i<=mutiOrNot ;i++){
 	let DiceToRoll = text1.toLowerCase();
 	if (DiceToRoll.match('d') == null) return undefined;
@@ -159,7 +165,8 @@ function BuildRollDice(inputStr){
 
 	}
 	
-	return finalStr;
+	rply.text = finalStr;
+	return rply;
 
 
 }	
