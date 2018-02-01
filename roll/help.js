@@ -45,7 +45,7 @@ rply.text = funny.randomReply().text + '\n' + '\
 \n・塔羅牌占卜 塔羅/大十字塔羅/每日塔羅牌\
 \n  時間tarot 等關键字可啓動\
 \n  死亡FLAG：啓動語 立Flag/死亡flag\
-\n  coc7角色背景：啓動語 coc7角色背景test01\
+\n  coc7角色背景：啓動語 coc7角色背景\
 ';	
 return rply;	
 }
