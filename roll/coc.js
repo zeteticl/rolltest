@@ -1,5 +1,5 @@
 var rollbase = require('./rollbase.js');
-var rply ={type : 'text'};
+var rply ={type : 'text'}; //type是必需的,但可以更改
 
 ////////////////////////////////////////
 //////////////// COC6
@@ -44,6 +44,7 @@ function coc7(chack,text){
 	if (temp <= chack) rply.text = temp + ' → 通常成功；' + text;
 	else rply.text = temp + ' → 失敗；' + text;
 	}
+		return rply;
 }
 	
 function coc7chack(temp,chack,text){
@@ -64,6 +65,7 @@ else
 	if (temp <= chack) rply.text = temp + ' → 通常成功；' + text;
 	else rply.text = temp + ' → 失敗；' + text;
 	}
+		return rply;
 }
 
 
@@ -95,6 +97,7 @@ function coc7bp (chack,bpdiceNum,text){
 	let countArr = countStr.split('、'); 
 	countStr = countStr + ' → ' + coc7chack(Math.max(...countArr),chack,text);
 	rply.text = countStr;
+	return rply;
 	}
 }
 	
@@ -106,6 +109,7 @@ function ArrMax (Arr){
 	}
 	})
 	rply.text = max;
+	return rply;
 }
 ////////////////////////////////////////
 //////////////// COC7傳統創角
@@ -191,6 +195,7 @@ function build7char(text01){
 
 
 	rply.text = ReStr;
+	return rply;
 	} 
 
 ////////////////////////////////////////
@@ -242,6 +247,7 @@ function build6char(){
 	ReStr = ReStr + '\n年收入：' + rollbase.BuildDiceCal('(1d10)'); 	
 	ReStr = ReStr + '\n調查員的最小起始年齡等於EDU+6，每比起始年齡年老十年，\n調查員增加一點EDU並且加20點職業技能點數。\n當超過40歲後，每老十年，\n從STR,CON,DEX,APP中選擇一個減少一點。';
 	rply.text = ReStr;
+	return rply;
 	} 
 	//隨機產生角色背景
 	function PcBG(){
@@ -254,6 +260,7 @@ function build6char(){
 	let TraitsArr = ['慷慨大方的人','對動物很友善的人','善於夢想的人','享樂主義者','甘冒風險的賭徒或冒險者', '善於料理的人', '萬人迷','忠心耿耿的人','有好名聲的人','充滿野心的人'];
 	
 	rply.text = '背景描述生成器（僅供娛樂用，不具實際參考價值）\n==\n調查員是一個' + PersonalDescriptionArr[Math.floor((Math.random() * (PersonalDescriptionArr.length)) + 0)] + '人。\n【信念】：說到這個人，他' + IdeologyBeliefsArr[Math.floor((Math.random() * (IdeologyBeliefsArr.length)) + 0)] + '。\n【重要之人】：對他來說，最重要的人是' + SignificantPeopleArr[Math.floor((Math.random() * (SignificantPeopleArr.length)) + 0)] + '，這個人對他來說之所以重要，是因為' + SignificantPeopleWhyArr[Math.floor((Math.random() * (SignificantPeopleWhyArr.length)) + 0)] + '。\n【意義非凡之地】：對他而言，最重要的地點是' + MeaningfulLocationsArr[Math.floor((Math.random() * (MeaningfulLocationsArr.length)) + 0)] + '。\n【寶貴之物】：他最寶貴的東西就是'+ TreasuredPossessionsArr[Math.floor((Math.random() * (TreasuredPossessionsArr.length)) + 0)] + '。\n【特徵】：總括來說，調查員是一個' + TraitsArr[Math.floor((Math.random() * (TraitsArr.length)) + 0)] + '。';
+	return rply;
 	}
 
 module.exports = {
