@@ -85,8 +85,10 @@ function handleEvent(event) {
        break;
 
     case 'join':
-		 break;
-
+	var replyText = {};
+		replyText.text = 'sdsdsdsd';
+		replyText.type = 'text';
+	   return replyText;
     case 'leave':
        break;
 
