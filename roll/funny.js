@@ -281,8 +281,8 @@ function tarotRevReply(count) {
 	if (count == 0) returnStr = '＋';
 	if (count == 1) returnStr = '－';
 
-	rply.text = returnStr;
-	return rply;
+	return returnStr;
+	//return rply;
 }
 
 function choice(input,str) {
@@ -373,8 +373,8 @@ function tarotCardReply(count) {
 	if (count == 76) returnStr = '錢幣皇后';
 	if (count == 77) returnStr = '錢幣國王';
 	if (count == 78) returnStr = '空白牌';
-	rply.text = returnStr;
-	return rply;
+	return returnStr;
+	//return rply;
 
 }
 

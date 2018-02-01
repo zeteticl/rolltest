@@ -1,8 +1,9 @@
 var rollbase = require('./rollbase.js');
 var funny = require('./funny.js');
+var rply ={type : 'text'}; //type是必需的,但可以更改
 
 function Help() {
-return funny.randomReply() + '\n' + '\
+rply.text = funny.randomReply() + '\n' + '\
 【擲骰BOT】v1.26 \
 \n 例如輸入2d6+1　攻撃！\
 \n 會輸出）2d6+1：攻撃  9[6+3]+1 = 10\
@@ -45,7 +46,8 @@ return funny.randomReply() + '\n' + '\
 \n  時間tarot 等關键字可啓動\
 \n  死亡FLAG：啓動語 立Flag/死亡flag\
 \n  coc7角色背景：啓動語 coc7角色背景test01\
-';		
+';	
+return rply;	
 }
 
 
