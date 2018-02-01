@@ -22,24 +22,14 @@ app.get('/', function(req, res) {
 });
 app.post('/', jsonParser, function(req, res) {
 	let event = req.body.events[0];
-	let type = event.type;
-	let msgType = event.message.type;
-	let msg = event.message.text;
+//	let type = event.type;
+//	let msgType = event.message.type;
+//	let msg = event.message.text;
 	let rplyToken = event.replyToken;
 	let rplyVal = {};
 	console.log(msg);
 	//如果有訊息, 呼叫handleEvent 分類	
 	rplyVal = handleEvent(event);
-/*	if (type == 'message' && msgType == 'text') {
-	try {
-		rplyVal = analytics.parseInput(rplyToken, msg); 
-	} 
-	catch(e) {
-		console.log('catch error');
-		console.log('Request error: ' + e.message);
-	}
-	}
-	*/
 	//把回應的內容,掉到replyMsgToLine.js傳出去
 	if (rplyVal) {
 	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal.text, options, rplyVal.type); 
@@ -81,10 +71,7 @@ function handleEvent(event) {
       }
 
     case 'follow':
-		var replyText = {};
-		replyText.text = 'sdsdsdsd';
-		replyText.type = 'text';
-      return replyText;
+      return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 	
     case 'unfollow':
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
@@ -93,7 +80,7 @@ function handleEvent(event) {
 		var replyText = {};
 		replyText.text = 'sdsdsdsd';
 		replyText.type = 'text';
-      return replyText;
+      return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
     case 'leave':
       return console.log(`Left: ${JSON.stringify(event)}`);
