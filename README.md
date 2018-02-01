@@ -10,7 +10,7 @@ RoboYabaso是一個開放源碼的line骰子機器人計畫。
 
 試用
 ==
-骰子狗的LineID是：@utr0641o  
+RoboYabaso的LineID是：@utr0641o  
 你也可以使用QR扣：  
 ![QR](http://truth.bahamut.com.tw/s01/201612/c50dc2bd02de285983e7cf1c48926a61.JPG)  
 
