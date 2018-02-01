@@ -80,11 +80,11 @@ function handleEvent(event) {
           throw new Error(`Unknown message: ${JSON.stringify(message)}`);
       }
 
-    case 'follow':
+    case 'follow':{
 		var replyText.text = 'sdsdsdsd';
 		replyText.type = 'text';
       return replyText;
-
+	}
     case 'unfollow':
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
