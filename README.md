@@ -1,5 +1,4 @@
-# RoboYabaso
-# RoboYabaso：開放原始碼的LINE骰子機器人
+# RoboYabaso V1.30：開放原始碼的LINE骰子機器人
 
 關於RoboYabaso
 ==
@@ -17,7 +16,14 @@ RoboYabaso是一個開放源碼的line骰子機器人計畫。
 
 或是點這裡：<a href="https://line.me/R/ti/p/svMLqy9Mik"><img height="36" border="0" alt="加入好友" src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"></a>
 </br></br></br>
+順便宣傳
 
+<a href="http://www.goddessfantasy.net/bbs/index.php?board=1400.0">香港TRPG區</a>
+
+<a href="https://www.hktrpg.com">TRPG百科</a>
+</br>
+招技術人員
+</br></br>
 特色介紹
 ==
 占卜運氣功能
@@ -128,3 +134,7 @@ Step5：鏈接Line與Heroku
 
 以上說明參考
 https://github.com/zeteticl/TrpgLineBot-php
+
+下一部希望更新是
+1. 幫助的顯示方式可以更漂亮
+2. DX3 開發
