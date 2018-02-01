@@ -31,6 +31,7 @@ app.post('/', jsonParser, function(req, res) {
 	let rplyToken = event.replyToken;
 	let rplyVal = {};
 	console.log(msg);
+	//如果有訊息,掉到analytics.js 分析需不要 自動回應
 	if (type == 'message' && msgType == 'text') {
 	try {
 		rplyVal = analytics.parseInput(rplyToken, msg); 
@@ -40,6 +41,7 @@ app.post('/', jsonParser, function(req, res) {
 		console.log('Request error: ' + e.message);
 	}
 	}
+	//把回應的內容,掉到replyMsgToLine.js傳出去
 	if (rplyVal) {
 	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal.text, options, rplyVal.type); 
 	} else {
@@ -54,8 +56,5 @@ app.listen(app.get('port'), function() {
 
 
 ////////////////////////////////////////
-//////////////// 骰組分析放到analytics.js 
+///////// 骰組分析放到analytics.js 
 ////////////////////////////////////////		
-
-
-
