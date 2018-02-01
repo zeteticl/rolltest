@@ -90,7 +90,10 @@ function handleEvent(event) {
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
     case 'join':
-      return replyText(event.replyToken, `Joined ${event.source.type}`);
+      		var replyText = {};
+		replyText.text = 'sdsdsdsd';
+		replyText.type = 'text';
+      return replyText;.source.type}`);
 
     case 'leave':
       return console.log(`Left: ${JSON.stringify(event)}`);
