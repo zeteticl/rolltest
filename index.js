@@ -29,8 +29,7 @@ app.post('/', jsonParser, function(req, res) {
 	let rplyVal = {};
 	console.log(msg);
 	//如果有訊息,掉到analytics.js 分析需不要 自動回應	
-	//
-handleEvent(event);
+	rplyVal = handleEvent(event);
 	
 /*	if (type == 'message' && msgType == 'text') {
 	try {
@@ -67,7 +66,7 @@ function handleEvent(event) {
       const message = event.message;
       switch (message.type) {
         case 'text':
-          return rplyVal = analytics.parseInput(event.rplyToken, event.message.text); 
+          return analytics.parseInput(event.rplyToken, event.message.text); 
         case 'image':
           return handleImage(message, event.replyToken);
         case 'video':
