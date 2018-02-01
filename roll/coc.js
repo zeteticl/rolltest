@@ -54,7 +54,7 @@ function coc7chack(temp,chack,text){
 	if (temp <= chack/5) rply.text = temp + ' → 極限成功';
 	if (temp <= chack/2) rply.text = temp + ' → 困難成功';
 	if (temp <= chack) rply.text = temp + ' → 通常成功';
-	else rply.text = temp + ' → 失敗' ;
+	else return temp + ' → 失敗' ;
 	}
 else
 	{
@@ -63,9 +63,8 @@ else
 	if (temp <= chack/5) rply.text = temp + ' → 極限成功；' + text;
 	if (temp <= chack/2) rply.text = temp + ' → 困難成功；' + text;
 	if (temp <= chack) rply.text = temp + ' → 通常成功；' + text;
-	else rply.text = temp + ' → 失敗；' + text;
+	else return temp + ' → 失敗；' + text;
 	}
-		return rply;
 }
 
 
