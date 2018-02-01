@@ -61,7 +61,10 @@ function handleEvent(event) {
       const message = event.message;
       switch (message.type) {
         case 'text':
-          return analytics.parseInput(event.rplyToken, event.message.text); 
+          	var replyText = {};
+		replyText.text = 'sdsdsdsd';
+		replyText.type = 'text';
+	   return replyText;
         case 'image':
            break;
         case 'video':
