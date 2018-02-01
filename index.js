@@ -85,8 +85,8 @@ function handleEvent(event) {
 		replyText.text = 'sdsdsdsd';
 		replyText.type = 'text';
       return replyText;
-	}
-/*    case 'unfollow':
+	
+    case 'unfollow':
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
     case 'join':
@@ -104,7 +104,7 @@ function handleEvent(event) {
 
     case 'beacon':
       return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
-*/
+
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`);
   }
