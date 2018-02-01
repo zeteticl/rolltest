@@ -28,9 +28,8 @@ app.post('/', jsonParser, function(req, res) {
 	let rplyToken = event.replyToken;
 	let rplyVal = {};
 	console.log(msg);
-	//如果有訊息,掉到analytics.js 分析需不要 自動回應	
+	//如果有訊息, 呼叫handleEvent 分類	
 	rplyVal = handleEvent(event);
-	
 /*	if (type == 'message' && msgType == 'text') {
 	try {
 		rplyVal = analytics.parseInput(rplyToken, msg); 
@@ -82,7 +81,9 @@ function handleEvent(event) {
       }
 
     case 'follow':
-      return replyText(event.replyToken, 'Got followed event');
+		var replyText.text = 'sdsdsdsd';
+		replyText.type = 'text';
+      return replyText;
 
     case 'unfollow':
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
