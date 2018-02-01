@@ -80,8 +80,9 @@ function handleEvent(event) {
           throw new Error(`Unknown message: ${JSON.stringify(message)}`);
       }
 
-    case 'follow':{
-		var replyText.text = 'sdsdsdsd';
+    case 'follow':
+		var replyText = {};
+		replyText.text = 'sdsdsdsd';
 		replyText.type = 'text';
       return replyText;
 	}
