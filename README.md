@@ -17,9 +17,7 @@ RoboYabaso的LineID是：@utr0641o
 或是點這裡：<a href="https://line.me/R/ti/p/svMLqy9Mik"><img height="36" border="0" alt="加入好友" src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"></a>
 </br></br></br>
 順便宣傳
-
 <a href="http://www.goddessfantasy.net/bbs/index.php?board=1400.0">香港TRPG區</a>
-
 <a href="https://www.hktrpg.com">TRPG百科</a>
 </br>
 招技術人員
@@ -34,7 +32,7 @@ cc<= 改成 cc cc1 cc2 ccn1 ccn2
 增加永遠後日談的NC擲骰 來自Rainsting/TarotLineBot
 增加wod 黑暗世界的擲骰
 模組化設計
-
+==
 
 如何建立自己的Line骰子機器人
 ==
