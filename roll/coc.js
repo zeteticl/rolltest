@@ -136,8 +136,8 @@ function build7char(text01){
 	let AppDebuffArr = [0,0,5,10,15,20,25]
 	let EDUincArr = [0,1,2,3,4,4,4]
 
-	if (old < 15) rply.text = ReStr + '等等，核心規則不允許小於15歲的人物哦。';	
-	if (old >= 90) rply.text = ReStr + '等等，核心規則不允許90歲以上的人物哦。'; 
+	if (old < 15) rply.text = ReStr + '等等，核心規則沒有適用小於15歲的人物哦。';	
+	if (old >= 90) rply.text = ReStr + '等等，核心規則沒有適用於90歲以上的人物哦。'; 
 
 	for ( i=0 ; old >= oldArr[i] ; i ++){
 		Debuff = DebuffArr[i];

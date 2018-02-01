@@ -1,4 +1,5 @@
 var rollbase = require('./rollbase.js');
+var rply ={type : 'text'}; //type是必需的,但可以更改
 
 ////////////////////////////////////////
 //////////////// 占卜&其他
@@ -60,7 +61,8 @@ let rplyArr = ['\
 「騙人的吧，我們不是朋友嗎？」', '\
 「我老爸是....你有種就....」', '\
 「我可以好好利用這件事」'];
-return rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
+rply.text = rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
+return rply;
 }
 	
 function randomReply() {
@@ -89,20 +91,22 @@ wwwwwwwwwwwwwwwww', '\
 公道價，八萬一（伸手）。', '\
 你的嘴裡有異音（指）', '\
 幫主說，有人打你的左臉，你就要用肉食性猛擊咬斷他的小腿。'];
-return rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
+rply.text = rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
+return rply;
 }
 	
-	function randomLuck(TEXT) {
-	let rplyArr = ['超吉','超級上吉','大吉','吉','中吉','小吉','吉','小吉','吉','吉','中吉','吉','中吉','吉','中吉','小吉','末吉','吉','中吉','小吉','末吉','中吉','小吉','小吉','吉','小吉','末吉','中吉','小吉','凶','小凶','沒凶','大凶','很凶'];
-	return TEXT[0] + ' ： ' + rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
-	}
+function randomLuck(TEXT) {
+let rplyArr = ['超吉','超級上吉','大吉','吉','中吉','小吉','吉','小吉','吉','吉','中吉','吉','中吉','吉','中吉','小吉','末吉','吉','中吉','小吉','末吉','中吉','小吉','小吉','吉','小吉','末吉','中吉','小吉','凶','小凶','沒凶','大凶','很凶'];
+rply.text = TEXT[0] + ' ： ' + rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
+return rply;
+}
 	
 	
 ////////////////////////////////////////
 //////////////// Funny
 ////////////////////////////////////////
 /* 猜拳功能 */
-	function RockPaperScissors(HandToCal, text) {
+function RockPaperScissors(HandToCal, text) {
 	let returnStr = '';
 	if (HandToCal.match(/石頭|布|剪刀|1|2|3/) != null) {
 	let aHand = ['石頭','布','剪刀'];
@@ -146,7 +150,8 @@ return rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
 		break;
 	}
 
-	return returnStr;
+	rply.text = returnStr;
+	return rply;
 }
 
 
@@ -240,7 +245,8 @@ function MultiDrawTarot(CardToCal, text, type) {
 	}
 
 
-	return returnStr;
+	rply.text = returnStr;
+	return rply;
 }
 
 function NomalDrawTarot(CardToCal, text) {
@@ -250,7 +256,8 @@ function NomalDrawTarot(CardToCal, text) {
 	returnStr = tarotCardReply(rollbase.FunnyDice(22)) + ' ' + tarotRevReply(rollbase.FunnyDice(2));
 	else
 	returnStr = tarotCardReply(rollbase.FunnyDice(22)) + ' ' + tarotRevReply(rollbase.FunnyDice(2)) + ' ; ' + text;
-	return returnStr;
+	rply.text = returnStr;
+	return rply;
 }
 
 
@@ -264,7 +271,8 @@ function NomalDrawTarot(CardToCal, text) {
 	a[randomIndex] = a[i];
 	a[i] = itemAtIndex;
 	}
-	return mainMsg[0] + ' → ['+ a + ']' ;
+	rply.text = mainMsg[0] + ' → ['+ a + ']' ;
+	return rply;
  }
 
 function tarotRevReply(count) {
@@ -273,12 +281,14 @@ function tarotRevReply(count) {
 	if (count == 0) returnStr = '＋';
 	if (count == 1) returnStr = '－';
 
-	return returnStr;
+	rply.text = returnStr;
+	return rply;
 }
 
 function choice(input,str) {
 	let a = input.replace(str[0], '').match(/\S+/ig);
-	return str[0] + '['+ a + '] → ' + a[rollbase.Dice(a.length)-1];
+	rply.text = str[0] + '['+ a + '] → ' + a[rollbase.Dice(a.length)-1];
+	return rply;
 }
 
 function tarotCardReply(count) {
@@ -363,7 +373,8 @@ function tarotCardReply(count) {
 	if (count == 76) returnStr = '錢幣皇后';
 	if (count == 77) returnStr = '錢幣國王';
 	if (count == 78) returnStr = '空白牌';
-	return returnStr;
+	rply.text = returnStr;
+	return rply;
 
 }
 

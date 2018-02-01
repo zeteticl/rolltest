@@ -1,4 +1,5 @@
 var rollbase = require('./rollbase.js');
+var rply ={type : 'text'}; //type是必需的,但可以更改
 
 ////////////////////////////////////////
 //////////////// nechronica (NC)
