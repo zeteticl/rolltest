@@ -82,6 +82,7 @@ function coc7bp (chack,bpdiceNum,text){
 	let countArr = countStr.split('、'); 
 	countStr = countStr + ' → ' + coc7chack(Math.min(...countArr),chack,text);
 	rply.text = countStr;
+		return rply;
 	}
 	
 	if (bpdiceNum < 0){
@@ -96,9 +97,8 @@ function coc7bp (chack,bpdiceNum,text){
 	let countArr = countStr.split('、'); 
 	countStr = countStr + ' → ' + coc7chack(Math.max(...countArr),chack,text);
 	rply.text = countStr;
-	
+		return rply;
 	}
-	return rply;
 }
 	
 function ArrMax (Arr){
