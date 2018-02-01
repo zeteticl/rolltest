@@ -29,17 +29,13 @@ app.post('/', jsonParser, function(req, res) {
 	let rplyVal = {};
 	console.log(msg);
 	//如果有訊息, 呼叫handleEvent 分類	
-	rplyVal = handleEvent(event);
-/*	if (type == 'message' && msgType == 'text') {
 	try {
-		rplyVal = analytics.parseInput(rplyToken, msg); 
+	rplyVal = handleEvent(event);
 	} 
 	catch(e) {
 		console.log('catch error');
 		console.log('Request error: ' + e.message);
 	}
-	}
-	*/
 	//把回應的內容,掉到replyMsgToLine.js傳出去
 	if (rplyVal) {
 	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal.text, options, rplyVal.type); 
@@ -81,8 +77,10 @@ function handleEvent(event) {
       }
 
     case 'follow':
-       break;
-	
+	var replyText = {};
+		replyText.text = 'sdsdsdsd';
+		replyText.type = 'text';
+	   return replyText;
     case 'unfollow':
        break;
 
