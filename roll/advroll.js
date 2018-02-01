@@ -1,8 +1,10 @@
 var rollbase = require('./rollbase.js');
+var rply ={type : 'text'}; //type是必需的,但可以更改
+
+
 ////////////////////////////////////////
 //////////////// D66
 ////////////////////////////////////////
-
 function d66(text) {
 	let returnStr = '';
 	if(text != null){
@@ -11,7 +13,8 @@ function d66(text) {
 	else{
 	returnStr = 'D66 → ' + rollbase.Dice(6) + rollbase.Dice(6);
 	}
-	return returnStr;
+	rply.text = returnStr;
+	return rply;
 }
 ////////////////////////////////////////
 //////////////// D66s
@@ -31,7 +34,8 @@ function d66s(text) {
 	else{
 	returnStr = 'D66s → ' +  temp0 + temp1;
 	}
-	return returnStr;
+	rply.text = returnStr;
+	return rply;
 }
 ////////////////////////////////////////
 //////////////// xBy
@@ -61,7 +65,8 @@ else{
 	if (text01 ==undefined) text01 ='';
 	returnStr+=  ' → ' + varcou + ' ' +text01 ;
 	}
-return returnStr;
+rply.text = returnStr;
+return rply;
 }
 ////////////////////////////////////////
 //////////////// xUy
@@ -86,7 +91,10 @@ function xUy(triggermsg ,text01, text02, text03) {
 	let varcoufanl =  new Array();
 	let varcounew =  new Array();
 	var varsu = 0;
-	if (text01<=2) { return  '加骰最少比2高'; }
+	if (text01<=2) { 
+	rply.text =  '加骰最少比2高'; 
+	return rply;
+	}
 
 for (var i = 0; i < Number(match[1]); i++)	
 	{
@@ -127,7 +135,8 @@ returnStr  += ' → 成功数' +suc;
 returnStr  += '/' + varcou.reduce(function(previousValue,currentValue){
 	return previousValue + currentValue;} ) +'(最大/合計)';
 	}
-	return returnStr;
+	rply.text = returnStr;
+	return rply;
 	}
 module.exports = {
 d66:d66, 
