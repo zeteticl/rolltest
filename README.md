@@ -15,13 +15,14 @@ RoboYabaso的LineID是：@utr0641o
 ![QR](http://truth.bahamut.com.tw/s01/201612/c50dc2bd02de285983e7cf1c48926a61.JPG)  
 
 或是點這裡：<a href="https://line.me/R/ti/p/svMLqy9Mik"><img height="36" border="0" alt="加入好友" src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"></a>
-</br></br></br>
+</br>
 順便宣傳
 <a href="http://www.goddessfantasy.net/bbs/index.php?board=1400.0">香港TRPG區</a>
 <a href="https://www.hktrpg.com">TRPG百科</a>
-</br>
+
+
 招技術人員
-</br></br>
+
 特色介紹
 ==
 占卜運氣功能
