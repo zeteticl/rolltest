@@ -5,8 +5,7 @@ var rply ={type : 'text'}; //type是必需的,但可以更改
 function Help() {
 rply =		{
   "type": "template",
-  "altText": funny.randomReply().text + '\n' + '\
-【擲骰BOT】v1.30 \
+  "altText": '【擲骰BOT】v1.30 \
 \n 例如輸入2d6+1　攻撃！\
 \n 會輸出）2d6+1：攻撃  9[6+3]+1 = 10\
 \n 如上面一樣,在骰子數字後方隔空白位打字,可以進行發言。\
@@ -48,7 +47,7 @@ rply =		{
 \n  時間tarot 等關键字可啓動\
 \n  死亡FLAG：啓動語 立Flag/死亡flag\
 \n  coc7角色背景：啓動語 coc7角色背景\
-'	,
+',
   "template": {
       "type": "carousel",
       "columns": [
