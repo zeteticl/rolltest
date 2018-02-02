@@ -68,7 +68,7 @@ rply =		{
 		},
           {
 			"title": "《其他系統01》",
-			"text": "NC, WoD",
+			"text": "NC死靈年代記之永遠的後日談, WoD黑暗世界",
 			"actions": [
 				{
 					"type": "message",
@@ -89,23 +89,23 @@ rply =		{
 			]
 		},
           {
-			"title": "《PBTA系統》",
-			"text": "本系統相關指令，關鍵字為 pb",
+			"title": "《附加功能》",
+			"text": "排序及隨機功能,D66, D66s",
 			"actions": [
 				{
 					"type": "message",
-					"label": "系統指令說明",
-					"text": "骰子狗pb"
+					"label": "排序功能範例",
+					"text": "交換禮物排序 A君 C君 F君 G君"
 				},
 				{
 					"type": "message",
-					"label": "一般擲骰範例",
-					"text": "pb 示範"
+					"label": "隨機功能範例",
+					"text": "隨機收到聖誕禮物數 1 2 3 >4"
 				},
 				{
 					"type": "message",
-					"label": "調整值範例",
-					"text": "pb+1 調整值示範"
+					"label": "D66s 骰出D66 小至大",
+					"text": "D66s 骰出D66 小至大"
 				}
 						
 			]
