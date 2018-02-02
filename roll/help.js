@@ -19,7 +19,7 @@ rply =		{
 \n Choice：啓動語choice/隨機/選項/選1\
 \n (問題)(啓動語)(問題)  (選項1) (選項2) \
 \n 例子 隨機收到聖誕禮物數 1 2 3 >4  \
-",
+更多請到 www.hktrpg.com查詢",
   "template": {
       "type": "carousel",
       "columns": [
@@ -112,7 +112,7 @@ rply =		{
 		},
 		{
 			"title": "《附加功能2》",
-			"text": "塔羅牌,運氣占卜,死亡FLAG,巴獸",
+			"text": "塔羅牌,運氣占卜,死亡FLAG",
 			"actions": [
 				{
 					"type": "message",
@@ -126,8 +126,8 @@ rply =		{
 				},
 				{
 					"type": "message",
-					"label": "鴨霸獸",
-					"text": "鴨霸獸|巴獸"
+					"label": "回報問題",
+					"text": "請到 www.hktrpg.com 留言"
 				}
 						
 			]
