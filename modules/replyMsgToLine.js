@@ -1,5 +1,5 @@
 var https = require('https');	
-function replyMsgToLine(rplyToken, rplyVal, options, rplyType) {
+function replyMsgToLine(rplyToken, rplyVal, options, rplyType, rplypath) {
 	let rplyObj = {
 	replyToken: rplyToken,
 	messages: [
@@ -10,6 +10,7 @@ function replyMsgToLine(rplyToken, rplyVal, options, rplyType) {
 	]
 	
 	}
+	options+= {path: '/v2/bot/message/reply'};
 	let rplyJson = JSON.stringify(rplyObj); 
 	var request = https.request(options, function(response) {
 //	console.log('Status: ' + response.statusCode);
