@@ -38,8 +38,7 @@ app.post('/', jsonParser, function(req, res) {
 		console.log('Request error: ' + e.message);
 	}
 	//把回應的內容,掉到replyMsgToLine.js傳出去
-	if (rplyVal) {
-	options.path= path.rply;	
+	if (rplyVal) {	
 	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options); 
 	} else {
 	//console.log('Do not trigger'); 
@@ -63,7 +62,9 @@ function handleEvent(event) {
       const message = event.message;
       switch (message.type) {
         case 'text':
-          return analytics.parseInput(event.rplyToken, event.message.text); 
+		var reply = analytics.parseInput(event.rplyToken, event.message.text);
+          	reply.path = path.rply;
+		  return  reply;
         case 'image':
            break;
         case 'video':
