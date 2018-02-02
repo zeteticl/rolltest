@@ -75,7 +75,6 @@ break;
        break;
     case 'postback':
        break;
-
     case 'beacon':
       break;
     default:
