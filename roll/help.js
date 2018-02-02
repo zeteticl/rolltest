@@ -5,7 +5,7 @@ var rply ={type : 'text'}; //type是必需的,但可以更改
 function Help() {
 rply =		{
   "type": "template",
-  "altText": '【擲骰BOT】v1.30 \
+  "altText": "【擲骰BOT】v1.30 \
  例如輸入2d6+1　攻撃！\
  會輸出）2d6+1：攻撃  9[6+3]+1 = 10\
  如上面一樣,在骰子數字後方隔空白位打字,可以進行發言。\
@@ -47,7 +47,7 @@ rply =		{
   時間tarot 等關键字可啓動\
   死亡FLAG：啓動語 立Flag/死亡flag\
   coc7角色背景：啓動語 coc7角色背景\
-',
+",
   "template": {
       "type": "carousel",
       "columns": [
