@@ -6,7 +6,7 @@ function Help() {
 rply =		{
   "type": "template",
   "altText": "【擲骰BOT】v1.30   coc7角色背景：啓動語 coc7角色背景\
-23123123",
+\n23123123",
   "template": {
       "type": "carousel",
       "columns": [
