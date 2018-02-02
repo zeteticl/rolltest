@@ -116,7 +116,7 @@ rply =		{
 			"actions": [
 				{
 					"type": "message",
-					"label": "塔羅/大十字塔羅/每日塔羅牌/時間tarot",
+					"label": "塔羅占卜",
 					"text": "塔羅/大十字塔羅/每日塔羅牌/時間tarot"
 				},
 				{
