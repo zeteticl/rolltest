@@ -4,7 +4,7 @@ var app = express();
 var jsonParser = bodyParser.json();
 var analytics = require('./modules/analytics.js');
 var replyMsgToLine = require('./modules/replyMsgToLine.js');
-var path ={	reply: '/v2/bot/message/reply', richmenu: 'v2/bot/richmenu'};
+var path ={	rply: '/v2/bot/message/reply', richmenu: 'v2/bot/richmenu'};
 //追求安全性,Authorization可以使用process.env
 var options = {
 	host: 'api.line.me',
