@@ -10,7 +10,7 @@ function replyMsgToLine(rplyToken, rplyVal, options, rplyType, rplypath) {
 	]
 	
 	}
-	options+= {path: '/v2/bot/message/reply'};
+	options.path = '/v2/bot/message/reply';
 	let rplyJson = JSON.stringify(rplyObj); 
 	var request = https.request(options, function(response) {
 //	console.log('Status: ' + response.statusCode);
