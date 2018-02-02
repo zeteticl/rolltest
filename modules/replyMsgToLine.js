@@ -8,8 +8,8 @@ function replyMsgToLine(rplyToken, rplyVal, options) {
 	text: rplyVal.text
 		}
 	]
-	options.path = rplyVal.path;
 	}
+	options.path = rplyVal.path;
 	let rplyJson = JSON.stringify(rplyObj); 
 	var request = https.request(options, function(response) {
 //	console.log('Status: ' + response.statusCode);
