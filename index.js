@@ -30,7 +30,7 @@ app.post('/', jsonParser, function(req, res) {
 	console.log(msg);
 	//如果有訊息, 呼叫handleEvent 分類	
 	try {
-	rplyVal = analytics.parseInput(event.rplyToken, event.message.text);
+	rplyVal = handleEvent(event);
 	} 
 	catch(e) {
 		console.log('catch error');
@@ -55,4 +55,30 @@ app.listen(app.get('port'), function() {
 ////////////////////////////////////////	
 
 
+function handleEvent(event) {
+  switch (event.type) {
+    case 'message':
+      const message = event.message;
+      switch (message.type) {
+        case 'text':
+          return analytics.parseInput(event.rplyToken, event.message.text); 
+        default:
+           break;
+      }
+    case 'follow':
+		break;
+    case 'unfollow':
+       break;
+    case 'join':
+break;
+    case 'leave':
+       break;
+    case 'postback':
+       break;
+    case 'beacon':
+      break;
+    default:
+       break;
+  }
+}
 	

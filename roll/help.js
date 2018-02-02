@@ -19,34 +19,34 @@ rply =		{
 \n Choice：啓動語choice/隨機/選項/選1\
 \n (問題)(啓動語)(問題)  (選項1) (選項2) \
 \n 例子 隨機收到聖誕禮物數 1 2 3 >4  \
-23213",
+",
   "template": {
       "type": "carousel",
       "columns": [
 	  {
-			"title": "《AAAB》",
-			"text": "本系統相關指令，關鍵字為 pb",
+			"title": "《基本擲骰系統》",
+			"text": "指令包括1D100, 5B10, 5U10 8",
 			"actions": [
 				{
 					"type": "message",
-					"label": "系統指令說明",
-					"text": "骰子狗pb"
+					"label": "1d100擲骰範例",
+					"text": "5 1d100 示範"
 				},
 				{
 					"type": "message",
-					"label": "一般擲骰範例",
-					"text": "pb 示範"
+					"label": "5B10擲骰範例",
+					"text": "5B10 9 示範"
 				},
 				{
 					"type": "message",
-					"label": "調整值範例",
-					"text": "pb+1 調整值示範"
+					"label": "5U10 8 9擲骰範例",
+					"text": "5U10 8 9 示範"
 				}
 						
 			]
 		},{
-			"title": "《AAA》",
-			"text": "本系統相關指令，關鍵字為 pb",
+			"title": "《COC 6 7版 擲骰系統》",
+			"text": "指令包括 6版ccb, 7版cc, cc(n)1~2, cc6版創角, cc7版創角, coc7角色背景",
 			"actions": [
 				{
 					"type": "message",
