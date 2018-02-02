@@ -39,7 +39,7 @@ rply =		{
 				},
 				{
 					"type": "message",
-					"label": "5U10 8 9",
+					"label": "5U10 8 9擲骰範例",
 					"text": "5U10 8 9 每骰出一粒8會有一粒獎勵骰及計算有多少粒大於9"
 				}
 						
@@ -55,8 +55,8 @@ rply =		{
 				},
 				{
 					"type": "message",
-					"label": "7版擲骰 技能80 -1懲罰",
-					"text": "ccn2 80"
+					"label": "7版擲骰 技能80 -2懲罰",
+					"text": "ccn2 80 7版擲骰技能80 -2懲罰"
 				},
 				{
 					"type": "message",
@@ -67,23 +67,23 @@ rply =		{
 			]
 		},
           {
-			"title": "《P2系統》",
-			"text": "本系統3為 pb",
+			"title": "《其他系統01》",
+			"text": "NC, WoD",
 			"actions": [
 				{
 					"type": "message",
-					"label": "系統指令說明",
-					"text": "骰子狗pb"
+					"label": "1NC 擲骰範例",
+					"text": "2NC"
 				},
 				{
 					"type": "message",
-					"label": "一般擲骰範例",
-					"text": "pb 示範"
+					"label": "NM 依戀擲骰範例",
+					"text": "nm"
 				},
 				{
 					"type": "message",
-					"label": "調整值範例",
-					"text": "pb+1 調整值示範"
+					"label": "WOD擲骰範例",
+					"text": "5wd8 投擲5次D10 每有一粒大於8,得到一粒獎勵骰"
 				}
 						
 			]
