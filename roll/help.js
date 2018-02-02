@@ -23,27 +23,8 @@ rply =		{
   "template": {
       "type": "carousel",
       "columns": [
-          {
-            "title": "123213",
-            "text": "本系統相關指令，關鍵字為 CC",
-            "actions": [	
-                {
-                    "type": "message",
-                    "label": "系統指令說明",
-                    "text": "骰子狗CC"
-                },
-                {
-                    "type": "message",
-                    "label": "獎懲骰範例",
-                    "text": "CC(2)<=50 獎勵骰示範"
-                },
-                {
-                    "type": "message",
-                    "label": "技能成長範例",
-                    "text": "CC>20 技能成長示範"
-                }
-            ]
-          },            "title": "A123213",
+	  {
+            "title": "《A04",
             "text": "本系統相關指令，關鍵字為 CC",
             "actions": [	
                 {
@@ -63,7 +44,69 @@ rply =		{
                 }
             ]
           },
-
+	  {
+            "title": "《A03",
+            "text": "本系統相關指令，關鍵字為 CC",
+            "actions": [	
+                {
+                    "type": "message",
+                    "label": "系統指令說明",
+                    "text": "骰子狗CC"
+                },
+                {
+                    "type": "message",
+                    "label": "獎懲骰範例",
+                    "text": "CC(2)<=50 獎勵骰示範"
+                },
+                {
+                    "type": "message",
+                    "label": "技能成長範例",
+                    "text": "CC>20 技能成長示範"
+                }
+            ]
+          },
+	  {
+            "title": "《A02",
+            "text": "本系統相關指令，關鍵字為 CC",
+            "actions": [	
+                {
+                    "type": "message",
+                    "label": "系統指令說明",
+                    "text": "骰子狗CC"
+                },
+                {
+                    "type": "message",
+                    "label": "獎懲骰範例",
+                    "text": "CC(2)<=50 獎勵骰示範"
+                },
+                {
+                    "type": "message",
+                    "label": "技能成長範例",
+                    "text": "CC>20 技能成長示範"
+                }
+            ]
+          },
+          {
+            "title": "《A01",
+            "text": "本系統相關指令，關鍵字為 CC",
+            "actions": [	
+                {
+                    "type": "message",
+                    "label": "系統指令說明",
+                    "text": "骰子狗CC"
+                },
+                {
+                    "type": "message",
+                    "label": "獎懲骰範例",
+                    "text": "CC(2)<=50 獎勵骰示範"
+                },
+                {
+                    "type": "message",
+                    "label": "技能成長範例",
+                    "text": "CC>20 技能成長示範"
+                }
+            ]
+          },
 		  "title": "《CoC7th 克蘇魯的呼喚》",
             "text": "本系統相關指令，關鍵字為 CC",
             "actions": [	
