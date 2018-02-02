@@ -39,7 +39,7 @@ app.post('/', jsonParser, function(req, res) {
 	}
 	//把回應的內容,掉到replyMsgToLine.js傳出去
 	if (rplyVal) {
-	options.rply= path.rply;	
+	options.path= path.rply;	
 	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options); 
 	} else {
 	//console.log('Do not trigger'); 
