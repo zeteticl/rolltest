@@ -4,7 +4,8 @@ var app = express();
 var jsonParser = bodyParser.json();
 var analytics = require('./modules/analytics.js');
 var replyMsgToLine = require('./modules/replyMsgToLine.js');
-var path;
+var path ={	reply: '/v2/bot/message/reply', richmenu: 'v2/bot/richmenu'};
+//追求安全性,Authorization可以使用process.env
 var options = {
 	host: 'api.line.me',
 	port: 443,
@@ -38,7 +39,8 @@ app.post('/', jsonParser, function(req, res) {
 	}
 	//把回應的內容,掉到replyMsgToLine.js傳出去
 	if (rplyVal) {
-	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal.text, options, rplyVal.type); 
+	options.rply= path.rply;	
+	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options, path.rply); 
 	} else {
 	//console.log('Do not trigger'); 
 	}
