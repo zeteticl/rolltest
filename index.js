@@ -76,11 +76,13 @@ function handleEvent(event) {
            break;
       }
     case 'follow':
-		break;
+		event.message.text = 'help';
+		return analytics.parseInput(event.rplyToken, event.message.text); 
     case 'unfollow':
        break;
     case 'join':
-break;
+		event.message.text = 'help';
+		return analytics.parseInput(event.rplyToken, event.message.text); 
     case 'leave':
        break;
 
