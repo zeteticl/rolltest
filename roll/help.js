@@ -5,7 +5,8 @@ var rply ={type : 'text'}; //type是必需的,但可以更改
 function Help() {
 rply =		{
   "type": "template",
-  "altText": "【擲骰BOT】v1.30   coc7角色背景：啓動語 coc7角色背景",
+  "altText": "【擲骰BOT】v1.30   基本擲骰方法 1D20 
+  qweqe",
   "template": {
       "type": "carousel",
       "columns": [
