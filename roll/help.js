@@ -42,11 +42,6 @@ rply =		{
                     "type": "message",
                     "label": "技能成長範例",
                     "text": "CC>20 技能成長示範"
-                },
-                {
-                    "type": "message",
-                    "label": "技能成長範例",
-                    "text": "CC>20 技能成長示範"
                 }
             ]
           },
