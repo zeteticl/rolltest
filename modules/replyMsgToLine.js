@@ -9,7 +9,6 @@ function replyMsgToLine(rplyToken, rplyVal, options) {
 		}
 	]
 	}
-	options.path = rplyVal.path;
 	let rplyJson = JSON.stringify(rplyObj); 
 	var request = https.request(options, function(response) {
 //	console.log('Status: ' + response.statusCode);

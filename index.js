@@ -4,12 +4,12 @@ var app = express();
 var jsonParser = bodyParser.json();
 var analytics = require('./modules/analytics.js');
 var replyMsgToLine = require('./modules/replyMsgToLine.js');
-var path ={	rply: '/v2/bot/message/reply', richmenu: 'v2/bot/richmenu'};
 //追求安全性,Authorization可以使用process.env
 var options = {
 	host: 'api.line.me',
 	port: 443,
 	method: 'POST',
+	rply: '/v2/bot/message/reply'
 	headers: {
 	'Content-Type': 'application/json',
 	'Authorization':'Bearer L/rv6DxG3fHK7SOuQOz4mvHxX5mjN7+Axpy1IJJBg6ENFEKVV1Z+kApbryOPP77P03OF7O80JNHmjl6Ncxt/dgIml8n4UOD71jQPhI+wiEKhnagEmiqxC2sLKROX/GSrLcbxa0fei67hhh5QyfDLngdB04t89/1O/w1cDnyilFU='
@@ -51,6 +51,7 @@ app.listen(app.get('port'), function() {
 });
 
 
+
 ////////////////////////////////////////
 ///////// 骰組分析放到analytics.js 
 ////////////////////////////////////////	
@@ -63,7 +64,6 @@ function handleEvent(event) {
       switch (message.type) {
         case 'text':
 		var reply = analytics.parseInput(event.rplyToken, event.message.text);
-          	reply.path = path.rply;
 		  return  reply;
         default:
            break;
