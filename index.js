@@ -62,36 +62,22 @@ function handleEvent(event) {
       switch (message.type) {
         case 'text':
           return analytics.parseInput(event.rplyToken, event.message.text); 
-        case 'image':
-           break;
-        case 'video':
-           break;
-        case 'audio':
-           break;
-        case 'location':
-           break;
-        case 'sticker':
-           break;
         default:
            break;
       }
     case 'follow':
-		event.message.text = 'help';
-		return analytics.parseInput(event.rplyToken, event.message.text); 
+		break;
     case 'unfollow':
        break;
     case 'join':
-		event.message.text = 'help';
-		return analytics.parseInput(event.rplyToken, event.message.text); 
+break;
     case 'leave':
        break;
-
     case 'postback':
        break;
 
     case 'beacon':
       break;
-
     default:
        break;
   }
