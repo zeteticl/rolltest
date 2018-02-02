@@ -3,7 +3,7 @@ var funny = require('./funny.js');
 var rply ={type : 'text'}; //type是必需的,但可以更改
 
 function Help() {
-rply={
+rply =		{
   "type": "template",
   "altText": "系統說明",
   "template": {
@@ -76,7 +76,8 @@ rply={
 		}
       ]
   }
-}return rply;	
+};
+return rply;	
 }
 
 
