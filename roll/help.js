@@ -111,23 +111,23 @@ rply =		{
 			]
 		},
 		{
-			"title": "《附加功能》",
-			"text": "附加功能相關指令，關鍵字為「骰子狗」以及 .jpg 和 (ry",
+			"title": "《附加功能2》",
+			"text": "塔羅牌,運氣占卜,死亡FLAG,巴獸",
 			"actions": [
 				{
 					"type": "message",
-					"label": "附加功能指令說明",
-					"text": "骰子狗其他"
+					"label": "塔羅/大十字塔羅/每日塔羅牌/時間tarot",
+					"text": "塔羅/大十字塔羅/每日塔羅牌/時間tarot"
 				},
 				{
 					"type": "message",
-					"label": "隨機選擇範例",
-					"text": "骰子狗，請幫我選宵夜要吃 鹽酥雞 滷味 吃p吃，不准吃"
+					"label": "死亡FLAG",
+					"text": "立Flag/死亡flag"
 				},
 				{
 					"type": "message",
-					"label": "圖片回應範例",
-					"text": "我覺得不行.jpg"
+					"label": "鴨霸獸",
+					"text": "鴨霸獸|巴獸"
 				}
 						
 			]
