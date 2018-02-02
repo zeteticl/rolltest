@@ -65,33 +65,13 @@ function handleEvent(event) {
 		var reply = analytics.parseInput(event.rplyToken, event.message.text);
           	reply.path = path.rply;
 		  return  reply;
-        case 'image':
-           break;
-        case 'video':
-           break;
-        case 'audio':
-           break;
-        case 'location':
-           break;
-        case 'sticker':
-           break;
         default:
            break;
       }
     case 'follow':
 		break;
-    case 'unfollow':
-       break;
     case 'join':
-break;
-    case 'leave':
-       break;
-
-    case 'postback':
-       break;
-
-    case 'beacon':
-      break;
+		break;
 
     default:
        break;
