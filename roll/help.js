@@ -24,6 +24,27 @@ rply =		{
       "type": "carousel",
       "columns": [
 	  {
+			"title": "《AAAB》",
+			"text": "本系統相關指令，關鍵字為 pb",
+			"actions": [
+				{
+					"type": "message",
+					"label": "系統指令說明",
+					"text": "骰子狗pb"
+				},
+				{
+					"type": "message",
+					"label": "一般擲骰範例",
+					"text": "pb 示範"
+				},
+				{
+					"type": "message",
+					"label": "調整值範例",
+					"text": "pb+1 調整值示範"
+				}
+						
+			]
+		},{
 			"title": "《AAA》",
 			"text": "本系統相關指令，關鍵字為 pb",
 			"actions": [
