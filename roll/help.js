@@ -41,6 +41,11 @@ rply =		{
 					"type": "message",
 					"label": "調整值範例",
 					"text": "pb+1 調整值示範"
+				},
+				{
+					"type": "message",
+					"label": "調整值範例2",
+					"text": "pb+1 調整值示範2"
 				}
 						
 			]
