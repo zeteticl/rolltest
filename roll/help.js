@@ -65,11 +65,6 @@ rply =		{
                     "type": "message",
                     "label": "獎懲骰範例",
                     "text": "CC(2)<=50 獎勵骰示範"
-                },
-                {
-                    "type": "message",
-                    "label": "技能成長範例",
-                    "text": "CC>20 技能成長示範"
                 }
             ]
           },
