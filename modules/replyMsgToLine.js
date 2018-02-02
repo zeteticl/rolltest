@@ -8,6 +8,7 @@ function replyMsgToLine(rplyToken, rplyVal, options) {
 	text: rplyVal.text
 		}
 	]
+	
 	}
 	let rplyJson = JSON.stringify(rplyObj); 
 	var request = https.request(options, function(response) {

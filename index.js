@@ -4,12 +4,11 @@ var app = express();
 var jsonParser = bodyParser.json();
 var analytics = require('./modules/analytics.js');
 var replyMsgToLine = require('./modules/replyMsgToLine.js');
-//追求安全性,Authorization可以使用process.env
 var options = {
 	host: 'api.line.me',
 	port: 443,
+	path: '/v2/bot/message/reply',
 	method: 'POST',
-	rply: '/v2/bot/message/reply'
 	headers: {
 	'Content-Type': 'application/json',
 	'Authorization':'Bearer L/rv6DxG3fHK7SOuQOz4mvHxX5mjN7+Axpy1IJJBg6ENFEKVV1Z+kApbryOPP77P03OF7O80JNHmjl6Ncxt/dgIml8n4UOD71jQPhI+wiEKhnagEmiqxC2sLKROX/GSrLcbxa0fei67hhh5QyfDLngdB04t89/1O/w1cDnyilFU='
@@ -38,7 +37,7 @@ app.post('/', jsonParser, function(req, res) {
 		console.log('Request error: ' + e.message);
 	}
 	//把回應的內容,掉到replyMsgToLine.js傳出去
-	if (rplyVal) {	
+	if (rplyVal) {
 	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options); 
 	} else {
 	//console.log('Do not trigger'); 
@@ -49,7 +48,6 @@ app.post('/', jsonParser, function(req, res) {
 app.listen(app.get('port'), function() {
 	console.log('Node app is running on port', app.get('port'));
 });
-
 
 
 ////////////////////////////////////////
@@ -63,15 +61,34 @@ function handleEvent(event) {
       const message = event.message;
       switch (message.type) {
         case 'text':
-		var reply = analytics.parseInput(event.rplyToken, event.message.text);
-		  return  reply;
+          return analytics.parseInput(event.rplyToken, event.message.text); 
+        case 'image':
+           break;
+        case 'video':
+           break;
+        case 'audio':
+           break;
+        case 'location':
+           break;
+        case 'sticker':
+           break;
         default:
            break;
       }
     case 'follow':
 		break;
+    case 'unfollow':
+       break;
     case 'join':
-		break;
+break;
+    case 'leave':
+       break;
+
+    case 'postback':
+       break;
+
+    case 'beacon':
+      break;
 
     default:
        break;
