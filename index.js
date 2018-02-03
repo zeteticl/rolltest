@@ -2,8 +2,17 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var jsonParser = bodyParser.json();
-var analytics = require('./modules/analytics.js');
-var replyMsgToLine = require('./modules/replyMsgToLine.js');
+//var analytics = require('./modules/analytics.js');
+//var replyMsgToLine = require('./modules/replyMsgToLine.js');
+// Load `*.js` under current directory as properties
+//  i.e., `User.js` will become `exports['User']` or `exports.User`
+require('fs').readdirSync(__dirname + '/').forEach(function(file) {
+  if (file.match(/\.js$/) !== null && file !== 'index.js') {
+    var name = file.replace('.js', '');
+    modules[name] = require('./modules/' + file);
+  }
+});
+//需要安全性,Authorization可以用process.env 取代,明文因為減少設定步驟
 var options = {
 	host: 'api.line.me',
 	port: 443,
@@ -28,7 +37,8 @@ app.post('/', jsonParser, function(req, res) {
 	let rplyToken = event.replyToken;
 	let rplyVal = {};
 	console.log(msg);
-	//如果有訊息, 呼叫handleEvent 分類	
+	//訊息來到後, 會自動呼叫handleEvent 分類,然後跳到analytics.js進行骰組分析
+	//如希望增加修改骰組,只要修改analytics.js的條件式 和ROLL內的骰組檔案即可,然後在HELP.JS 增加說明.
 	try {
 	rplyVal = handleEvent(event);
 	} 
@@ -38,7 +48,7 @@ app.post('/', jsonParser, function(req, res) {
 	}
 	//把回應的內容,掉到replyMsgToLine.js傳出去
 	if (rplyVal) {
-	replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options); 
+	modules.replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options); 
 	} else {
 	//console.log('Do not trigger'); 
 	}
@@ -49,19 +59,13 @@ app.listen(app.get('port'), function() {
 	console.log('Node app is running on port', app.get('port'));
 });
 
-
-////////////////////////////////////////
-///////// 骰組分析放到analytics.js 
-////////////////////////////////////////	
-
-
 function handleEvent(event) {
   switch (event.type) {
     case 'message':
       const message = event.message;
       switch (message.type) {
         case 'text':
-          return analytics.parseInput(event.rplyToken, event.message.text); 
+          return modules.analytics.parseInput(event.rplyToken, event.message.text); 
         default:
            break;
       }
@@ -81,4 +85,3 @@ break;
        break;
   }
 }
-	
