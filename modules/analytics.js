@@ -7,7 +7,7 @@ require('fs').readdirSync('./roll/').forEach(function(file) {
 	}
   });
 
-//用來呼叫骰組,新增骰組檔案的話,要寫到上面
+//用來呼叫骰組,新增骰組的話,要寫條件式到下面呼叫
 function parseInput(rplyToken, inputStr) {
 	//console.log('InputStr: ' + inputStr);
 	_isNaN = function(obj) 	{
@@ -95,4 +95,9 @@ function parseInput(rplyToken, inputStr) {
 
   
 }
+
+
+module.exports = {
+	parseInput:parseInput
+};
 
