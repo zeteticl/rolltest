@@ -2,8 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var jsonParser = bodyParser.json();
-//var analytics = require('./modules/analytics.js');
-//var replyMsgToLine = require('./modules/replyMsgToLine.js');
 // Load `*.js` under current directory as properties
 //  i.e., `User.js` will become `exports['User']` or `exports.User`
 require('fs').readdirSync(__dirname + '/modules/').forEach(function(file) {
