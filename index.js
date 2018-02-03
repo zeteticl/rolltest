@@ -6,10 +6,10 @@ var jsonParser = bodyParser.json();
 //var replyMsgToLine = require('./modules/replyMsgToLine.js');
 // Load `*.js` under current directory as properties
 //  i.e., `User.js` will become `exports['User']` or `exports.User`
-require('fs').readdirSync(__dirname + '/').forEach(function(file) {
+require('fs').readdirSync(__dirname + '/modules/').forEach(function(file) {
   if (file.match(/\.js$/) !== null && file !== 'index.js') {
     var name = file.replace('.js', '');
-    modules[name] = require('./modules/' + file);
+    exports[name] = require('./modules/' + file);
   }
 });
 //需要安全性,Authorization可以用process.env 取代,明文因為減少設定步驟
@@ -48,7 +48,7 @@ app.post('/', jsonParser, function(req, res) {
 	}
 	//把回應的內容,掉到replyMsgToLine.js傳出去
 	if (rplyVal) {
-	modules.replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options); 
+	exports.replyMsgToLine.replyMsgToLine(rplyToken, rplyVal, options); 
 	} else {
 	//console.log('Do not trigger'); 
 	}
@@ -65,7 +65,7 @@ function handleEvent(event) {
       const message = event.message;
       switch (message.type) {
         case 'text':
-          return modules.analytics.parseInput(event.rplyToken, event.message.text); 
+          return exports.analytics.parseInput(event.rplyToken, event.message.text); 
         default:
            break;
       }
