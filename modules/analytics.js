@@ -96,8 +96,3 @@ function parseInput(rplyToken, inputStr) {
   
 }
 
-
-module.exports = {
-	parseInput:parseInput
-};
-
